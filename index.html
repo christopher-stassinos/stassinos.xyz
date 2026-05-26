@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Christopher Stassinos — Cybersecurity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #cdd5dc;
+      --bg2:        #d8dee4;
+      --surface:    #dfe4ea;
+      --ice:        #c8d0d8;
+      --border:     rgba(140,155,170,0.45);
+      --blue:       #3a7aaa;
+      --blue-light: #5a9ac0;
+      --blue-dim:   #7aaac8;
+      --text:       #0e1e2e;
+      --text-mid:   #1e3a54;
+      --text-dim:   #4a6a88;
+      --white:      #e8f0f8;
+      --display:    'Syncopate', sans-serif;
+      --body:       'DM Sans', sans-serif;
+      --shadow-3d:  0 16px 48px rgba(40,90,140,0.22), 0 4px 12px rgba(40,90,140,0.14), inset 0 1px 0 rgba(255,255,255,0.6);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: radial-gradient(circle, rgba(100,115,130,0.15) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 60px;
+      background: rgba(195,205,215,0.82);
+      backdrop-filter: blur(20px) saturate(1.4);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 20px rgba(80,140,200,0.1);
+    }
+
+    .nav-logo {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, var(--text), var(--blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links { display: flex; gap: 8px; list-style: none; }
+
+    .nav-links a {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      color: var(--text-mid);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255,255,255,0.8);
+      border-color: var(--border);
+      color: var(--blue);
+      box-shadow: 0 2px 8px rgba(80,140,200,0.12);
+    }
+
+    .nav-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--blue);
+      background: rgba(150,195,228,0.5);
+      border: 1px solid rgba(80,150,210,0.4);
+      padding: 6px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-pill::before {
+      content: '';
+      width: 7px; height: 7px;
+      background: #44bb88;
+      border-radius: 50%;
+      box-shadow: 0 0 6px #44bb88;
+      animation: glow 2s infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 4px #44bb88; }
+      50%       { box-shadow: 0 0 10px #44bb88, 0 0 20px rgba(68,187,136,0.3); }
+    }
+
+    .wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 32px 80px;
+    }
+
+    .card {
+      background: linear-gradient(160deg,
+        rgba(218,224,230,0.97) 0%,
+        rgba(208,216,224,0.94) 60%,
+        rgba(198,208,218,0.90) 100%
+      );
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: var(--shadow-3d);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0) 100%);
+      border-radius: 20px 20px 0 0;
+      pointer-events: none;
+    }
+
+    .card:hover {
+      transform: translateY(-6px) rotateX(2deg);
+      box-shadow: 0 32px 80px rgba(60,120,180,0.25), 0 8px 24px rgba(60,120,180,0.15), inset 0 1px 0 rgba(255,255,255,0.95);
+    }
+
+    .card-label {
+      font-family: var(--display);
+      font-size: 9px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-label::before {
+      content: '';
+      width: 20px; height: 2px;
+      background: linear-gradient(90deg, var(--blue), var(--blue-light));
+      border-radius: 1px;
+      flex-shrink: 0;
+    }
+
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 26px;
+      font-family: var(--body);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      border-radius: 50px;
+      transition: all 0.25s cubic-bezier(0.23,1,0.32,1);
+    }
+
+    .btn-primary {
+      background: linear-gradient(145deg, #6aabdd 0%, #4488cc 50%, #3377bb 100%);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(60,120,200,0.35), 0 1px 4px rgba(60,120,200,0.2), inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 8px 28px rgba(60,120,200,0.45), 0 2px 8px rgba(60,120,200,0.25), inset 0 1px 0 rgba(255,255,255,0.4);
+    }
+
+    .btn-ghost {
+      background: rgba(255,255,255,0.7);
+      color: var(--blue);
+      border: 1px solid rgba(100,170,230,0.5);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 12px rgba(80,140,200,0.1), inset 0 1px 0 rgba(255,255,255,0.9);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.9);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(80,140,200,0.18), inset 0 1px 0 rgba(255,255,255,1);
+    }
+
+    .card-hero {
+      grid-column: span 8;
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 48px 56px;
+      border-radius: 28px;
+      overflow: hidden;
+      background: linear-gradient(145deg, #e4eaf0 0%, #d4dde8 35%, #c8d4e0 65%, #d0dae6 100%);
+    }
+
+    .hero-sphere {
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%,
+        rgba(255,255,255,0.95) 0%,
+        rgba(180,220,255,0.7) 30%,
+        rgba(100,170,230,0.5) 60%,
+        rgba(60,130,200,0.3) 100%
+      );
+      box-shadow:
+        inset -20px -20px 40px rgba(60,120,200,0.2),
+        inset 10px 10px 30px rgba(255,255,255,0.6),
+        0 20px 60px rgba(60,120,200,0.15);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .hero-orb {
+      position: absolute;
+      bottom: 40px; right: 180px;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%,
+        rgba(255,255,255,0.9),
+        rgba(160,210,250,0.6),
+        rgba(80,160,220,0.3)
+      );
+      box-shadow: inset -6px -6px 14px rgba(60,120,200,0.15), inset 4px 4px 10px rgba(255,255,255,0.7);
+      animation: float 4s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50%       { transform: translateY(-16px) rotate(3deg); }
+    }
+
+    .hero-eyebrow {
+      font-family: var(--display);
+      font-size: 10px;
+      letter-spacing: 5px;
+      color: var(--blue);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      position: relative; z-index: 1;
+    }
+
+    .hero-name {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: clamp(42px, 6vw, 80px);
+      color: var(--text);
+      line-height: 0.95;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+      position: relative; z-index: 1;
+      text-shadow:
+        1px 1px 0 rgba(100,160,220,0.3),
+        2px 2px 0 rgba(100,160,220,0.2),
+        3px 3px 0 rgba(100,160,220,0.15),
+        4px 4px 0 rgba(100,160,220,0.1),
+        0 8px 24px rgba(60,120,180,0.15);
+    }
+
+    .hero-name .accent { color: var(--blue); }
+
+    .hero-typed-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 20px;
+      margin-bottom: 32px;
+      position: relative; z-index: 1;
+      flex-wrap: wrap;
+    }
+
+    .hero-typed-row .prefix { font-size: 13px; color: var(--text-dim); font-weight: 400; }
+
+    .typed-text {
+      font-family: var(--display);
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: var(--blue);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 2px; height: 16px;
+      background: var(--blue);
+      margin-left: 2px;
+      animation: blink 1s step-end infinite;
+      vertical-align: middle;
+      border-radius: 1px;
+    }
+
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    .hero-ctas { display: flex; gap: 12px; position: relative; z-index: 1; flex-wrap: wrap; }
+
+    .card-status { grid-column: span 4; display: flex; flex-direction: column; }
+
+    .status-row {
+      padding: 13px 0;
+      border-bottom: 1px solid rgba(160,200,230,0.3);
+      display: flex; flex-direction: column; gap: 3px;
+    }
+
+    .status-row:last-child { border-bottom: none; }
+
+    .status-key {
+      font-size: 10px;
+      font-family: var(--display);
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .status-val { font-size: 13px; font-weight: 600; color: var(--text); }
+    .status-val.blue { color: var(--blue); }
+    .status-val a { color: inherit; text-decoration: none; }
+
+    .card-certs { grid-column: span 4; }
+    .cert-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .cert-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 12px;
+      border-radius: 16px;
+      background: linear-gradient(145deg, rgba(210,218,226,0.9), rgba(196,208,218,0.8));
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 16px rgba(80,140,200,0.1), inset 0 1px 0 rgba(255,255,255,0.9);
+      text-align: center; gap: 6px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: default;
+    }
+
+    .cert-chip:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 10px 28px rgba(80,140,200,0.2), inset 0 1px 0 rgba(255,255,255,1);
+    }
+
+    .cert-badge {
+      font-family: var(--display);
+      font-weight: 700; font-size: 14px; letter-spacing: 1px;
+      background: linear-gradient(135deg, var(--blue), #88aadd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .cert-name { font-size: 10px; color: var(--text-mid); line-height: 1.3; font-weight: 500; }
+
+    .cert-dot {
+      width: 6px; height: 6px;
+      background: linear-gradient(135deg, #44bb88, #22aa77);
+      border-radius: 50%;
+      box-shadow: 0 0 6px rgba(68,187,136,0.5);
+    }
+
+    .about-text { font-size: 13px; color: var(--text-mid); line-height: 1.9; }
+    .about-text p { margin-bottom: 14px; }
+    .about-text strong { color: var(--text); font-weight: 600; }
+
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+
+    .tag {
+      padding: 5px 12px; border-radius: 20px;
+      font-size: 11px; font-weight: 500;
+      color: var(--blue);
+      background: rgba(150,190,220,0.35);
+      border: 1px solid rgba(100,170,230,0.35);
+      transition: all 0.2s;
+    }
+
+    .tag:hover { background: rgba(150,190,220,0.6); transform: translateY(-1px); box-shadow: 0 3px 10px rgba(80,140,200,0.15); }
+
+    .card-about   { grid-column: span 4; }
+    .card-skills  { grid-column: span 4; }
+    .card-resume  { grid-column: span 12; }
+
+    .resume-tabs {
+      display: flex; gap: 4px; margin-bottom: 24px;
+      background: rgba(150,188,218,0.3);
+      padding: 4px; border-radius: 14px;
+      border: 1px solid var(--border);
+      width: fit-content;
+    }
+
+    .rtab {
+      padding: 7px 18px;
+      font-family: var(--body); font-size: 12px; font-weight: 600;
+      color: var(--text-dim); background: transparent;
+      border: none; border-radius: 10px; cursor: pointer; transition: all 0.2s;
+    }
+
+    .rtab.active {
+      background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(225,240,255,0.9));
+      color: var(--blue);
+      box-shadow: 0 2px 10px rgba(80,140,200,0.15), inset 0 1px 0 rgba(255,255,255,1);
+    }
+
+    .resume-panel { display: none; }
+    .resume-panel.active { display: block; }
+
+    .tl-item {
+      display: grid; grid-template-columns: 90px 1fr;
+      gap: 16px; margin-bottom: 20px; padding-bottom: 20px;
+      border-bottom: 1px solid rgba(160,200,230,0.25);
+    }
+
+    .tl-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+    .tl-date {
+      font-family: var(--display); font-size: 9px;
+      letter-spacing: 1.5px; color: var(--blue);
+      padding-top: 3px; line-height: 1.6; text-transform: uppercase;
+    }
+
+    .tl-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .tl-sub { font-size: 11px; color: var(--blue); font-weight: 500; margin-bottom: 5px; }
+    .tl-desc { font-size: 12px; color: var(--text-dim); line-height: 1.8; }
+
+    .skills-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+    .skill-group-title {
+      font-family: var(--display); font-size: 9px;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--blue); margin-bottom: 12px;
+    }
+
+    .skill-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .skill-name { font-size: 11px; color: var(--text-mid); font-weight: 500; min-width: 90px; }
+    .skill-track { flex: 1; height: 4px; background: rgba(160,200,230,0.25); border-radius: 4px; overflow: hidden; }
+
+    .skill-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blue), #88ccff);
+      border-radius: 4px; width: 0;
+      transition: width 1.5s cubic-bezier(0.16,1,0.3,1);
+      box-shadow: 0 0 8px rgba(80,150,220,0.4);
+    }
+
+    .card-project {
+      grid-column: span 3;
+      text-decoration: none; color: inherit;
+      display: flex; flex-direction: column; cursor: pointer;
+    }
+
+    .card-project:hover {
+      transform: translateY(-8px) rotateX(3deg) rotateY(-1deg);
+      box-shadow: 0 40px 80px rgba(60,120,180,0.25), 0 8px 24px rgba(60,120,180,0.15), inset 0 1px 0 rgba(255,255,255,1);
+    }
+
+    .proj-num {
+      font-family: var(--display); font-weight: 700; font-size: 40px;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, rgba(80,140,200,0.15), rgba(80,140,200,0.05));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; line-height: 1; margin-bottom: 12px;
+    }
+
+    .proj-lang {
+      font-family: var(--display); font-size: 9px;
+      letter-spacing: 3px; color: var(--blue);
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+
+    .proj-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px; line-height: 1.2; }
+    .proj-desc { font-size: 12px; color: var(--text-dim); line-height: 1.8; flex: 1; }
+
+    .proj-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 16px; padding-top: 14px;
+      border-top: 1px solid rgba(160,200,230,0.3);
+    }
+
+    .proj-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .proj-tag {
+      font-size: 10px; color: var(--blue);
+      background: rgba(150,190,220,0.35);
+      border: 1px solid rgba(100,170,230,0.3);
+      padding: 2px 8px; border-radius: 10px;
+    }
+
+    .proj-arrow { font-size: 18px; color: var(--blue-dim); transition: transform 0.2s, color 0.2s; }
+    .card-project:hover .proj-arrow { transform: translate(3px,-3px); color: var(--blue); }
+
+    .card-blog { grid-column: span 6; }
+
+    .blog-featured-num {
+      font-family: var(--display); font-weight: 700; font-size: 72px;
+      letter-spacing: -2px;
+      background: linear-gradient(135deg, rgba(80,140,200,0.12), rgba(80,140,200,0.04));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; line-height: 1;
+      float: right; margin: -8px -8px 0 16px;
+    }
+
+    .blog-date {
+      font-family: var(--display); font-size: 9px;
+      letter-spacing: 2px; color: var(--text-dim);
+      text-transform: uppercase; margin-bottom: 10px;
+    }
+
+    .blog-title { font-size: 20px; font-weight: 700; color: var(--text); line-height: 1.3; margin-bottom: 10px; }
+    .blog-excerpt { font-size: 12px; color: var(--text-dim); line-height: 1.9; margin-bottom: 20px; }
+    .blog-mini-list { border-top: 1px solid rgba(160,200,230,0.3); padding-top: 16px; }
+
+    .blog-mini-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 0; border-bottom: 1px solid rgba(160,200,230,0.2);
+      text-decoration: none; color: inherit; transition: color 0.2s; cursor: pointer;
+    }
+
+    .blog-mini-item:last-child { border-bottom: none; }
+    .blog-mini-item:hover .blog-mini-title { color: var(--blue); }
+
+    .blog-mini-n { font-family: var(--display); font-size: 10px; color: var(--blue-dim); min-width: 18px; }
+    .blog-mini-title { font-size: 12px; color: var(--text-mid); flex: 1; font-weight: 500; }
+    .blog-mini-date { font-size: 10px; color: var(--text-dim); }
+
+    .card-contact {
+      grid-column: span 12;
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 48px; align-items: start;
+    }
+
+    .contact-headline {
+      font-family: var(--display); font-weight: 700; font-size: 52px;
+      text-transform: uppercase; color: var(--text);
+      line-height: 1; letter-spacing: -1px;
+      text-shadow: 2px 2px 0 rgba(100,160,220,0.2), 4px 4px 0 rgba(100,160,220,0.12), 6px 6px 0 rgba(100,160,220,0.06);
+    }
+
+    .contact-headline span { color: var(--blue); display: block; }
+    .contact-sub { font-size: 13px; color: var(--text-dim); line-height: 1.8; margin-top: 16px; max-width: 260px; }
+    .contact-links { display: flex; flex-direction: column; }
+
+    .contact-link {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 0; border-bottom: 1px solid rgba(160,200,230,0.3);
+      text-decoration: none; color: var(--text-mid);
+      font-size: 12px; font-weight: 500; transition: color 0.2s;
+    }
+
+    .contact-link:hover { color: var(--blue); }
+
+    .contact-icon {
+      width: 30px; height: 30px; border-radius: 10px;
+      background: linear-gradient(145deg, rgba(170,205,230,0.5), rgba(150,195,222,0.4));
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(80,140,200,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+
+    .contact-arr { margin-left: auto; opacity: 0; transition: opacity 0.2s; color: var(--blue); }
+    .contact-link:hover .contact-arr { opacity: 1; }
+
+    .contact-form { display: flex; flex-direction: column; gap: 14px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+    .form-label {
+      font-family: var(--display); font-size: 9px;
+      letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim);
+    }
+
+    .form-input, .form-textarea {
+      background: rgba(185,212,234,0.7);
+      border: 1px solid rgba(120,165,200,0.5);
+      border-radius: 12px; color: var(--text);
+      font-family: var(--body); font-size: 13px;
+      padding: 10px 16px; outline: none; transition: all 0.2s;
+      box-shadow: inset 0 2px 6px rgba(80,140,200,0.06); resize: none;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--blue-light);
+      background: rgba(205,225,242,0.95);
+      box-shadow: 0 0 0 3px rgba(100,170,230,0.15), inset 0 2px 6px rgba(80,140,200,0.04);
+    }
+
+    .form-textarea { min-height: 96px; }
+
+    footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 32px; margin-top: 16px;
+      border-top: 1px solid rgba(160,200,230,0.3);
+      font-size: 12px; color: var(--text-dim);
+    }
+
+    footer a { color: var(--blue); text-decoration: none; font-weight: 500; }
+
+    .sparkle {
+      position: fixed; pointer-events: none; font-size: 16px;
+      animation: sparkle-anim 1s forwards; z-index: 9999;
+    }
+
+    @keyframes sparkle-anim {
+      0%   { opacity: 1; transform: translate(0,0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px) scale(0.98);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.23,1,0.32,1);
+    }
+
+    .reveal.visible { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.08s; }
+    .d2 { transition-delay: 0.16s; }
+    .d3 { transition-delay: 0.24s; }
+    .d4 { transition-delay: 0.32s; }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--blue-dim); border-radius: 6px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--blue); }
+
+    @media (max-width: 1024px) {
+      .card-hero    { grid-column: span 12; min-height: 340px; padding: 40px; }
+      .card-status  { grid-column: span 6; }
+      .card-certs   { grid-column: span 6; }
+      .card-about   { grid-column: span 6; }
+      .card-skills  { grid-column: span 6; }
+      .card-resume  { grid-column: span 12; }
+      .card-contact { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .hero-sphere  { width: 240px; height: 240px; top: -40px; right: -40px; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 16px; height: 54px; }
+      .nav-links { display: none; }
+      .nav-logo { font-size: 11px; letter-spacing: 2px; }
+      .wrap { padding: 16px 12px 60px; }
+      .bento { gap: 12px; grid-template-columns: 1fr; }
+      .card { padding: 22px; border-radius: 16px; }
+      .card:hover { transform: none; }
+      .card-hero, .card-status, .card-certs, .card-about,
+      .card-resume, .card-skills, .card-project, .card-blog,
+      .card-contact { grid-column: span 1; }
+      .card-hero { min-height: auto; padding: 28px 24px 32px; }
+      .hero-sphere { width: 180px; height: 180px; top: -30px; right: -30px; }
+      .hero-orb { display: none; }
+      .hero-name { font-size: 36px; }
+      .cert-grid { grid-template-columns: 1fr 1fr; }
+      .skills-cols { grid-template-columns: 1fr; }
+      .resume-tabs { overflow-x: auto; width: 100%; }
+      .rtab { white-space: nowrap; }
+      .tl-item { grid-template-columns: 70px 1fr; }
+      .card-contact { grid-template-columns: 1fr; gap: 24px; }
+      .contact-headline { font-size: 36px; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 6px; text-align: center; padding: 20px 16px; }
+    }
+
+    @media (max-width: 400px) {
+      .hero-name { font-size: 28px; }
+      .card { padding: 18px; }
+      .cert-grid { grid-template-columns: 1fr 1fr; }
+      .nav-pill { font-size: 9px; padding: 5px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Christopher Stassinos</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#resume">Resume</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-pill">Available for work</div>
+</nav>
+
+<div class="wrap">
+<div class="bento">
+
+  <!-- HERO -->
+  <div class="card card-hero reveal">
+    <div class="hero-sphere"></div>
+    <div class="hero-orb"></div>
+    <div class="hero-eyebrow">// Cybersecurity &amp; IT Portfolio</div>
+    <div class="hero-name">
+      CHRISTOPHER<br><span class="accent">STASSINOS</span>
+    </div>
+    <div class="hero-typed-row">
+      <span class="prefix">Specialist in</span>
+      <span class="typed-text"><span id="typed"></span><span class="cursor"></span></span>
+    </div>
+    <div class="hero-ctas">
+      <a href="christopher-stassinos-cv.pdf" download class="btn btn-primary">↓ Download CV</a>
+    </div>
+  </div>
+
+  <!-- STATUS -->
+  <div class="card card-status reveal d1">
+    <div class="card-label">Profile</div>
+    <div class="status-row"><span class="status-key">Role</span><span class="status-val blue">Cybersecurity Specialist</span></div>
+    <div class="status-row"><span class="status-key">Location</span><span class="status-val">San Diego, CA</span></div>
+    <div class="status-row"><span class="status-key">Experience</span><span class="status-val">5+ Years MSP &amp; Enterprise</span></div>
+    <div class="status-row"><span class="status-key">Email</span><span class="status-val"><a href="mailto:chrisstassinos@gmail.com" style="color:var(--blue)">chrisstassinos@gmail.com</a></span></div>
+    <div class="status-row"><span class="status-key">LinkedIn</span><span class="status-val"><a href="https://linkedin.com/in/christopher-stassinos" target="_blank" style="color:var(--blue)">christopher-stassinos</a></span></div>
+  </div>
+
+  <!-- CERTS -->
+  <div id="about" class="card card-certs reveal d2">
+    <div class="card-label">Certifications</div>
+    <div class="cert-grid">
+      <div class="cert-chip"><div class="cert-dot"></div><span class="cert-badge">S+</span><span class="cert-name">CompTIA Security+</span></div>
+      <div class="cert-chip"><div class="cert-dot"></div><span class="cert-badge">N+</span><span class="cert-name">CompTIA Network+</span></div>
+      <div class="cert-chip"><div class="cert-dot"></div><span class="cert-badge">SAA</span><span class="cert-name">AWS Solutions Architect Assoc.</span></div>
+      <div class="cert-chip"><div class="cert-dot"></div><span class="cert-badge">CCP</span><span class="cert-name">AWS Cloud Practitioner</span></div>
+      <div class="cert-chip"><div class="cert-dot"></div><span class="cert-badge">IBM</span><span class="cert-name">IBM Cybersecurity Analyst</span></div>
+      <div class="cert-chip"><div class="cert-dot"></div><span class="cert-badge">PANA</span><span class="cert-name">Palo Alto Networks Assoc.</span></div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="card card-about reveal">
+    <div class="card-label">About</div>
+    <div class="about-text">
+      <p>Cybersecurity and IT Specialist with <strong>5+ years of MSP and enterprise experience</strong>, supporting 2,500+ computers, servers, networking equipment, and cloud-connected systems across casino enterprise environments.</p>
+      <p>Experienced in <strong>security monitoring, vulnerability remediation, endpoint and identity management</strong>, and cross-platform support across Windows, macOS, Linux, iOS, and Android.</p>
+    </div>
+    <div class="tag-cloud">
+      <span class="tag">Security Monitoring</span>
+      <span class="tag">Endpoint Mgmt</span>
+      <span class="tag">Network Config</span>
+      <span class="tag">Cloud · AWS</span>
+      <span class="tag">Active Directory</span>
+      <span class="tag">Incident Response</span>
+    </div>
+  </div>
+
+  <!-- SKILLS -->
+  <div class="card card-skills reveal d1">
+    <div class="card-label">Skills</div>
+    <div class="skills-cols">
+      <div>
+        <div class="skill-group-title">Networking</div>
+        <div class="skill-row"><span class="skill-name">TCP/IP</span><div class="skill-track"><div class="skill-fill" data-w="92"></div></div></div>
+        <div class="skill-row"><span class="skill-name">Network Config</span><div class="skill-track"><div class="skill-fill" data-w="88"></div></div></div>
+        <div class="skill-row"><span class="skill-name">VLANs</span><div class="skill-track"><div class="skill-fill" data-w="82"></div></div></div>
+        <div class="skill-row"><span class="skill-name">Palo Alto NGFW</span><div class="skill-track"><div class="skill-fill" data-w="75"></div></div></div>
+        <br>
+        <div class="skill-group-title">Systems</div>
+        <div class="skill-row"><span class="skill-name">Win / macOS</span><div class="skill-track"><div class="skill-fill" data-w="95"></div></div></div>
+        <div class="skill-row"><span class="skill-name">Linux</span><div class="skill-track"><div class="skill-fill" data-w="82"></div></div></div>
+        <div class="skill-row"><span class="skill-name">Active Directory</span><div class="skill-track"><div class="skill-fill" data-w="85"></div></div></div>
+      </div>
+      <div>
+        <div class="skill-group-title">Security</div>
+        <div class="skill-row"><span class="skill-name">Sec Monitoring</span><div class="skill-track"><div class="skill-fill" data-w="85"></div></div></div>
+        <div class="skill-row"><span class="skill-name">Vuln Remediation</span><div class="skill-track"><div class="skill-fill" data-w="80"></div></div></div>
+        <div class="skill-row"><span class="skill-name">Incident Response</span><div class="skill-track"><div class="skill-fill" data-w="78"></div></div></div>
+        <div class="skill-row"><span class="skill-name">Digital Forensics</span><div class="skill-track"><div class="skill-fill" data-w="68"></div></div></div>
+        <br>
+        <div class="skill-group-title">Cloud &amp; Tools</div>
+        <div class="skill-row"><span class="skill-name">AWS (EC2/S3/VPC)</span><div class="skill-track"><div class="skill-fill" data-w="75"></div></div></div>
+        <div class="skill-row"><span class="skill-name">Remote Mgmt</span><div class="skill-track"><div class="skill-fill" data-w="88"></div></div></div>
+        <div class="skill-row"><span class="skill-name">Log Review / SIEM</span><div class="skill-track"><div class="skill-fill" data-w="76"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESUME -->
+  <div id="resume" class="card card-resume reveal d1">
+    <div class="card-label">Resume</div>
+    <div class="resume-tabs">
+      <button class="rtab active" onclick="switchTab(event,'exp')">Experience</button>
+      <button class="rtab" onclick="switchTab(event,'certs')">Certifications</button>
+      <button class="rtab" onclick="switchTab(event,'edu')">Education</button>
+    </div>
+
+    <div class="resume-panel active" id="tab-exp">
+      <div class="tl-item"><div class="tl-date">2025 —<br>Present</div><div><div class="tl-title">Slot Systems Technician</div><div class="tl-sub">Jamul Casino · San Diego</div><div class="tl-desc">Configure, maintain, and repair slot machines including IP addressing, device communication, network configuration, hardware diagnostics, and system-level troubleshooting.</div></div></div>
+      <div class="tl-item"><div class="tl-date">2022 —<br>2024</div><div><div class="tl-title">Computer Engineer 2</div><div class="tl-sub">Viejas Casino · San Diego</div><div class="tl-desc">Supported 1,500+ enterprise devices — Windows, macOS, Linux, iOS, Android, servers, printers, network hardware, proprietary systems, and cloud-integrated tools.</div></div></div>
+      <div class="tl-item"><div class="tl-date">2021 —<br>2022</div><div><div class="tl-title">PC/LAN Technician</div><div class="tl-sub">Sycuan Casino · San Diego</div><div class="tl-desc">Supported 1,000+ devices, administered Active Directory users and permissions, resolved outages, and operated independently on overnight enterprise support shifts.</div></div></div>
+    </div>
+
+    <div class="resume-panel" id="tab-certs">
+      <div class="tl-item"><div class="tl-date">Earned</div><div><div class="tl-title">CompTIA Security+</div><div class="tl-sub">CompTIA</div><div class="tl-desc">Threat analysis & detection, incident response, secure network & system hardening, identity and access management.</div></div></div>
+      <div class="tl-item"><div class="tl-date">Earned</div><div><div class="tl-title">CompTIA Network+</div><div class="tl-sub">CompTIA</div><div class="tl-desc">Networking concepts, infrastructure, operations, network security, and troubleshooting across wired and wireless environments.</div></div></div>
+      <div class="tl-item"><div class="tl-date">Earned</div><div><div class="tl-title">AWS Solutions Architect Associate</div><div class="tl-sub">Amazon Web Services</div><div class="tl-desc">Designing distributed systems on AWS, covering compute, storage, networking, security, and cost-optimized architectures.</div></div></div>
+      <div class="tl-item"><div class="tl-date">Earned</div><div><div class="tl-title">AWS Cloud Practitioner</div><div class="tl-sub">Amazon Web Services</div><div class="tl-desc">Cloud architecture, virtual private cloud networking, compute & storage services (EC2, S3).</div></div></div>
+      <div class="tl-item"><div class="tl-date">Earned</div><div><div class="tl-title">IBM Cybersecurity Analyst</div><div class="tl-sub">IBM</div><div class="tl-desc">SOC practices, vulnerability analysis & log review, digital forensics, incident investigation.</div></div></div>
+      <div class="tl-item"><div class="tl-date">Earned</div><div><div class="tl-title">Palo Alto Networks Associate</div><div class="tl-sub">Palo Alto Networks</div><div class="tl-desc">Network security fundamentals, next-gen firewall concepts, enterprise security operations.</div></div></div>
+    </div>
+
+    <div class="resume-panel" id="tab-edu">
+      <div class="tl-item"><div class="tl-date">In Progress</div><div><div class="tl-title">B.S. IT Business Management</div><div class="tl-sub">Western Governors University</div><div class="tl-desc">Focus on IT systems, business operations, project management, and cloud/cybersecurity fundamentals.</div></div></div>
+      <div class="tl-item"><div class="tl-date">Completed</div><div><div class="tl-title">Network Security</div><div class="tl-sub">City College of San Francisco</div><div class="tl-desc">Training in network defense, Cisco networking, system configuration, and hands-on security labs.</div></div></div>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+
+
+</div>
+</div>
+
+<footer>
+  <span>© 2025 Christopher Stassinos — Securing systems, one packet at a time.</span>
+  <span>Made with <a href="#">☕ + dedication</a></span>
+</footer>
+
+<script>
+  const phrases = ['network defense.','endpoint security.','enterprise infrastructure.','cloud security.','system hardening.'];
+  let pi=0,ci=0,del=false;
+  const el=document.getElementById('typed');
+  function type(){
+    const p=phrases[pi];
+    el.textContent=del?p.slice(0,ci--):p.slice(0,ci++);
+    if(!del&&ci>p.length){del=true;setTimeout(type,1600);return;}
+    if(del&&ci<0){del=false;pi=(pi+1)%phrases.length;ci=0;}
+    setTimeout(type,del?36:72);
+  }
+  type();
+
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+  },{threshold:0.07});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+  const sObs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting)
+        e.target.querySelectorAll('.skill-fill').forEach(b=>{b.style.width=b.dataset.w+'%';});
+    });
+  },{threshold:0.2});
+  document.querySelectorAll('.card-skills').forEach(c=>sObs.observe(c));
+
+  window.switchTab = function(e,id){
+    document.querySelectorAll('.resume-panel').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.rtab').forEach(t=>t.classList.remove('active'));
+    document.getElementById('tab-'+id).classList.add('active');
+    e.target.classList.add('active');
+  };
+
+
+  const sparks=['✦','✧','★','⋆','·'];
+  let lastSpark=0;
+  document.addEventListener('mousemove',e=>{
+    const now=Date.now();
+    if(now-lastSpark<80)return;
+    lastSpark=now;
+    const s=document.createElement('div');
+    s.className='sparkle';
+    s.textContent=sparks[Math.floor(Math.random()*sparks.length)];
+    s.style.left=e.clientX+'px';
+    s.style.top=e.clientY+'px';
+    s.style.color=`hsl(${190+Math.random()*60},80%,60%)`;
+    const dx=(Math.random()-0.5)*60;
+    const dy=-20-Math.random()*40;
+    s.style.setProperty('--dx',dx+'px');
+    s.style.setProperty('--dy',dy+'px');
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),900);
+  });
+</script>
+</body>
+</html>
