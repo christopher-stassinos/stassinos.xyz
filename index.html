@@ -711,11 +711,7 @@
 <nav>
   <div class="nav-logo">Christopher Stassinos</div>
   <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#resume">Resume</a></li>
-    <li><a href="#contact">Contact</a></li>
   </ul>
-  <div class="nav-pill">Available for work</div>
 </nav>
 
 <div class="wrap">
@@ -816,6 +812,7 @@
       <button class="rtab active" onclick="switchTab(event,'exp')">Experience</button>
       <button class="rtab" onclick="switchTab(event,'certs')">Certifications</button>
       <button class="rtab" onclick="switchTab(event,'edu')">Education</button>
+      <button class="rtab" onclick="switchTab(event,'proj')">Projects</button>
     </div>
 
     <div class="resume-panel active" id="tab-exp">
@@ -834,8 +831,13 @@
     </div>
 
     <div class="resume-panel" id="tab-edu">
-      <div class="tl-item"><div class="tl-date">In Progress</div><div><div class="tl-title">B.S. IT Business Management</div><div class="tl-sub">Western Governors University</div><div class="tl-desc">Focus on IT systems, business operations, project management, and cloud/cybersecurity fundamentals.</div></div></div>
+      <div class="tl-item"><div class="tl-date">Earned</div><div><div class="tl-title">B.S. IT Business Management</div><div class="tl-sub">Western Governors University</div><div class="tl-desc">Focus on IT systems, business operations, project management, and cloud/cybersecurity fundamentals.</div></div></div>
       <div class="tl-item"><div class="tl-date">Completed</div><div><div class="tl-title">Network Security</div><div class="tl-sub">City College of San Francisco</div><div class="tl-desc">Training in network defense, Cisco networking, system configuration, and hands-on security labs.</div></div></div>
+    </div>
+
+    <div class="resume-panel" id="tab-proj">
+      <div class="tl-item"><div class="tl-date">Home Lab</div><div><div class="tl-title">SIEM Home Lab</div><div class="tl-sub">Splunk · pfSense · VMware · Windows Server</div><div class="tl-desc">Set up a home security lab using VMware Workstation with a Windows Server running Active Directory. Configured Splunk Free to collect Windows Event Logs, Sysmon, and AD audit logs. Manually triggered attacks like brute force attempts, account lockouts, and privilege escalation then wrote Splunk searches to detect each one in real time.</div></div></div>
+      <div class="tl-item"><div class="tl-date">Analysis</div><div><div class="tl-title">Network Traffic Analysis</div><div class="tl-sub">Wireshark · tcpdump · Kali Linux</div><div class="tl-desc">Used Wireshark to capture live network traffic and analyze pre-captured pcap files. Worked across protocols like HTTP, FTP, DNS, ARP, and TCP. Pulled credentials from cleartext sessions, spotted ARP spoofing, and developed a workflow for approaching packet analysis challenges.</div></div></div>
     </div>
   </div>
 
@@ -844,11 +846,6 @@
 
 </div>
 </div>
-
-<footer>
-  <span>© 2025 Christopher Stassinos — Securing systems, one packet at a time.</span>
-  <span>Made with <a href="#">☕ + dedication</a></span>
-</footer>
 
 <script>
   const phrases = ['network defense.','endpoint security.','enterprise infrastructure.','cloud security.','system hardening.'];
@@ -904,5 +901,8 @@
     setTimeout(()=>s.remove(),900);
   });
 </script>
+<footer style="display:flex; justify-content:center; align-items:center; padding: 20px 32px; font-size: 11px; color: var(--text-mid); font-family: var(--display); letter-spacing: 1px; background: rgba(180,200,220,0.4); border-top: 1px solid rgba(140,170,200,0.35); margin-top: 8px;">
+  © 2025 Christopher Stassinos
+</footer>
 </body>
 </html>
