@@ -8,15 +8,15 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, KeepTogethe
 OUTPUT = r"C:\Users\XRIS\stassinos.xyz\christopher-stassinos-cv.pdf"
 
 NAME = "Christopher Stassinos"
-TITLE = "Cybersecurity / ML Engineer"
+TITLE = "Cybersecurity Engineer"
 CONTACT = "San Diego, CA  •  chrisstassinos@gmail.com  •  linkedin.com/in/christopher-stassinos  •  github.com/christopher-stassinos"
 
 SUMMARY = (
-    "Cybersecurity and ML engineer with <b>5+ years of MSP and enterprise IT experience</b> supporting "
+    "Cybersecurity engineer with <b>5+ years of MSP and enterprise IT experience</b> supporting "
     "Southern California client environments across Microsoft 365, endpoint support, identity and access, "
-    "Windows/macOS/Linux administration, network troubleshooting, cloud-connected infrastructure, and private research systems. "
-    "Backed by Security+, Network+, AWS, Palo Alto, and IBM cybersecurity credentials plus hands-on lab work "
-    "in Splunk, Active Directory, pfSense, VMware, packet analysis, and GPU-assisted systematic trading infrastructure."
+    "Windows/macOS/Linux administration, network troubleshooting, and cloud-connected infrastructure. "
+    "Backed by Security+, Network+, AWS, Palo Alto, and IBM cybersecurity credentials plus home lab work "
+    "in Splunk, Active Directory, pfSense, VMware, and packet analysis."
 )
 
 EXPERIENCE = [
