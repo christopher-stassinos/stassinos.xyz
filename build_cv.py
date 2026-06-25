@@ -13,10 +13,10 @@ CONTACT = "San Diego, CA  •  chrisstassinos@gmail.com  •  linkedin.com/in/ch
 
 SUMMARY = (
     "Cybersecurity engineer with <b>5+ years of MSP and enterprise IT experience</b> supporting "
-    "Southern California client environments and high-availability operations across endpoint security, "
-    "identity and access support, Windows/macOS/Linux administration, network troubleshooting, and "
-    "cloud-connected infrastructure. Backed by Security+, Network+, AWS, Palo Alto, and IBM cybersecurity "
-    "credentials plus home lab work in Splunk, Active Directory, pfSense, VMware, and packet analysis."
+    "Southern California client environments across Microsoft 365, endpoint support, identity and access, "
+    "Windows/macOS/Linux administration, network troubleshooting, and cloud-connected infrastructure. "
+    "Backed by Security+, Network+, AWS, Palo Alto, and IBM cybersecurity credentials plus home lab work "
+    "in Splunk, Active Directory, pfSense, VMware, and packet analysis."
 )
 
 EXPERIENCE = [
@@ -26,8 +26,9 @@ EXPERIENCE = [
         "location": "San Diego, CA",
         "dates": "Jul 2026–Present",
         "bullets": [
-            "Provide MSP support across Southern California client environments, troubleshooting endpoints, user access, networking issues, and day-to-day infrastructure problems.",
-            "Support business operations with practical ticket resolution across systems administration, remote support, cloud-connected tools, and security-minded account and endpoint handling.",
+            "Provide first-line MSP support for small and mid-sized business clients, handling tickets, phone support, remote troubleshooting, and occasional onsite visits across Windows 10/11, Microsoft 365, printers, Wi-Fi, VPN, and day-to-day connectivity issues.",
+            "Set up and support client accounts and equipment including Microsoft 365, ConnectWise PSA, RMM tooling, MFA, endpoint onboarding, offboarding, and general user provisioning with accurate ticket documentation and escalation notes.",
+            "Train on core managed-service platforms including ConnectWise PSA and ticketing, backup and disaster recovery workflows, VoIP systems, and the broader security stack while working directly with clients and senior engineers in a production support environment.",
         ],
     },
     {
