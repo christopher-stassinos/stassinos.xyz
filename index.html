@@ -1883,9 +1883,17 @@
 
       function syncPlayerChrome() {
         if (!playerBar) return;
-        const shouldFloat = (window.scrollY || window.pageYOffset || 0) > 140 || overlay.classList.contains('is-open');
+        const overlayOpen = overlay.classList.contains('is-open');
+        let shouldFloat = overlayOpen;
+        if (!shouldFloat) {
+          const hero = playerBar.closest('.hero') || playerBar.parentElement;
+          if (hero) {
+            const heroRect = hero.getBoundingClientRect();
+            shouldFloat = heroRect.bottom < playerBar.offsetHeight + 40;
+          }
+        }
         playerBar.classList.toggle('is-floating', shouldFloat);
-        playerBar.classList.toggle('is-elevated', overlay.classList.contains('is-open'));
+        playerBar.classList.toggle('is-elevated', overlayOpen);
       }
 
       function closeOverlay(pushState) {
