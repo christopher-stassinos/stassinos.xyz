@@ -466,10 +466,13 @@
     .artifact-model {
       position: absolute;
       left: 50%;
-      top: 43%;
+      top: 42%;
       width: min(360px, 76%);
       transform: translate(-50%, -50%);
       z-index: 2;
+      display: grid;
+      justify-items: center;
+      gap: 10px;
       animation: frame-float 13.5s ease-in-out infinite;
     }
 
@@ -528,6 +531,7 @@
     }
 
     .player-track {
+      position: relative;
       font-family: var(--mono);
       font-size: 11px;
       letter-spacing: 0.02em;
@@ -536,6 +540,46 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    .player-track.is-condensed {
+      font-size: 10px;
+      letter-spacing: 0.01em;
+    }
+
+    .player-track-viewport {
+      display: block;
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .player-track-inner {
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+      will-change: transform;
+    }
+
+    .player-track-copy {
+      display: inline-block;
+      white-space: nowrap;
+      flex: none;
+    }
+
+    .player-track-gap {
+      display: inline-block;
+      width: var(--track-gap, 40px);
+      flex: none;
+    }
+
+    .player-track.is-scrolling .player-track-inner {
+      animation: player-track-ticker var(--track-duration, 16s) linear infinite;
+    }
+
+    @keyframes player-track-ticker {
+      from { transform: translateX(0); }
+      to { transform: translateX(calc(-1 * var(--track-shift, 0px))); }
     }
 
     .player-sub {
@@ -602,6 +646,37 @@
       height: auto;
       filter: grayscale(1) contrast(1.08) brightness(0.98);
       mix-blend-mode: luminosity;
+    }
+
+    .artifact-plaque {
+      width: max-content;
+      max-width: min(280px, 88%);
+      padding: 7px 12px 8px;
+      background: linear-gradient(180deg, rgba(20,23,29,0.92), rgba(11,14,18,0.92));
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow:
+        0 12px 24px rgba(0,0,0,0.35),
+        inset 0 0 0 1px rgba(255,255,255,0.04);
+      text-align: center;
+    }
+
+    .artifact-plaque-title {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.9);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .artifact-plaque-artist {
+      margin-top: 3px;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.58);
+      font-style: italic;
     }
 
     .artifact-caption {
@@ -1000,6 +1075,10 @@
         grid-template-columns: 1fr;
       }
 
+      .hero {
+        min-height: auto;
+      }
+
       .col-4,
       .col-6,
       .col-8 { grid-column: span 12; }
@@ -1018,6 +1097,17 @@
         padding: 20px;
       }
 
+      .hero-title {
+        font-size: clamp(40px, 12vw, 68px);
+        letter-spacing: -0.08em;
+      }
+
+      .hero-summary,
+      .resume-copy p {
+        font-size: 16px;
+        line-height: 1.7;
+      }
+
       .metrics,
       .resume-stats,
       .focus-grid,
@@ -1034,22 +1124,181 @@
       footer { flex-direction: column; }
     }
 
-    @media (max-width: 520px) {
-      .hero { min-height: auto; }
-      .artifact-stage { min-height: 400px; }
-      .hero-title { font-size: 46px; }
-      .section-title { font-size: 28px; }
-      .timeline-role h3 { font-size: 22px; }
+    @media (max-width: 640px) {
+      .hero-copy,
+      .hero-visual,
+      .sub-panel,
+      .resume-panel,
+      .contact-panel {
+        padding: 16px;
+      }
+
+      .eyebrow,
+      .micro,
+      .section-kicker,
+      .player-sub,
+      .artifact-plaque-title {
+        letter-spacing: 0.12em;
+      }
+
+      .hero-title {
+        font-size: clamp(34px, 11vw, 52px);
+        line-height: 0.9;
+      }
+
+      .hero-summary {
+        font-size: 15px;
+      }
+
+      .artifact-stage {
+        min-height: 470px;
+      }
+
+      .artifact-stage::after {
+        inset: 10px;
+      }
+
+      .artifact-player {
+        top: 14px;
+        width: min(420px, calc(100% - 24px));
+        padding: 8px;
+        gap: 6px;
+      }
+
+      .player-btn {
+        width: 28px;
+        height: 28px;
+      }
+
+      .player-btn svg {
+        width: 12px;
+        height: 12px;
+      }
+
+      .player-bars {
+        display: none;
+      }
+
+      .player-track {
+        font-size: 10px;
+      }
+
+      .player-track.is-condensed {
+        font-size: 9px;
+      }
+
+      .player-sub {
+        font-size: 8px;
+      }
+
+      .artifact-model {
+        top: 41%;
+        width: min(320px, 78%);
+        gap: 8px;
+      }
+
+      .artifact-frame {
+        padding: 10px;
+      }
+
+      .artifact-plaque {
+        max-width: min(240px, 86%);
+        padding: 6px 10px 7px;
+      }
+
+      .artifact-plaque-title {
+        font-size: 9px;
+      }
+
+      .artifact-plaque-artist {
+        font-size: 10px;
+      }
+
+      .artifact-caption {
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+        gap: 8px;
+      }
+
+      .artifact-caption .section-title {
+        font-size: 24px;
+        line-height: 0.95;
+      }
+
+      .artifact-caption p {
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .contact-links,
       .tabs,
       .cta-row {
         display: grid;
       }
+
       .btn,
       .tab,
       .contact-link {
         width: 100%;
         justify-content: center;
         text-align: center;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .shell {
+        padding: 16px 10px 42px;
+      }
+
+      .brand {
+        font-size: 11px;
+        letter-spacing: 0.14em;
+      }
+
+      .hero-title {
+        font-size: 30px;
+      }
+
+      .artifact-stage {
+        min-height: 430px;
+      }
+
+      .artifact-model {
+        top: 40%;
+        width: min(280px, 76%);
+      }
+
+      .artifact-caption .section-title {
+        font-size: 21px;
+      }
+
+      .resume-stat strong {
+        font-size: 26px;
+      }
+
+      .timeline-role h3,
+      .section-title {
+        font-size: 22px;
+      }
+
+      footer {
+        font-size: 11px;
+      }
+    }
+
+    @media (hover: none), (pointer: coarse) {
+      .particle-layer,
+      .cursor-node {
+        display: none !important;
+      }
+
+      body,
+      body.cursor-active,
+      body.cursor-active a,
+      body.cursor-active button,
+      body.cursor-active [role="button"] {
+        cursor: auto !important;
       }
     }
 
@@ -1177,6 +1426,10 @@
               <figure class="artifact-frame">
                 <img src="icarus.jpeg" alt="Winged figure — Icarus" loading="lazy" />
               </figure>
+              <div class="artifact-plaque" aria-label="Artwork label">
+                <div class="artifact-plaque-title">Triumph of Icarus</div>
+                <div class="artifact-plaque-artist">Bryan Larsen, 2009</div>
+              </div>
             </div>
             <div class="artifact-caption">
               <div class="micro">Security Operations / Infrastructure</div>
@@ -1664,6 +1917,40 @@
       let ready = false;
       let muted = true;
       let unmuteArmed = true;
+      let lastRenderedTitle = '';
+
+      function updateTicker() {
+        const inner = trackEl.querySelector('.player-track-inner');
+        const copies = trackEl.querySelectorAll('.player-track-copy');
+        if (!inner || !copies.length) return;
+
+        trackEl.classList.remove('is-scrolling', 'is-condensed');
+        trackEl.style.removeProperty('--track-shift');
+        trackEl.style.removeProperty('--track-duration');
+
+        const gap = 36;
+        trackEl.style.setProperty('--track-gap', gap + 'px');
+
+        const containerWidth = trackEl.clientWidth;
+        const primaryCopy = copies[0];
+        let contentWidth = primaryCopy.scrollWidth;
+        let overflow = contentWidth - containerWidth;
+
+        if (overflow > 0) {
+          trackEl.classList.add('is-condensed');
+          contentWidth = primaryCopy.scrollWidth;
+          overflow = contentWidth - containerWidth;
+        }
+
+        if (overflow <= 2) return;
+
+        const shift = contentWidth + gap;
+        const speed = 16;
+        const duration = Math.max(16, shift / speed);
+        trackEl.style.setProperty('--track-shift', shift + 'px');
+        trackEl.style.setProperty('--track-duration', duration.toFixed(2) + 's');
+        trackEl.classList.add('is-scrolling');
+      }
 
       function setSub() {
         let total = 0, idx = 0;
@@ -1678,10 +1965,21 @@
         subEl.textContent = tag + counter;
       }
 
-      function setTitle() {
+      function setTitle(force) {
         try {
           const d = player.getVideoData();
-          if (d && d.title) trackEl.textContent = d.title;
+          if (d && d.title) {
+            if (!force && d.title === lastRenderedTitle) return;
+            lastRenderedTitle = d.title;
+            const safe = d.title
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/\"/g, '&quot;')
+              .replace(/'/g, '&#39;');
+            trackEl.innerHTML = '<span class="player-track-viewport"><span class="player-track-inner"><span class="player-track-copy">' + safe + '</span><span class="player-track-gap" aria-hidden="true"></span><span class="player-track-copy" aria-hidden="true">' + safe + '</span></span></span>';
+            updateTicker();
+          }
         } catch (e) {}
       }
 
@@ -1692,13 +1990,12 @@
         bar.classList.toggle('is-playing', playing && !muted);
         bar.classList.toggle('is-muted', muted);
         toggle.setAttribute('aria-label', playing ? 'Pause' : 'Play');
-        setTitle();
         setSub();
       }
 
       function doUnmute() {
         if (!ready || !unmuteArmed) return;
-        try { player.unMute(); player.setVolume(70); } catch (e) {}
+        try { player.unMute(); player.setVolume(30); } catch (e) {}
         muted = false;
         unmuteArmed = false;
         renderState();
@@ -1727,9 +2024,10 @@
             onReady: function () {
               ready = true;
               try { player.mute(); player.playVideo(); } catch (e) {}
+              setTitle(true);
               renderState();
             },
-            onStateChange: function () { renderState(); },
+            onStateChange: function () { setTitle(); renderState(); },
             onError: function () { trackEl.textContent = 'Playlist unavailable'; }
           }
         });
@@ -1758,8 +2056,7 @@
         }, { once: true, passive: true });
       });
 
-      // keep title fresh
-      setInterval(() => { if (ready) { setTitle(); setSub(); } }, 4000);
+      window.addEventListener('resize', () => updateTicker());
     })();
   </script>
 </body>
