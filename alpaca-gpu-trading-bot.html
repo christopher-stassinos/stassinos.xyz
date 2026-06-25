@@ -3,19 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alpaca API Trading Bot — Christopher Stassinos</title>
-  <meta name="description" content="Private trading lab by Christopher Stassinos built around the Alpaca API, GPU-accelerated research workflows, market data ingestion, and production-minded execution controls." />
+  <title>Public Market Lab — Christopher Stassinos</title>
+  <meta name="description" content="Distributed systematic trading lab by Christopher Stassinos built around a Mac mini + Hermes Agent research node, a 5-card GPU rig, Alpaca API algorithmic paper trading, SQLite snapshot transfer, and deterministic risk controls." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #111318;
-      --bg-2: #0a0b0e;
       --panel: rgba(255, 255, 255, 0.025);
       --panel-strong: rgba(255, 255, 255, 0.035);
       --line: rgba(255, 255, 255, 0.12);
-      --line-strong: rgba(255, 255, 255, 0.22);
       --text: #ffffff;
       --text-soft: rgba(255, 255, 255, 0.8);
       --muted: rgba(255, 255, 255, 0.56);
@@ -27,14 +25,11 @@
       min-height: 100vh;
       font-family: var(--sans);
       color: var(--text);
-      background:
-        radial-gradient(circle at 50% -20%, rgba(255,255,255,0.08), transparent 34%),
-        linear-gradient(180deg, #171a20 0%, #101217 52%, #090a0d 100%);
+      background: radial-gradient(circle at 50% -20%, rgba(255,255,255,0.08), transparent 34%), linear-gradient(180deg, #171a20 0%, #101217 52%, #090a0d 100%);
       overflow-x: hidden;
       position: relative;
     }
-    body::before,
-    body::after {
+    body::before, body::after {
       content: '';
       position: fixed;
       inset: 0;
@@ -48,237 +43,92 @@
     }
     body::after {
       opacity: 0.06;
-      background-image:
-        radial-gradient(circle at 22% 18%, rgba(255,255,255,0.35) 0 1px, transparent 1px),
-        radial-gradient(circle at 72% 44%, rgba(255,255,255,0.22) 0 1px, transparent 1px),
-        radial-gradient(circle at 46% 72%, rgba(255,255,255,0.18) 0 1px, transparent 1px);
+      background-image: radial-gradient(circle at 22% 18%, rgba(255,255,255,0.35) 0 1px, transparent 1px), radial-gradient(circle at 72% 44%, rgba(255,255,255,0.22) 0 1px, transparent 1px), radial-gradient(circle at 46% 72%, rgba(255,255,255,0.18) 0 1px, transparent 1px);
       background-size: 16px 16px, 22px 22px, 26px 26px;
     }
     a { color: inherit; }
-    .shell {
-      position: relative;
-      z-index: 2;
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 28px 22px 80px;
-    }
+    .shell { position: relative; z-index: 2; max-width: 1180px; margin: 0 auto; padding: 28px 22px 80px; }
     .site-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
+      display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; flex-wrap: wrap;
     }
-    .brand,
-    .micro,
-    .kicker,
-    .meta-label,
-    .section-label,
-    .btn {
-      font-family: var(--mono);
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      font-size: 11px;
+    .brand, .micro, .kicker, .meta-label, .section-label, .btn {
+      font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.18em; font-size: 11px;
     }
     .brand {
-      text-decoration: none;
-      color: var(--text-soft);
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
+      text-decoration: none; color: var(--text-soft); display: inline-flex; align-items: center; gap: 10px;
     }
     .brand::before {
-      content: '';
-      width: 8px;
-      height: 8px;
-      border: 1px solid rgba(255,255,255,0.6);
-      transform: rotate(45deg);
+      content: ''; width: 8px; height: 8px; border: 1px solid rgba(255,255,255,0.6); transform: rotate(45deg);
     }
     .micro, .kicker, .meta-label, .section-label { color: var(--muted); }
     .panel {
-      position: relative;
-      border: 1px solid var(--line);
-      background: var(--panel);
-      overflow: hidden;
+      position: relative; border: 1px solid var(--line); background: var(--panel); overflow: hidden;
     }
     .panel::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border: 1px solid rgba(255,255,255,0.04);
-      pointer-events: none;
+      content: ''; position: absolute; inset: 0; border: 1px solid rgba(255,255,255,0.04); pointer-events: none;
     }
-    main {
-      display: grid;
-      gap: 18px;
-    }
+    main { display: grid; gap: 18px; }
     .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
-      gap: 14px;
+      display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr); gap: 14px;
     }
-    .hero-copy,
-    .hero-visual,
-    .section,
-    .summary-grid {
-      padding: 24px;
-    }
+    .hero-copy, .hero-visual, .section, .summary-grid { padding: 24px; }
     .hero-copy {
-      display: grid;
-      gap: 18px;
-      align-content: start;
-      min-height: 620px;
+      display: grid; gap: 18px; align-content: start; min-height: 620px;
     }
     .hero-title {
-      font-family: var(--mono);
-      font-size: clamp(46px, 7vw, 92px);
-      line-height: 0.86;
-      letter-spacing: -0.095em;
-      text-transform: uppercase;
-      font-weight: 300;
+      font-family: var(--mono); font-size: clamp(42px, 6.5vw, 82px); line-height: 0.88; letter-spacing: -0.095em; text-transform: uppercase; font-weight: 300;
     }
     .hero-title span { display: block; }
     .hero-summary {
-      max-width: 58ch;
-      font-size: clamp(17px, 1.7vw, 20px);
-      line-height: 1.65;
-      color: var(--text-soft);
+      max-width: 60ch; font-size: clamp(17px, 1.7vw, 20px); line-height: 1.65; color: var(--text-soft);
     }
     .hero-summary strong { color: var(--text); }
     .hero-points {
-      display: grid;
-      gap: 8px;
-      padding-left: 18px;
-      color: var(--text-soft);
-      line-height: 1.65;
-      font-size: 14px;
+      display: grid; gap: 8px; padding-left: 18px; color: var(--text-soft); line-height: 1.65; font-size: 14px;
     }
-    .cta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 6px;
-    }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
     .btn {
-      min-height: 46px;
-      padding: 12px 18px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      border: 1px solid rgba(255,255,255,0.18);
-      transition: opacity 180ms ease, background 180ms ease;
+      min-height: 46px; padding: 12px 18px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; border: 1px solid rgba(255,255,255,0.18); transition: opacity 180ms ease, background 180ms ease;
     }
-    .btn-primary {
-      background: #fff;
-      color: #101217;
-      border-color: #fff;
-    }
-    .btn-secondary {
-      background: transparent;
-      color: #fff;
-    }
+    .btn-primary { background: #fff; color: #101217; border-color: #fff; }
+    .btn-secondary { background: transparent; color: #fff; }
     .btn:hover { opacity: 0.82; }
     .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      align-content: start;
-      min-height: 620px;
-      background: var(--panel-strong);
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; align-content: start; min-height: 620px; background: var(--panel-strong);
     }
     .metric {
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.02);
-      padding: 14px;
-      display: grid;
-      gap: 8px;
-      min-height: 140px;
+      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); padding: 14px; display: grid; gap: 8px; min-height: 140px;
     }
-    .metric strong {
-      font-size: clamp(22px, 2.4vw, 34px);
-      line-height: 1;
-    }
-    .metric p {
-      color: var(--text-soft);
-      font-size: 13px;
-      line-height: 1.55;
-    }
+    .metric strong { font-size: clamp(22px, 2.4vw, 34px); line-height: 1; }
+    .metric p { color: var(--text-soft); font-size: 13px; line-height: 1.55; }
     .metric.wide { grid-column: 1 / -1; }
-    .section {
-      display: grid;
-      gap: 18px;
-    }
+    .section { display: grid; gap: 18px; }
     .section-title {
-      font-family: var(--mono);
-      font-size: clamp(28px, 4vw, 46px);
-      line-height: 0.95;
-      text-transform: uppercase;
-      letter-spacing: -0.055em;
-      font-weight: 400;
-      max-width: 14ch;
+      font-family: var(--mono); font-size: clamp(28px, 4vw, 46px); line-height: 0.95; text-transform: uppercase; letter-spacing: -0.055em; font-weight: 400; max-width: 16ch;
     }
     .section-copy {
-      max-width: 72ch;
-      color: var(--text-soft);
-      line-height: 1.72;
-      font-size: 15px;
+      max-width: 76ch; color: var(--text-soft); line-height: 1.72; font-size: 15px;
     }
     .detail-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px;
     }
     .detail-card {
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.02);
-      padding: 16px;
-      display: grid;
-      gap: 12px;
-      align-content: start;
+      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); padding: 16px; display: grid; gap: 12px; align-content: start;
     }
-    .detail-card h3 {
-      font-size: 20px;
-      line-height: 1.08;
-      font-weight: 500;
-    }
-    .detail-card p,
-    .detail-card li {
-      color: var(--text-soft);
-      line-height: 1.65;
-      font-size: 14px;
-    }
-    .detail-card ul {
-      padding-left: 18px;
-      display: grid;
-      gap: 8px;
-    }
+    .detail-card h3 { font-size: 20px; line-height: 1.08; font-weight: 500; }
+    .detail-card p, .detail-card li { color: var(--text-soft); line-height: 1.65; font-size: 14px; }
+    .detail-card ul { padding-left: 18px; display: grid; gap: 8px; }
     footer {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      padding: 10px 2px 0;
-      flex-wrap: wrap;
+      display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; padding: 10px 2px 0; flex-wrap: wrap;
     }
     @media (max-width: 980px) {
-      .hero,
-      .detail-grid { grid-template-columns: 1fr; }
-      .hero-copy,
-      .summary-grid { min-height: auto; }
+      .hero, .detail-grid { grid-template-columns: 1fr; }
+      .hero-copy, .summary-grid { min-height: auto; }
     }
     @media (max-width: 640px) {
-      .hero-copy,
-      .hero-visual,
-      .section,
-      .summary-grid { padding: 18px; }
+      .hero-copy, .hero-visual, .section, .summary-grid { padding: 18px; }
       .summary-grid { grid-template-columns: 1fr; }
-      .hero-title { font-size: clamp(38px, 14vw, 70px); }
+      .hero-title { font-size: clamp(36px, 13vw, 64px); }
       .section-title { max-width: none; }
       .cta-row .btn { width: 100%; }
     }
@@ -294,18 +144,19 @@
     <main>
       <section class="hero">
         <article class="panel hero-copy">
-          <div class="kicker">Labs Addition</div>
-          <h1 class="hero-title"><span>Alpaca API</span><span>Trading Bot</span></h1>
+          <div class="kicker">Private Repository</div>
+          <h1 class="hero-title"><span>Public Market</span><span>Lab</span></h1>
           <p class="hero-summary">
-            A <strong>private trading systems lab</strong> built around the Alpaca API, focused on strategy research,
-            data-heavy experimentation, and production-minded execution controls. The project blends
-            market data ingestion, signal evaluation, and GPU-accelerated research loops to shorten the time
-            between idea, test, and iteration.
+            A <strong>distributed systematic trading lab</strong> built around two different machines with two different jobs:
+            a <strong>Mac mini running Hermes Agent</strong> for collection, orchestration, research workflows, and paper-trading oversight, and a
+            <strong>5-card GPU rig</strong> for higher-throughput model training, ranking passes, and trading-side compute.
+            The stack uses the <strong>Alpaca API for algorithmic paper trading</strong> while moving market research through a repeatable system that can collect,
+            screen, evaluate, simulate, and accelerate experiments across dedicated hardware.
           </p>
           <ul class="hero-points">
-            <li>Designed to explore automated order flow, strategy evaluation, and guardrails before deployment.</li>
-            <li>Uses GPU-backed workflows to accelerate research tasks such as parameter sweeps, backtesting runs, and model experimentation.</li>
-            <li>Structured as a reusable system rather than a one-off script, with attention to observability, repeatability, and risk controls.</li>
+            <li>The Mac mini acts as the always-on research node: collecting stock, options, and crypto data, managing SQLite state, driving Hermes Agent-based workflows and reporting, and supervising Alpaca paper-trading operations.</li>
+            <li>Consistent database snapshots can be handed off to the GPU machine so the heavier training and ranking work runs where the compute actually lives, while Alpaca API paper positions and strategy state remain visible through the lab tooling.</li>
+            <li>The result is a private lab that behaves like an infrastructure system — with pipeline stages, telemetry, safety rails, and division of labor between orchestration hardware and compute hardware.</li>
           </ul>
           <div class="cta-row">
             <a class="btn btn-primary" href="index.html">Back to portfolio</a>
@@ -315,87 +166,87 @@
 
         <aside class="panel summary-grid hero-visual" aria-label="Project summary">
           <div class="metric">
-            <span class="meta-label">Project Type</span>
-            <strong>Private Lab</strong>
-            <p>Private GitHub repository focused on systematic trading research and automation workflows.</p>
+            <span class="meta-label">Research Node</span>
+            <strong>Mac mini + Hermes Agent</strong>
+            <p>Continuous collection, orchestration, reporting, and research workflows managed from the Mac mini side of the stack.</p>
           </div>
           <div class="metric">
-            <span class="meta-label">Core Stack</span>
-            <strong>Alpaca + Python</strong>
-            <p>API-driven trading workflows, data ingestion, execution logic, and automation scripting.</p>
+            <span class="meta-label">Compute Node</span>
+            <strong>5-Card GPU Rig</strong>
+            <p>Dedicated machine for higher-throughput training, model iteration, ranking passes, and trading-related compute workloads.</p>
           </div>
           <div class="metric">
-            <span class="meta-label">Compute</span>
-            <strong>GPU Research</strong>
-            <p>Uses GPU-capable experimentation to accelerate model testing and data-heavy iteration cycles.</p>
+            <span class="meta-label">Data Spine</span>
+            <strong>SQLite Snapshots</strong>
+            <p>Time-ordered market snapshots persist locally and can be copied safely between systems for reproducible experiments.</p>
           </div>
           <div class="metric">
-            <span class="meta-label">Focus</span>
-            <strong>Execution Controls</strong>
-            <p>Position sizing, evaluation loops, and guardrails that make automation safer and easier to reason about.</p>
+            <span class="meta-label">Sources</span>
+            <strong>Stocks · Options · Crypto</strong>
+            <p>Public market data collection spanning Yahoo, Cboe delayed chains, and Kraken ticker feeds.</p>
           </div>
           <div class="metric wide">
-            <span class="meta-label">Summary</span>
-            <strong>Production-Minded Research Workflow</strong>
-            <p>This lab is framed as an engineering system: gather data, evaluate signals, test strategies, and only then automate execution with clear controls and monitoring.</p>
+            <span class="meta-label">Operating Model</span>
+            <strong>Hermes Agent + Alpaca + GPU Separation</strong>
+            <p>The lab is built around role separation: Hermes Agent and the Mac mini keep research organized, persistent, and tied to Alpaca paper-trading workflows, while the GPU rig takes on the heavier numerical work when it is time to train, rank, or test at scale.</p>
           </div>
         </aside>
       </section>
 
       <section class="panel section">
-        <div class="section-label">Overview</div>
-        <h2 class="section-title">What the project is built to do</h2>
+        <div class="section-label">Architecture</div>
+        <h2 class="section-title">How the two-machine workflow is structured</h2>
         <p class="section-copy">
-          The Alpaca bot project is a research and execution environment for testing ideas in a structured way.
-          Instead of treating algorithmic trading as a single script that places orders, the work is organized around
-          a repeatable pipeline: ingest market data, generate and evaluate signals, test assumptions, and enforce
-          risk-aware decision points before any live execution path is used.
+          The architecture is intentionally split. The Mac mini side continuously collects public market data, maintains the local SQLite dataset,
+          drives Hermes Agent-powered research and reporting workflows, and coordinates Alpaca API paper-trading activity. When there is enough history to do meaningful training or broader ranking work,
+          a consistent snapshot of the database is moved to the 5-card GPU rig, where the heavier experiments run without interrupting the collector.
+          That separation keeps the system practical: one node is stable and always-on, the other is optimized for bursty compute.
         </p>
         <div class="detail-grid">
           <article class="detail-card">
-            <div class="meta-label">01 / Data Flow</div>
-            <h3>Market data enters a controlled analysis loop</h3>
-            <p>Price data, signals, and strategy inputs are normalized into a repeatable workflow so ideas can be tested consistently rather than manually reworked each time.</p>
+            <div class="meta-label">01 / Research Node</div>
+            <h3>Mac mini handles collection and orchestration</h3>
+            <p>Public stocks, delayed options chains, and crypto ticker data are gathered continuously while Hermes Agent coordinates reporting, research flow, repeatable operator tasks, and the paper-trading side of the Alpaca workflow.</p>
           </article>
           <article class="detail-card">
-            <div class="meta-label">02 / Research</div>
-            <h3>GPU-backed experimentation speeds iteration</h3>
-            <p>GPU resources are used where they help most: accelerating model experiments, parameter exploration, and repeated evaluation runs over larger datasets.</p>
+            <div class="meta-label">02 / Handoff</div>
+            <h3>SQLite snapshot transfer preserves consistency</h3>
+            <p>Instead of sharing a live mutable database between machines, the project uses safe local snapshots so the GPU side can train against a coherent dataset copy.</p>
           </article>
           <article class="detail-card">
-            <div class="meta-label">03 / Execution</div>
-            <h3>Automation is wrapped in trading guardrails</h3>
-            <p>Execution logic is treated as the final step, with constraints around order flow, strategy validation, and operational safety rather than blind autopilot behavior.</p>
+            <div class="meta-label">03 / Compute Node</div>
+            <h3>5-GPU rig handles the expensive passes</h3>
+            <p>Higher-throughput model training, ranking experiments, and GPU-heavy analysis jobs are pushed onto the rig designed for them rather than the orchestration node.</p>
           </article>
         </div>
       </section>
 
       <section class="panel section">
-        <div class="section-label">Highlights</div>
-        <h2 class="section-title">Why it belongs in Labs</h2>
+        <div class="section-label">Functionality</div>
+        <h2 class="section-title">What the system actually does</h2>
         <div class="detail-grid">
           <article class="detail-card">
-            <div class="meta-label">Engineering</div>
-            <h3>System design over script hacking</h3>
+            <div class="meta-label">Collection + Storage</div>
+            <h3>Local dataset over time</h3>
             <ul>
-              <li>Separates research, signal generation, and order execution into clearer functional layers.</li>
-              <li>Built with the mindset of maintainability and iteration, not just one-time market access.</li>
+              <li>Collects market snapshots into SQLite as a durable local research dataset.</li>
+              <li>Keeps the time-ordered history needed for screening, simulation, and training readiness.</li>
             </ul>
           </article>
           <article class="detail-card">
-            <div class="meta-label">Operations</div>
-            <h3>Production-minded controls</h3>
+            <div class="meta-label">Screening + Risk</div>
+            <h3>Deterministic filters plus Alpaca paper execution</h3>
             <ul>
-              <li>Emphasizes risk-aware automation, testing discipline, and controlled deployment thinking.</li>
-              <li>Reflects the same operational mindset used in infrastructure and cybersecurity environments.</li>
+              <li>Screens candidates through transparent momentum, liquidity, spread, delta, and premium constraints before promoting ideas into the paper-trading workflow.</li>
+              <li>Uses the Alpaca API for paper positions while tracking invested capital, current value, and unrealized P&amp;L through the lab ledger and dashboard.</li>
             </ul>
           </article>
           <article class="detail-card">
-            <div class="meta-label">Portfolio Fit</div>
-            <h3>Shows range beyond traditional IT labs</h3>
+            <div class="meta-label">Telemetry + Ops</div>
+            <h3>Operational visibility built in</h3>
             <ul>
-              <li>Demonstrates API integration, automation design, and compute-aware experimentation.</li>
-              <li>Adds a quantitative systems project to a portfolio otherwise centered on infrastructure and security labs.</li>
+              <li>Flask dashboard surfaces candidates, P&amp;L, database health, training readiness, recent runs, and GPU telemetry.</li>
+              <li>The project is described and operated like an infrastructure platform, not a one-script bot.</li>
             </ul>
           </article>
         </div>
