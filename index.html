@@ -1880,18 +1880,20 @@
       });
       const playerBar = document.getElementById('artifact-player');
       let previousScrollY = 0;
+      let playerAnchorTop = 0;
+
+      function measureAnchor() {
+        if (!playerBar) return;
+        if (playerBar.classList.contains('is-floating')) return;
+        const rect = playerBar.getBoundingClientRect();
+        playerAnchorTop = rect.top + (window.scrollY || window.pageYOffset || 0);
+      }
 
       function syncPlayerChrome() {
         if (!playerBar) return;
         const overlayOpen = overlay.classList.contains('is-open');
-        let shouldFloat = overlayOpen;
-        if (!shouldFloat) {
-          const hero = playerBar.closest('.hero') || playerBar.parentElement;
-          if (hero) {
-            const heroRect = hero.getBoundingClientRect();
-            shouldFloat = heroRect.bottom < playerBar.offsetHeight + 40;
-          }
-        }
+        const scrollY = window.scrollY || window.pageYOffset || 0;
+        const shouldFloat = overlayOpen || scrollY > (playerAnchorTop - 16);
         playerBar.classList.toggle('is-floating', shouldFloat);
         playerBar.classList.toggle('is-elevated', overlayOpen);
       }
@@ -1947,7 +1949,10 @@
         }
       });
       window.addEventListener('scroll', syncPlayerChrome, { passive: true });
-      window.addEventListener('resize', syncPlayerChrome);
+      window.addEventListener('resize', () => { measureAnchor(); syncPlayerChrome(); });
+      measureAnchor();
+      syncPlayerChrome();
+      window.addEventListener('load', () => { measureAnchor(); syncPlayerChrome(); });
       syncPlayerChrome();
     })();
 
