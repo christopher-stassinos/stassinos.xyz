@@ -1881,12 +1881,35 @@
       const playerBar = document.getElementById('artifact-player');
       let previousScrollY = 0;
       let playerAnchorTop = 0;
+      let playerHome = null;
+      let playerHomeNext = null;
+      let isFloating = false;
+
+      if (playerBar) {
+        playerHome = playerBar.parentElement;
+        playerHomeNext = playerBar.nextElementSibling;
+      }
 
       function measureAnchor() {
-        if (!playerBar) return;
-        if (playerBar.classList.contains('is-floating')) return;
+        if (!playerBar || isFloating) return;
         const rect = playerBar.getBoundingClientRect();
         playerAnchorTop = rect.top + (window.scrollY || window.pageYOffset || 0);
+      }
+
+      function setFloating(float) {
+        if (!playerBar || float === isFloating) return;
+        isFloating = float;
+        if (float) {
+          document.body.appendChild(playerBar);
+          playerBar.classList.add('is-floating');
+        } else {
+          if (playerHomeNext && playerHomeNext.parentElement === playerHome) {
+            playerHome.insertBefore(playerBar, playerHomeNext);
+          } else if (playerHome) {
+            playerHome.appendChild(playerBar);
+          }
+          playerBar.classList.remove('is-floating');
+        }
       }
 
       function syncPlayerChrome() {
@@ -1894,7 +1917,7 @@
         const overlayOpen = overlay.classList.contains('is-open');
         const scrollY = window.scrollY || window.pageYOffset || 0;
         const shouldFloat = overlayOpen || scrollY > (playerAnchorTop - 16);
-        playerBar.classList.toggle('is-floating', shouldFloat);
+        setFloating(shouldFloat);
         playerBar.classList.toggle('is-elevated', overlayOpen);
       }
 
