@@ -366,6 +366,7 @@
   <script>
     (function initPlayer() {
       const frameMode = window.top !== window.self;
+      const bar = document.getElementById('artifact-player');
       if (frameMode) {
         document.querySelectorAll('[data-overlay-close="true"]').forEach((link) => {
           link.addEventListener('click', (event) => {
@@ -374,9 +375,13 @@
             window.parent.postMessage({ type: 'stassinos-close-project-overlay' }, window.location.origin);
           });
         });
+        if (bar) {
+          bar.style.display = 'none';
+          bar.setAttribute('aria-hidden', 'true');
+        }
+        return;
       }
 
-      const bar = document.getElementById('artifact-player');
       if (!bar) return;
       const toggle = document.getElementById('player-toggle');
       const icon = document.getElementById('player-icon');
