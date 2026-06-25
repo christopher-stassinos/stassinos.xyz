@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 780" aria-hidden="true">
+  <defs>
+    <linearGradient id="artifactFace" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fafafa" />
+      <stop offset="26%" stop-color="#e2e2e2" />
+      <stop offset="62%" stop-color="#878787" />
+      <stop offset="100%" stop-color="#181818" />
+    </linearGradient>
+    <linearGradient id="artifactSpine" x1="0" y1="0" x2="0.72" y2="1">
+      <stop offset="0%" stop-color="#d8d8d8" />
+      <stop offset="46%" stop-color="#727272" />
+      <stop offset="100%" stop-color="#161616" />
+    </linearGradient>
+    <linearGradient id="artifactBase" x1="0" y1="0" x2="1" y2="0.9">
+      <stop offset="0%" stop-color="#d0d0d0" />
+      <stop offset="100%" stop-color="#242424" />
+    </linearGradient>
+  </defs>
+  <polygon points="252,48 326,70 312,130 248,118" fill="#1a1c21" opacity="0.64" />
+  <polygon points="184,612 214,576 230,700 192,734" fill="#181a1f" opacity="0.5" />
+  <polygon points="318,636 360,596 388,708 336,748" fill="#111318" opacity="0.54" />
+
+  <polygon points="214,646 206,430 224,220 268,78 340,92 370,230 364,470 330,676 272,758" fill="url(#artifactFace)" />
+  <polygon points="214,646 206,430 224,220 248,248 248,504 244,694" fill="#f5f5f5" />
+  <polygon points="224,220 268,78 340,92 320,166 248,248" fill="#dfdfdf" />
+  <polygon points="248,248 320,166 324,378 292,504 248,504" fill="url(#artifactSpine)" />
+  <polygon points="320,166 370,230 364,470 324,378" fill="#707070" />
+  <polygon points="248,504 292,504 272,758 244,694" fill="#5a5a5a" />
+  <polygon points="292,504 324,378 330,676 272,758" fill="#272727" />
+  <polygon points="248,118 312,130 320,166 248,248 224,220" fill="#cfcfcf" opacity="0.92" />
+  <polygon points="244,694 272,758 226,772 196,728" fill="#d7d7d7" opacity="0.78" />
+  <polygon points="272,758 330,676 380,716 304,780" fill="url(#artifactBase)" />
+
+  <polyline points="268,78 248,118 248,248 248,504 244,694" fill="none" stroke="rgba(255,255,255,0.36)" stroke-width="2" />
+  <polyline points="340,92 320,166 324,378 330,676" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="2" />
+  <polyline points="248,248 320,166 370,230" fill="none" stroke="rgba(255,255,255,0.32)" stroke-width="2" />
+  <polyline points="292,504 324,378 364,470" fill="none" stroke="rgba(0,0,0,0.34)" stroke-width="2" />
+  <polyline points="244,694 272,758 304,780 380,716" fill="none" stroke="rgba(0,0,0,0.4)" stroke-width="2" />
+</svg>

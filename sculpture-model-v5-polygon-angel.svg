@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 780" aria-hidden="true">
+  <defs>
+    <linearGradient id="angelWing" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f6f6f6" />
+      <stop offset="34%" stop-color="#dbdbdb" />
+      <stop offset="70%" stop-color="#8b8b8b" />
+      <stop offset="100%" stop-color="#212121" />
+    </linearGradient>
+    <linearGradient id="angelBody" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fafafa" />
+      <stop offset="28%" stop-color="#e3e3e3" />
+      <stop offset="58%" stop-color="#8a8a8a" />
+      <stop offset="100%" stop-color="#191919" />
+    </linearGradient>
+    <linearGradient id="angelCore" x1="0" y1="0" x2="0.68" y2="1">
+      <stop offset="0%" stop-color="#d8d8d8" />
+      <stop offset="44%" stop-color="#737373" />
+      <stop offset="100%" stop-color="#141414" />
+    </linearGradient>
+    <linearGradient id="angelBase" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#d5d5d5" />
+      <stop offset="100%" stop-color="#242424" />
+    </linearGradient>
+  </defs>
+  <polygon points="266,44 308,22 352,44 334,82 292,68" fill="#16181d" opacity="0.38" />
+  <polygon points="292,68 334,82 324,128 286,118" fill="#202329" opacity="0.62" />
+  <polygon points="252,120 292,68 286,118 258,150 226,144" fill="#181b21" opacity="0.52" />
+  <polygon points="334,82 382,144 350,168 324,128" fill="#15181d" opacity="0.52" />
+
+  <polygon points="124,292 208,166 238,252 222,412 166,552 106,450" fill="#16191f" opacity="0.5" />
+  <polygon points="160,250 248,130 278,216 260,388 208,546 146,466" fill="url(#angelWing)" />
+  <polygon points="146,466 208,546 198,642 130,574" fill="#acacac" opacity="0.82" />
+
+  <polygon points="360,140 452,248 474,446 414,562 356,406 344,234" fill="url(#angelWing)" />
+  <polygon points="452,248 506,348 522,500 454,592 414,562 474,446" fill="#111317" opacity="0.44" />
+  <polygon points="414,562 454,592 436,670 374,618" fill="#8a8a8a" opacity="0.8" />
+
+  <polygon points="236,676 228,452 244,240 286,122 350,134 390,246 384,462 344,674 294,754" fill="url(#angelBody)" />
+  <polygon points="236,676 228,452 244,240 272,268 274,512 268,706" fill="#f6f6f6" />
+  <polygon points="244,240 286,122 350,134 322,214 272,268" fill="#dfdfdf" />
+  <polygon points="272,268 322,214 334,392 304,516 274,512" fill="url(#angelCore)" />
+  <polygon points="322,214 350,134 390,246 384,462 334,392" fill="#747474" />
+  <polygon points="274,512 304,516 294,754 268,706" fill="#5c5c5c" />
+  <polygon points="304,516 334,392 344,674 294,754" fill="#292929" />
+
+  <polygon points="236,676 294,754 244,780 196,732" fill="#d7d7d7" opacity="0.78" />
+  <polygon points="294,754 344,674 394,730 336,780" fill="url(#angelBase)" />
+
+  <polyline points="286,122 272,268 274,512 268,706" fill="none" stroke="rgba(255,255,255,0.36)" stroke-width="2" />
+  <polyline points="350,134 322,214 334,392 344,674" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="2" />
+  <polyline points="160,250 248,130 286,122 272,268" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="2" />
+  <polyline points="360,140 350,134 322,214 390,246" fill="none" stroke="rgba(255,255,255,0.24)" stroke-width="2" />
+  <polyline points="208,546 198,642 244,780" fill="none" stroke="rgba(0,0,0,0.34)" stroke-width="2" />
+  <polyline points="414,562 436,670 336,780" fill="none" stroke="rgba(0,0,0,0.38)" stroke-width="2" />
+</svg>
