@@ -517,8 +517,8 @@
 
     .artifact-player {
       position: absolute;
-      bottom: 26px;
-      top: auto;
+      top: 26px;
+      bottom: auto;
       left: 50%;
       transform: translateX(-50%);
       width: min(420px, 84%);
@@ -2174,6 +2174,7 @@
       function persistState() {
         const state = getRuntimeState();
         if (!state) return;
+        if (!state.playlistLength) return;
         try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
       }
 
@@ -2267,7 +2268,7 @@
 
       function applySavedState() {
         const saved = readSavedState();
-        if (!saved || saved.playlistId !== PLAYLIST_ID) {
+        if (!saved || saved.playlistId !== PLAYLIST_ID || !saved.playlistLength) {
           try { player.mute(); player.playVideo(); } catch (e) {}
           muted = true;
           unmuteArmed = true;
@@ -2296,8 +2297,7 @@
           try {
             if (muted) player.mute();
             else { player.unMute(); player.setVolume(30); }
-            if (saved.shouldPlay) player.playVideo();
-            else player.pauseVideo();
+            player.playVideo();
           } catch (e) {}
           applyingSavedState = false;
           setTitle(true);
