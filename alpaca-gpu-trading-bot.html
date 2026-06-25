@@ -242,7 +242,7 @@
     </div>
     <div id="yt-host" aria-hidden="true" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;left:-9999px;top:-9999px;"></div>
     <header class="site-head">
-      <a class="brand" href="index.html">Christopher Stassinos</a>
+      <a class="brand" href="index.html" data-overlay-close="true">Christopher Stassinos</a>
       <div class="micro">Labs / Private Project Brief</div>
     </header>
 
@@ -264,7 +264,7 @@
             <li>The result is a private lab that behaves like an infrastructure system — with pipeline stages, telemetry, safety rails, and division of labor between orchestration hardware and compute hardware.</li>
           </ul>
           <div class="cta-row">
-            <a class="btn btn-primary" href="index.html">Back to portfolio</a>
+            <a class="btn btn-primary" href="index.html" data-overlay-close="true">Back to portfolio</a>
             <a class="btn btn-secondary" href="christopher-stassinos-cv.pdf" download>Download CV</a>
           </div>
         </article>
@@ -365,6 +365,17 @@
   </div>
   <script>
     (function initPlayer() {
+      const frameMode = window.top !== window.self;
+      if (frameMode) {
+        document.querySelectorAll('[data-overlay-close="true"]').forEach((link) => {
+          link.addEventListener('click', (event) => {
+            if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            event.preventDefault();
+            window.parent.postMessage({ type: 'stassinos-close-project-overlay' }, window.location.origin);
+          });
+        });
+      }
+
       const bar = document.getElementById('artifact-player');
       if (!bar) return;
       const toggle = document.getElementById('player-toggle');
