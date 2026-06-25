@@ -1943,16 +1943,64 @@
       const muteBtn = document.getElementById('player-mute');
       const trackEl = document.getElementById('player-track');
       const subEl = document.getElementById('player-sub');
+      const hostId = document.getElementById('yt-host')?.id || 'yt-host';
 
       const PLAYLIST_ID = 'PLX1pbf-obzvE';
       const PLAY = 'M8 5v14l11-7z';
       const PAUSE = 'M6 5h4v14H6zm8 0h4v14h-4z';
+      const STORAGE_KEY = 'stassinos-site-player-state-v1';
 
       let player = null;
       let ready = false;
       let muted = true;
       let unmuteArmed = true;
       let lastRenderedTitle = '';
+      let stateTimer = null;
+      let applyingSavedState = false;
+
+      function readSavedState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return null;
+          return JSON.parse(raw);
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function getRuntimeState() {
+        if (!player || !ready) return null;
+        let playlist = [];
+        let index = 0;
+        let seconds = 0;
+        let status = -1;
+        try {
+          playlist = player.getPlaylist() || [];
+          index = player.getPlaylistIndex ? Math.max(0, player.getPlaylistIndex()) : 0;
+          seconds = player.getCurrentTime ? Math.max(0, Math.floor(player.getCurrentTime())) : 0;
+          status = player.getPlayerState ? player.getPlayerState() : -1;
+        } catch (e) {}
+        return {
+          playlistId: PLAYLIST_ID,
+          playlistLength: playlist.length,
+          index,
+          seconds,
+          muted,
+          shouldPlay: status === 1,
+          savedAt: Date.now()
+        };
+      }
+
+      function persistState() {
+        const state = getRuntimeState();
+        if (!state) return;
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+      }
+
+      function startStateSync() {
+        if (stateTimer) clearInterval(stateTimer);
+        stateTimer = setInterval(persistState, 1000);
+      }
 
       function updateTicker() {
         const inner = trackEl.querySelector('.player-track-inner');
@@ -2034,15 +2082,52 @@
         muted = false;
         unmuteArmed = false;
         renderState();
+        persistState();
       }
 
-      // Load the IFrame API
-      const tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
-      document.head.appendChild(tag);
+      function applySavedState() {
+        const saved = readSavedState();
+        if (!saved || saved.playlistId !== PLAYLIST_ID) {
+          try { player.mute(); player.playVideo(); } catch (e) {}
+          muted = true;
+          unmuteArmed = true;
+          setTitle(true);
+          renderState();
+          persistState();
+          return;
+        }
 
-      window.onYouTubeIframeAPIReady = function () {
-        player = new YT.Player('yt-host', {
+        applyingSavedState = true;
+        muted = saved.muted !== false;
+        unmuteArmed = muted;
+
+        try {
+          player.loadPlaylist({
+            listType: 'playlist',
+            list: PLAYLIST_ID,
+            index: Math.max(0, saved.index || 0),
+            startSeconds: Math.max(0, saved.seconds || 0)
+          });
+        } catch (e) {
+          try { player.playVideo(); } catch (err) {}
+        }
+
+        window.setTimeout(() => {
+          try {
+            if (muted) player.mute();
+            else { player.unMute(); player.setVolume(30); }
+            if (saved.shouldPlay) player.playVideo();
+            else player.pauseVideo();
+          } catch (e) {}
+          applyingSavedState = false;
+          setTitle(true);
+          renderState();
+          persistState();
+        }, 700);
+      }
+
+      function bootPlayer() {
+        player = new YT.Player(hostId, {
           height: '1',
           width: '1',
           playerVars: {
@@ -2058,32 +2143,54 @@
           events: {
             onReady: function () {
               ready = true;
-              try { player.mute(); player.playVideo(); } catch (e) {}
-              setTitle(true);
-              renderState();
+              applySavedState();
+              startStateSync();
             },
-            onStateChange: function () { setTitle(); renderState(); },
-            onError: function () { trackEl.textContent = 'Playlist unavailable'; }
+            onStateChange: function () {
+              setTitle();
+              renderState();
+              if (!applyingSavedState) persistState();
+            },
+            onError: function () { subEl.textContent = '◼ Resume playback on interaction'; renderState(); }
           }
         });
-      };
+      }
 
-      // Controls
+      function bindYouTubeApi() {
+        const previousReady = window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady = function () {
+          if (typeof previousReady === 'function') {
+            try { previousReady(); } catch (e) {}
+          }
+          bootPlayer();
+        };
+      }
+
+      if (window.YT && window.YT.Player) bootPlayer();
+      else {
+        bindYouTubeApi();
+        if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
+          const tag = document.createElement('script');
+          tag.src = 'https://www.youtube.com/iframe_api';
+          document.head.appendChild(tag);
+        }
+      }
+
       toggle.addEventListener('click', () => {
         if (!ready) return;
         const state = player.getPlayerState();
         if (state === 1) { player.pauseVideo(); }
         else { player.playVideo(); doUnmute(); }
+        persistState();
       });
-      next.addEventListener('click', () => { if (ready) { player.nextVideo(); doUnmute(); } });
-      prev.addEventListener('click', () => { if (ready) { player.previousVideo(); doUnmute(); } });
+      next.addEventListener('click', () => { if (ready) { player.nextVideo(); doUnmute(); persistState(); } });
+      prev.addEventListener('click', () => { if (ready) { player.previousVideo(); doUnmute(); persistState(); } });
       muteBtn.addEventListener('click', () => {
         if (!ready) return;
         if (muted) { doUnmute(); }
-        else { try { player.mute(); } catch (e) {} muted = true; unmuteArmed = false; renderState(); }
+        else { try { player.mute(); } catch (e) {} muted = true; unmuteArmed = false; renderState(); persistState(); }
       });
 
-      // First interaction anywhere unmutes (browser autoplay policy)
       ['click', 'keydown', 'scroll', 'touchstart'].forEach(evt => {
         window.addEventListener(evt, function once() {
           doUnmute();
@@ -2092,6 +2199,8 @@
       });
 
       window.addEventListener('resize', () => updateTicker());
+      window.addEventListener('beforeunload', persistState);
+      document.addEventListener('visibilitychange', () => { if (document.hidden) persistState(); });
     })();
   </script>
 </body>
