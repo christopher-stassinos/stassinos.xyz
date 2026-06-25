@@ -1151,7 +1151,8 @@
       }
 
       .artifact-stage {
-        min-height: 560px;
+        min-height: auto;
+        padding: 74px 14px 16px;
       }
 
       .artifact-stage::after {
@@ -1192,9 +1193,14 @@
       }
 
       .artifact-model {
-        top: 35%;
+        position: relative;
+        left: auto;
+        top: auto;
+        transform: none;
         width: min(280px, 70%);
-        gap: 6px;
+        gap: 8px;
+        margin: 0 auto;
+        animation: none;
       }
 
       .artifact-frame {
@@ -1215,10 +1221,14 @@
       }
 
       .artifact-caption {
-        left: 14px;
-        right: 14px;
-        bottom: 12px;
+        position: relative;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        width: 100%;
+        margin-top: 12px;
         gap: 6px;
+        z-index: 2;
       }
 
       .artifact-caption .micro {
@@ -1235,6 +1245,11 @@
         max-width: 30ch;
         font-size: 12px;
         line-height: 1.45;
+      }
+
+      .artifact-plinth {
+        bottom: 140px;
+        opacity: 0.22;
       }
 
       .contact-links,
@@ -1267,11 +1282,10 @@
       }
 
       .artifact-stage {
-        min-height: 540px;
+        padding: 72px 12px 14px;
       }
 
       .artifact-model {
-        top: 34%;
         width: min(248px, 68%);
       }
 
