@@ -532,6 +532,29 @@
         0 18px 36px rgba(0,0,0,0.6),
         inset 0 0 0 1px rgba(255,255,255,0.05);
       backdrop-filter: blur(6px);
+      transition: top 0.22s ease, left 0.22s ease, right 0.22s ease, bottom 0.22s ease, width 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+
+    .artifact-player.is-floating {
+      position: fixed;
+      top: auto;
+      left: auto;
+      right: 22px;
+      bottom: 22px;
+      width: min(430px, calc(100vw - 28px));
+      transform: none;
+      z-index: 130;
+      box-shadow:
+        0 28px 54px rgba(0,0,0,0.62),
+        inset 0 0 0 1px rgba(255,255,255,0.05);
+    }
+
+    .artifact-player.is-elevated {
+      z-index: 160;
+      border-color: rgba(255,255,255,0.3);
+      box-shadow:
+        0 30px 70px rgba(0,0,0,0.72),
+        inset 0 0 0 1px rgba(255,255,255,0.06);
     }
 
     .player-btn {
@@ -1851,8 +1874,19 @@
       const closeBtn = document.getElementById('page-overlay-close');
       if (!overlay || !frame || !closeBtn) return;
 
-      const projectLinks = Array.from(document.querySelectorAll('a[href="alpaca-gpu-trading-bot.html"]'));
+      const projectLinks = Array.from(document.querySelectorAll('a[href$=".html"]')).filter((link) => {
+        const href = link.getAttribute('href') || '';
+        return href && href !== 'index.html' && !/^https?:/i.test(href) && !href.startsWith('#');
+      });
+      const playerBar = document.getElementById('artifact-player');
       let previousScrollY = 0;
+
+      function syncPlayerChrome() {
+        if (!playerBar) return;
+        const shouldFloat = (window.scrollY || window.pageYOffset || 0) > 140 || overlay.classList.contains('is-open');
+        playerBar.classList.toggle('is-floating', shouldFloat);
+        playerBar.classList.toggle('is-elevated', overlay.classList.contains('is-open'));
+      }
 
       function closeOverlay(pushState) {
         overlay.classList.remove('is-open');
@@ -1861,6 +1895,7 @@
         frame.removeAttribute('src');
         window.scrollTo({ top: previousScrollY, behavior: 'auto' });
         if (pushState) history.pushState({ overlay: false }, '', 'index.html');
+        syncPlayerChrome();
       }
 
       function openOverlay(url, pushState) {
@@ -1870,6 +1905,7 @@
         document.body.style.overflow = 'hidden';
         frame.src = url;
         if (pushState) history.pushState({ overlay: true, url }, '', url);
+        syncPlayerChrome();
       }
 
       projectLinks.forEach((link) => {
@@ -1892,13 +1928,19 @@
         if (event.data && event.data.type === 'stassinos-close-project-overlay') closeOverlay(true);
       });
       window.addEventListener('popstate', () => {
-        const showingLab = /\/alpaca-gpu-trading-bot\.html$/.test(location.pathname);
-        if (showingLab && !overlay.classList.contains('is-open')) {
-          openOverlay('alpaca-gpu-trading-bot.html', false);
-        } else if (!showingLab && overlay.classList.contains('is-open')) {
+        const path = (location.pathname.split('/').pop() || 'index.html');
+        const showingSecondary = path !== 'index.html';
+        if (showingSecondary && !overlay.classList.contains('is-open')) {
+          openOverlay(path, false);
+        } else if (!showingSecondary && overlay.classList.contains('is-open')) {
           closeOverlay(false);
+        } else {
+          syncPlayerChrome();
         }
       });
+      window.addEventListener('scroll', syncPlayerChrome, { passive: true });
+      window.addEventListener('resize', syncPlayerChrome);
+      syncPlayerChrome();
     })();
 
     const revealTargets = document.querySelectorAll('.reveal');
