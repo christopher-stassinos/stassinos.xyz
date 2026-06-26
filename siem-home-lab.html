@@ -65,17 +65,6 @@
       content: ''; width: 8px; height: 8px; border: 1px solid rgba(255,255,255,0.6); transform: rotate(45deg);
     }
     .micro, .kicker, .meta-label, .section-label { color: var(--muted); }
-    .head-status {
-      display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);
-    }
-    .pulse-dot {
-      width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.85); box-shadow: 0 0 0 0 rgba(255,255,255,0.5); animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.45); }
-      70% { box-shadow: 0 0 0 7px rgba(255,255,255,0); }
-      100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
-    }
     .panel {
       position: relative; border: 1px solid var(--line); background: var(--panel); overflow: hidden;
     }
@@ -130,8 +119,9 @@
     .console-title { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
     .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .stat {
-      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); padding: 12px 12px 11px; display: grid; gap: 4px;
+      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); padding: 12px 12px 11px; display: grid; gap: 4px; transition: border-color 200ms ease, background 200ms ease;
     }
+    .stat:hover { border-color: rgba(255,255,255,0.22); background: rgba(255,255,255,0.04); }
     .stat strong { font-family: var(--mono); font-size: 24px; line-height: 1; color: var(--signal); }
     .stat span { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
     .stat.alert strong { color: var(--alert); }
@@ -179,11 +169,13 @@
       display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px;
     }
     .detail-card {
-      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); padding: 18px; display: grid; gap: 11px; align-content: start; position: relative;
+      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); padding: 18px; display: grid; gap: 11px; align-content: start; position: relative; transition: border-color 220ms ease, background 220ms ease, transform 220ms ease;
     }
+    .detail-card:hover { border-color: rgba(255,255,255,0.22); background: rgba(255,255,255,0.035); transform: translateY(-2px); }
     .detail-card::after {
-      content: ''; position: absolute; left: 0; top: 0; width: 2px; height: 100%; background: linear-gradient(180deg, var(--signal), transparent);
+      content: ''; position: absolute; left: 0; top: 0; width: 2px; height: 100%; background: linear-gradient(180deg, rgba(255,255,255,0.5), transparent 70%); opacity: 0.4; transition: opacity 220ms ease;
     }
+    .detail-card:hover::after { opacity: 1; }
     .detail-card h3 { font-size: 19px; line-height: 1.12; font-weight: 500; }
     .detail-card p, .detail-card li { color: var(--text-soft); line-height: 1.62; font-size: 14px; }
     .detail-card ul { padding-left: 18px; display: grid; gap: 8px; }
@@ -236,7 +228,7 @@
   <div class="shell">
     <header class="site-head">
       <a class="brand" href="index.html" data-overlay-close="true">Christopher Stassinos</a>
-      <span class="head-status"><span class="pulse-dot"></span>SIEM · Live Detections</span>
+      <div class="micro">Labs / Private Project Brief</div>
     </header>
 
     <main>
