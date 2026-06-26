@@ -406,6 +406,7 @@
       let pointerX = window.innerWidth * 0.5;
       let pointerY = window.innerHeight * 0.5;
       let cursorFrame = null;
+      const hideCursor = () => cursorNode.classList.remove('visible');
 
       const paintCursor = () => {
         cursorFrame = null;
@@ -421,8 +422,15 @@
         if (!cursorFrame) cursorFrame = requestAnimationFrame(paintCursor);
       });
 
-      window.addEventListener('pointerleave', () => cursorNode.classList.remove('visible'));
-      window.addEventListener('blur', () => cursorNode.classList.remove('visible'));
+      window.addEventListener('pointerleave', hideCursor);
+      window.addEventListener('blur', hideCursor);
+      window.addEventListener('mouseout', (event) => {
+        if (!event.relatedTarget) hideCursor();
+      });
+      document.addEventListener('mouseleave', hideCursor);
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) hideCursor();
+      });
     })();
 
     (function initOverlayCloseLinks() {
