@@ -625,6 +625,16 @@
         inset 0 0 0 1px rgba(255,255,255,0.05);
     }
 
+    @media (max-width: 767px) {
+      .artifact-player.is-floating {
+        left: 50%;
+        right: auto;
+        bottom: max(16px, env(safe-area-inset-bottom, 0px) + 10px);
+        width: min(430px, calc(100vw - 16px));
+        transform: translateX(-50%);
+      }
+    }
+
     .artifact-player.is-elevated {
       z-index: 160;
       border-color: rgba(255,255,255,0.3);
@@ -2399,6 +2409,7 @@
           playerVars: {
             listType: 'playlist',
             list: PLAYLIST_ID,
+            playlist: PLAYLIST_ID,
             autoplay: 1,
             mute: 1,
             controls: 0,
@@ -2412,7 +2423,16 @@
               applySavedState();
               startStateSync();
             },
-            onStateChange: function () {
+            onStateChange: function (event) {
+              if (event && event.data === YT.PlayerState.ENDED) {
+                try {
+                  const playlist = player.getPlaylist ? player.getPlaylist() : [];
+                  const currentIndex = player.getPlaylistIndex ? player.getPlaylistIndex() : -1;
+                  if (playlist && playlist.length && currentIndex >= playlist.length - 1) {
+                    player.playVideoAt(0);
+                  }
+                } catch (e) {}
+              }
               setTitle();
               renderState();
               if (!applyingSavedState) persistState();
