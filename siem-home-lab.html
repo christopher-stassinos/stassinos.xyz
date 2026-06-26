@@ -50,6 +50,30 @@
       background-image: radial-gradient(circle at 22% 18%, rgba(255,255,255,0.35) 0 1px, transparent 1px), radial-gradient(circle at 72% 44%, rgba(255,255,255,0.22) 0 1px, transparent 1px), radial-gradient(circle at 46% 72%, rgba(255,255,255,0.18) 0 1px, transparent 1px);
       background-size: 16px 16px, 22px 22px, 26px 26px;
     }
+    html {
+      scrollbar-color: rgba(255,255,255,0.34) rgba(255,255,255,0.06);
+      scrollbar-width: thin;
+    }
+    body::-webkit-scrollbar {
+      width: 14px;
+      height: 14px;
+    }
+    body::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.04);
+      border-left: 1px solid rgba(255,255,255,0.08);
+    }
+    body::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, rgba(255,255,255,0.42), rgba(255,255,255,0.22));
+      border: 3px solid rgba(11,13,17,0.96);
+      border-radius: 0;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+    }
+    body::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, rgba(255,255,255,0.58), rgba(255,255,255,0.3));
+    }
+    body::-webkit-scrollbar-corner {
+      background: rgba(255,255,255,0.04);
+    }
     a { color: inherit; }
     .shell { position: relative; z-index: 2; max-width: 1180px; margin: 0 auto; padding: 28px 22px 80px; }
     .site-head {
