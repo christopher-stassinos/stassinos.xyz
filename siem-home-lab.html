@@ -10,13 +10,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #111318;
+      --bg: #0b0e12;
       --panel: rgba(255, 255, 255, 0.025);
       --panel-strong: rgba(255, 255, 255, 0.035);
       --line: rgba(255, 255, 255, 0.12);
       --text: #ffffff;
       --text-soft: rgba(255, 255, 255, 0.8);
       --muted: rgba(255, 255, 255, 0.56);
+      --signal: #4ade80;
+      --signal-dim: rgba(74, 222, 128, 0.16);
+      --alert: #f87171;
+      --amber: #fbbf24;
       --mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
       --sans: 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
@@ -25,7 +29,7 @@
       min-height: 100vh;
       font-family: var(--sans);
       color: var(--text);
-      background: radial-gradient(circle at 50% -20%, rgba(255,255,255,0.08), transparent 34%), linear-gradient(180deg, #171a20 0%, #101217 52%, #090a0d 100%);
+      background: radial-gradient(circle at 80% -10%, rgba(74,222,128,0.10), transparent 38%), radial-gradient(circle at 10% 0%, rgba(255,255,255,0.05), transparent 30%), linear-gradient(180deg, #11151b 0%, #0c0f14 52%, #07090c 100%);
       overflow-x: hidden;
       position: relative;
     }
@@ -37,12 +41,12 @@
       z-index: 0;
     }
     body::before {
-      opacity: 0.16;
+      opacity: 0.14;
       background: repeating-linear-gradient(to bottom, rgba(255,255,255,0.08) 0, rgba(255,255,255,0.08) 1px, transparent 1px, transparent 3px);
       mix-blend-mode: screen;
     }
     body::after {
-      opacity: 0.06;
+      opacity: 0.05;
       background-image: radial-gradient(circle at 22% 18%, rgba(255,255,255,0.35) 0 1px, transparent 1px), radial-gradient(circle at 72% 44%, rgba(255,255,255,0.22) 0 1px, transparent 1px), radial-gradient(circle at 46% 72%, rgba(255,255,255,0.18) 0 1px, transparent 1px);
       background-size: 16px 16px, 22px 22px, 26px 26px;
     }
@@ -61,6 +65,17 @@
       content: ''; width: 8px; height: 8px; border: 1px solid rgba(255,255,255,0.6); transform: rotate(45deg);
     }
     .micro, .kicker, .meta-label, .section-label { color: var(--muted); }
+    .head-status {
+      display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--signal);
+    }
+    .pulse-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 0 0 rgba(74,222,128,0.6); animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(74,222,128,0.55); }
+      70% { box-shadow: 0 0 0 7px rgba(74,222,128,0); }
+      100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
+    }
     .panel {
       position: relative; border: 1px solid var(--line); background: var(--panel); overflow: hidden;
     }
@@ -69,77 +84,151 @@
     }
     main { display: grid; gap: 18px; }
     .hero {
-      display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr); gap: 14px;
+      display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(330px, 0.95fr); gap: 14px;
     }
-    .hero-copy, .hero-visual, .section, .summary-grid { padding: 24px; }
+    .hero-copy, .hero-visual, .section { padding: 26px; }
     .hero-copy {
-      display: grid; gap: 18px; align-content: start; min-height: 620px;
+      display: grid; gap: 16px; align-content: start;
     }
     .hero-title {
-      font-family: var(--mono); font-size: clamp(42px, 6.5vw, 82px); line-height: 0.88; letter-spacing: -0.095em; text-transform: uppercase; font-weight: 300;
+      font-family: var(--mono); font-size: clamp(42px, 6.5vw, 80px); line-height: 0.86; letter-spacing: -0.095em; text-transform: uppercase; font-weight: 300;
     }
     .hero-title span { display: block; }
+    .hero-title em { font-style: normal; color: var(--signal); }
     .hero-summary {
-      max-width: 60ch; font-size: clamp(17px, 1.7vw, 20px); line-height: 1.65; color: var(--text-soft);
+      max-width: 60ch; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.62; color: var(--text-soft);
     }
     .hero-summary strong { color: var(--text); }
     .hero-points {
-      display: grid; gap: 8px; padding-left: 18px; color: var(--text-soft); line-height: 1.65; font-size: 14px;
+      display: grid; gap: 10px; color: var(--text-soft); line-height: 1.6; font-size: 14px;
     }
-    .cta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+    .hero-points li { list-style: none; position: relative; padding-left: 22px; }
+    .hero-points li::before {
+      content: ''; position: absolute; left: 0; top: 8px; width: 9px; height: 9px; border: 1px solid var(--signal); background: var(--signal-dim); transform: rotate(45deg);
+    }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
     .btn {
       min-height: 46px; padding: 12px 18px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; border: 1px solid rgba(255,255,255,0.18); transition: opacity 180ms ease, background 180ms ease;
     }
-    .btn-primary { background: #fff; color: #101217; border-color: #fff; }
+    .btn-primary { background: var(--signal); color: #06210f; border-color: var(--signal); font-weight: 500; }
     .btn-secondary { background: transparent; color: #fff; }
     .btn:hover { opacity: 0.82; }
-    .summary-grid {
-      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; align-content: start; min-height: 620px; background: var(--panel-strong);
+
+    /* ---- Hero visual: SOC console ---- */
+    .hero-visual {
+      background: linear-gradient(180deg, rgba(10,14,18,0.6), rgba(6,9,12,0.6));
+      display: grid; gap: 14px; align-content: start;
     }
-    .metric {
-      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); padding: 14px; display: grid; gap: 8px; min-height: 140px;
+    .console-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--line);
     }
-    .metric strong { font-size: clamp(22px, 2.4vw, 34px); line-height: 1; }
-    .metric p { color: var(--text-soft); font-size: 13px; line-height: 1.55; }
-    .metric.wide { grid-column: 1 / -1; }
+    .console-dots { display: inline-flex; gap: 6px; }
+    .console-dots span { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.18); }
+    .console-dots span:nth-child(1) { background: var(--alert); }
+    .console-dots span:nth-child(2) { background: var(--amber); }
+    .console-dots span:nth-child(3) { background: var(--signal); }
+    .console-title { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .stat {
+      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); padding: 12px 12px 11px; display: grid; gap: 4px;
+    }
+    .stat strong { font-family: var(--mono); font-size: 24px; line-height: 1; color: var(--signal); }
+    .stat span { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+    .stat.alert strong { color: var(--alert); }
+
+    .flow {
+      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.015); padding: 16px 14px; display: grid; gap: 9px;
+    }
+    .flow-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+    .flow-chain { display: flex; align-items: stretch; gap: 6px; flex-wrap: wrap; }
+    .node {
+      flex: 1 1 auto; min-width: 0; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.03); padding: 9px 8px; display: grid; gap: 3px; text-align: center;
+    }
+    .node b { font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; color: var(--text); white-space: nowrap; }
+    .node small { font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .node.sink { border-color: rgba(74,222,128,0.45); background: var(--signal-dim); }
+    .node.sink b { color: var(--signal); }
+    .arrow { display: grid; place-items: center; color: var(--signal); font-family: var(--mono); font-size: 14px; flex: none; }
+
+    .alert-feed { display: grid; gap: 6px; }
+    .alert-line {
+      display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding: 9px 11px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.015); font-family: var(--mono); font-size: 11px;
+    }
+    .sev { width: 7px; height: 7px; border-radius: 50%; }
+    .sev.high { background: var(--alert); box-shadow: 0 0 8px rgba(248,113,113,0.7); }
+    .sev.med { background: var(--amber); box-shadow: 0 0 8px rgba(251,191,36,0.6); }
+    .sev.low { background: var(--signal); box-shadow: 0 0 8px rgba(74,222,128,0.6); }
+    .alert-line .name { color: var(--text-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .alert-line .eid { color: var(--muted); font-size: 10px; }
+
+    .stack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .stack-item {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-soft); text-align: center; padding: 8px 6px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
     .section { display: grid; gap: 18px; }
+    .section-label { display: inline-flex; align-items: center; gap: 9px; }
+    .section-label::before { content: ''; width: 18px; height: 1px; background: var(--signal); }
     .section-title {
-      font-family: var(--mono); font-size: clamp(28px, 4vw, 46px); line-height: 0.95; text-transform: uppercase; letter-spacing: -0.055em; font-weight: 400; max-width: 16ch;
+      font-family: var(--mono); font-size: clamp(26px, 3.6vw, 42px); line-height: 0.96; text-transform: uppercase; letter-spacing: -0.05em; font-weight: 400; max-width: 18ch;
     }
     .section-copy {
-      max-width: 76ch; color: var(--text-soft); line-height: 1.72; font-size: 15px;
+      max-width: 76ch; color: var(--text-soft); line-height: 1.7; font-size: 15px;
     }
     .detail-grid {
       display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px;
     }
     .detail-card {
-      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); padding: 16px; display: grid; gap: 12px; align-content: start;
+      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); padding: 18px; display: grid; gap: 11px; align-content: start; position: relative;
     }
-    .detail-card h3 { font-size: 20px; line-height: 1.08; font-weight: 500; }
-    .detail-card p, .detail-card li { color: var(--text-soft); line-height: 1.65; font-size: 14px; }
+    .detail-card::after {
+      content: ''; position: absolute; left: 0; top: 0; width: 2px; height: 100%; background: linear-gradient(180deg, var(--signal), transparent);
+    }
+    .detail-card h3 { font-size: 19px; line-height: 1.12; font-weight: 500; }
+    .detail-card p, .detail-card li { color: var(--text-soft); line-height: 1.62; font-size: 14px; }
     .detail-card ul { padding-left: 18px; display: grid; gap: 8px; }
-    .detect-list { display: grid; gap: 10px; }
-    .detect-row {
-      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); padding: 14px 16px; display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 14px; align-items: center;
+
+    /* ---- Terminal-style detections ---- */
+    .terminal {
+      border: 1px solid var(--line); background: linear-gradient(180deg, rgba(8,11,15,0.85), rgba(6,8,11,0.9)); overflow: hidden;
     }
-    .detect-row .meta-label { color: var(--text); }
-    .detect-row code {
-      font-family: var(--mono); font-size: 12px; color: var(--text-soft); line-height: 1.5; word-break: break-word;
+    .terminal-bar {
+      display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,0.02);
     }
+    .terminal-bar .console-dots span { width: 9px; height: 9px; }
+    .terminal-bar .path { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--muted); }
+    .query { padding: 16px 16px; border-bottom: 1px solid rgba(255,255,255,0.06); display: grid; gap: 9px; }
+    .query:last-child { border-bottom: none; }
+    .query-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .chip {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border: 1px solid rgba(255,255,255,0.16); color: var(--text-soft);
+    }
+    .chip.eid { color: var(--signal); border-color: rgba(74,222,128,0.4); background: var(--signal-dim); }
+    .chip.sev-high { color: var(--alert); border-color: rgba(248,113,113,0.4); }
+    .chip.sev-med { color: var(--amber); border-color: rgba(251,191,36,0.4); }
+    .query-name { font-family: var(--mono); font-size: 13px; letter-spacing: 0.04em; color: var(--text); margin-right: auto; }
+    .spl {
+      font-family: var(--mono); font-size: 12.5px; line-height: 1.6; color: var(--text-soft); white-space: pre-wrap; word-break: break-word; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.06); padding: 11px 13px; overflow-x: auto;
+    }
+    .spl .cmd { color: var(--signal); }
+    .spl .field { color: #8bb4ff; }
+    .spl .val { color: var(--amber); }
+    .spl .pipe { color: var(--muted); }
+    .spl .prompt { color: var(--signal); user-select: none; }
+
     footer {
       display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; padding: 10px 2px 0; flex-wrap: wrap;
     }
     @media (max-width: 980px) {
       .hero, .detail-grid { grid-template-columns: 1fr; }
-      .hero-copy, .summary-grid { min-height: auto; }
     }
     @media (max-width: 640px) {
-      .hero-copy, .hero-visual, .section, .summary-grid { padding: 18px; }
-      .summary-grid { grid-template-columns: 1fr; }
+      .hero-copy, .hero-visual, .section { padding: 18px; }
       .hero-title { font-size: clamp(36px, 13vw, 64px); }
       .section-title { max-width: none; }
       .cta-row .btn { width: 100%; }
-      .detect-row { grid-template-columns: 1fr; gap: 8px; }
+      .stat-row { grid-template-columns: repeat(3, 1fr); }
+      .query-name { margin-right: 0; width: 100%; }
     }
   </style>
 </head>
@@ -147,25 +236,25 @@
   <div class="shell">
     <header class="site-head">
       <a class="brand" href="index.html" data-overlay-close="true">Christopher Stassinos</a>
-      <div class="micro">Labs / Private Project Brief</div>
+      <span class="head-status"><span class="pulse-dot"></span>SIEM · Live Detections</span>
     </header>
 
     <main>
       <section class="hero">
         <article class="panel hero-copy">
-          <div class="kicker">Detection Engineering</div>
-          <h1 class="hero-title"><span>SIEM</span><span>Home Lab</span></h1>
+          <div class="kicker">Detection Engineering · Home Lab</div>
+          <h1 class="hero-title"><span>SIEM</span><span><em>Detection</em> Lab</span></h1>
           <p class="hero-summary">
-            A <strong>self-contained security operations lab</strong> built on VMware, where a small
-            <strong>Windows Active Directory domain</strong> sits behind a <strong>pfSense firewall</strong> and feeds
-            host, identity, and network telemetry into <strong>Splunk</strong>. The lab exists to do one thing well:
-            generate realistic attacker behavior, capture the right logs, and turn that data into
-            <strong>working detections</strong> — the full loop from raw event to alert.
+            A <strong>self-contained security operations lab</strong> on VMware, where a
+            <strong>Windows Active Directory domain</strong> behind a <strong>pfSense firewall</strong> feeds host,
+            identity, and network telemetry into <strong>Splunk</strong>. Built to run one loop well:
+            generate real attacker behavior, capture the right logs, and turn them into
+            <strong>working detections</strong>.
           </p>
           <ul class="hero-points">
-            <li>Windows Server runs Active Directory and Group Policy, with domain-joined Windows clients producing real authentication, account, and policy events.</li>
-            <li>Sysmon and Windows Event Forwarding ship endpoint and identity telemetry into Splunk, building a centralized view of host and login activity across the domain.</li>
-            <li>Attacks are simulated on purpose — brute force, account lockouts, and privilege escalation — then each one is detected with a purpose-written Splunk search so the lab proves detection, not just collection.</li>
+            <li>Windows Server runs Active Directory and Group Policy; domain-joined clients produce real authentication, account, and policy events.</li>
+            <li>Sysmon and Windows Event Forwarding ship endpoint and identity telemetry into a single Splunk index.</li>
+            <li>Brute force, lockouts, and privilege escalation are simulated on purpose — then each one is caught with a purpose-written Splunk search.</li>
           </ul>
           <div class="cta-row">
             <a class="btn btn-primary" href="index.html" data-overlay-close="true">Back to portfolio</a>
@@ -173,31 +262,49 @@
           </div>
         </article>
 
-        <aside class="panel summary-grid hero-visual" aria-label="Project summary">
-          <div class="metric">
-            <span class="meta-label">Virtualization</span>
-            <strong>VMware</strong>
-            <p>Isolated multi-VM environment hosting the domain controller, clients, firewall, and SIEM on a single workstation.</p>
+        <aside class="panel hero-visual" aria-label="SOC console overview">
+          <div class="console-head">
+            <span class="console-dots"><span></span><span></span><span></span></span>
+            <span class="console-title">soc-console · home.lab</span>
           </div>
-          <div class="metric">
-            <span class="meta-label">Identity</span>
-            <strong>Windows AD</strong>
-            <p>Active Directory domain with Group Policy, organizational units, and domain-joined Windows endpoints.</p>
+
+          <div class="stat-row">
+            <div class="stat"><strong>4</strong><span>Detections</span></div>
+            <div class="stat"><strong>6</strong><span>Log Sources</span></div>
+            <div class="stat alert"><strong>3</strong><span>Sev Tiers</span></div>
           </div>
-          <div class="metric">
-            <span class="meta-label">Perimeter</span>
-            <strong>pfSense</strong>
-            <p>Firewall and routing layer segmenting the lab network and providing controlled egress and traffic visibility.</p>
+
+          <div class="flow">
+            <span class="flow-label">Telemetry Pipeline</span>
+            <div class="flow-chain">
+              <div class="node"><b>Endpoints</b><small>AD · Clients</small></div>
+              <div class="arrow">→</div>
+              <div class="node"><b>Sysmon</b><small>WEF</small></div>
+              <div class="arrow">→</div>
+              <div class="node sink"><b>Splunk</b><small>Index</small></div>
+            </div>
           </div>
-          <div class="metric">
-            <span class="meta-label">SIEM</span>
-            <strong>Splunk</strong>
-            <p>Central log index for Windows Event Logs, Sysmon telemetry, and AD audit data, with searches driving detection.</p>
+
+          <div class="flow">
+            <span class="flow-label">Recent Alerts</span>
+            <div class="alert-feed">
+              <div class="alert-line"><span class="sev high"></span><span class="name">Brute Force — Failed Logons</span><span class="eid">4625</span></div>
+              <div class="alert-line"><span class="sev med"></span><span class="name">Account Lockout Spike</span><span class="eid">4740</span></div>
+              <div class="alert-line"><span class="sev high"></span><span class="name">Privilege Escalation</span><span class="eid">4672</span></div>
+              <div class="alert-line"><span class="sev low"></span><span class="name">Suspicious Process Tree</span><span class="eid">SYS-1</span></div>
+            </div>
           </div>
-          <div class="metric wide">
-            <span class="meta-label">Operating Model</span>
-            <strong>Collect → Attack → Detect</strong>
-            <p>The lab is built as a closed detection-engineering loop: forward the right telemetry into Splunk, run deliberate attack scenarios against the domain, then write and validate searches that catch each behavior in real time.</p>
+
+          <div class="flow">
+            <span class="flow-label">Lab Stack</span>
+            <div class="stack-grid">
+              <span class="stack-item">VMware</span>
+              <span class="stack-item">Windows Server</span>
+              <span class="stack-item">Active Directory</span>
+              <span class="stack-item">pfSense</span>
+              <span class="stack-item">Sysmon</span>
+              <span class="stack-item">Splunk</span>
+            </div>
           </div>
         </aside>
       </section>
@@ -206,11 +313,10 @@
         <div class="section-label">Architecture</div>
         <h2 class="section-title">How the lab is wired together</h2>
         <p class="section-copy">
-          Everything runs as virtual machines on a single host under VMware. A pfSense VM sits at the edge and segments the
-          internal lab network from everything else. Inside that network, a Windows Server domain controller runs Active
-          Directory and Group Policy, with domain-joined Windows clients generating day-to-day authentication and account
-          activity. Sysmon and Windows Event Forwarding push endpoint and identity events into a Splunk instance, which
-          becomes the single place to search, correlate, and alert on what happened across the domain.
+          One VMware host, four roles. pfSense sits at the edge and segments the lab network. A Windows Server domain
+          controller runs Active Directory and Group Policy while domain-joined clients generate real logon and account
+          traffic. Sysmon and Windows Event Forwarding stream that activity into a single Splunk index — one pane of
+          glass to search, correlate, and alert across the whole domain.
         </p>
         <div class="detail-grid">
           <article class="detail-card">
@@ -235,26 +341,52 @@
         <div class="section-label">Detections</div>
         <h2 class="section-title">Attacks simulated, then caught</h2>
         <p class="section-copy">
-          Each scenario follows the same discipline: run the attack against the domain, confirm the expected events land
-          in Splunk, then write a search that isolates that behavior reliably. The goal is detection logic that maps to
-          specific Windows security event IDs rather than vague noise.
+          Same discipline every time: run the attack against the domain, confirm the events land in Splunk, then write a
+          search that isolates that behavior and nothing else. Detection logic is pinned to specific Windows security
+          event IDs — not keyword guesses.
         </p>
-        <div class="detect-list">
-          <div class="detect-row">
-            <span class="meta-label">Brute Force Logons</span>
-            <code>EventCode=4625 | stats count by src_ip, user | where count &gt; threshold</code>
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="console-dots"><span></span><span></span><span></span></span>
+            <span class="path">splunk &gt; search · detections.spl</span>
           </div>
-          <div class="detect-row">
-            <span class="meta-label">Account Lockouts</span>
-            <code>EventCode=4740 | stats count by user, ComputerName | sort - count</code>
+
+          <div class="query">
+            <div class="query-head">
+              <span class="query-name">Brute Force Logons</span>
+              <span class="chip eid">EventCode 4625</span>
+              <span class="chip sev-high">High</span>
+            </div>
+<pre class="spl"><span class="prompt">&gt; </span><span class="field">EventCode</span>=<span class="val">4625</span> <span class="pipe">|</span> <span class="cmd">stats</span> <span class="cmd">count</span> <span class="cmd">by</span> <span class="field">src_ip</span>, <span class="field">user</span> <span class="pipe">|</span> <span class="cmd">where</span> <span class="field">count</span> &gt; <span class="val">15</span></pre>
           </div>
-          <div class="detect-row">
-            <span class="meta-label">Privilege Escalation</span>
-            <code>EventCode=4672 OR EventCode=4728 OR EventCode=4732 | table _time, user, Group_Name</code>
+
+          <div class="query">
+            <div class="query-head">
+              <span class="query-name">Account Lockouts</span>
+              <span class="chip eid">EventCode 4740</span>
+              <span class="chip sev-med">Medium</span>
+            </div>
+<pre class="spl"><span class="prompt">&gt; </span><span class="field">EventCode</span>=<span class="val">4740</span> <span class="pipe">|</span> <span class="cmd">stats</span> <span class="cmd">count</span> <span class="cmd">by</span> <span class="field">user</span>, <span class="field">ComputerName</span> <span class="pipe">|</span> <span class="cmd">sort</span> - <span class="field">count</span></pre>
           </div>
-          <div class="detect-row">
-            <span class="meta-label">Suspicious Process Activity</span>
-            <code>source="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1 | stats count by ParentImage, Image</code>
+
+          <div class="query">
+            <div class="query-head">
+              <span class="query-name">Privilege Escalation</span>
+              <span class="chip eid">4672 · 4728 · 4732</span>
+              <span class="chip sev-high">High</span>
+            </div>
+<pre class="spl"><span class="prompt">&gt; </span>(<span class="field">EventCode</span>=<span class="val">4672</span> <span class="cmd">OR</span> <span class="field">EventCode</span>=<span class="val">4728</span> <span class="cmd">OR</span> <span class="field">EventCode</span>=<span class="val">4732</span>)
+  <span class="pipe">|</span> <span class="cmd">table</span> <span class="field">_time</span>, <span class="field">user</span>, <span class="field">Group_Name</span></pre>
+          </div>
+
+          <div class="query">
+            <div class="query-head">
+              <span class="query-name">Suspicious Process Tree</span>
+              <span class="chip eid">Sysmon EID 1</span>
+              <span class="chip sev-med">Medium</span>
+            </div>
+<pre class="spl"><span class="prompt">&gt; </span><span class="field">source</span>=<span class="val">"WinEventLog:Microsoft-Windows-Sysmon/Operational"</span> <span class="field">EventCode</span>=<span class="val">1</span>
+  <span class="pipe">|</span> <span class="cmd">stats</span> <span class="cmd">count</span> <span class="cmd">by</span> <span class="field">ParentImage</span>, <span class="field">Image</span></pre>
           </div>
         </div>
       </section>
