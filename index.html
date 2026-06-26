@@ -2137,6 +2137,7 @@
       let pointerX = lastX;
       let pointerY = lastY;
       let cursorFrame = null;
+      let cursorSourceNonce = 0;
 
       const burst = (x, y, vx = 0, vy = 0) => {
         const speed = Math.hypot(vx, vy);
@@ -2206,6 +2207,33 @@
 
       window.addEventListener('blur', () => {
         if (cursorNode) cursorNode.classList.remove('visible');
+      });
+
+      window.addEventListener('message', (event) => {
+        if (event.origin !== window.location.origin || !event.data || typeof event.data !== 'object') return;
+        if (!cursorNode) return;
+
+        if (event.data.type === 'stassinos-overlay-cursor') {
+          const frame = document.getElementById('page-overlay-frame');
+          const overlay = document.getElementById('page-overlay');
+          if (!frame || !overlay || !overlay.classList.contains('is-open')) return;
+          const rect = frame.getBoundingClientRect();
+          pointerX = rect.left + Number(event.data.x || 0);
+          pointerY = rect.top + Number(event.data.y || 0);
+          cursorNode.classList.add('visible');
+          cursorNode.classList.toggle('is-link', Boolean(event.data.isLink));
+          cursorSourceNonce += 1;
+          if (!cursorFrame) cursorFrame = requestAnimationFrame(paintCursor);
+          return;
+        }
+
+        if (event.data.type === 'stassinos-overlay-cursor-hide') {
+          const nonceAtHide = ++cursorSourceNonce;
+          window.setTimeout(() => {
+            if (nonceAtHide !== cursorSourceNonce) return;
+            cursorNode.classList.remove('visible', 'is-link');
+          }, 24);
+        }
       });
     }
 

@@ -475,10 +475,18 @@ Trace handshake, retransmission, and teardown behavior to understand whether a s
       if (!cursorNode || reducedMotion || !finePointer) return;
 
       document.body.classList.add('cursor-active');
+      const embedded = window.top !== window.self;
       let pointerX = window.innerWidth * 0.5;
       let pointerY = window.innerHeight * 0.5;
       let cursorFrame = null;
-      const hideCursor = () => cursorNode.classList.remove('visible');
+      const postParentCursor = (type, payload = {}) => {
+        if (!embedded) return;
+        window.parent.postMessage({ type, ...payload }, window.location.origin);
+      };
+      const hideCursor = () => {
+        cursorNode.classList.remove('visible');
+        postParentCursor('stassinos-overlay-cursor-hide');
+      };
 
       const paintCursor = () => {
         cursorFrame = null;
@@ -489,9 +497,15 @@ Trace handshake, retransmission, and teardown behavior to understand whether a s
       window.addEventListener('pointermove', (event) => {
         pointerX = event.clientX;
         pointerY = event.clientY;
-        cursorNode.classList.add('visible');
-        cursorNode.classList.toggle('is-link', Boolean(event.target && event.target.closest('a, button, [role="button"]')));
-        if (!cursorFrame) cursorFrame = requestAnimationFrame(paintCursor);
+        const isLink = Boolean(event.target && event.target.closest('a, button, [role="button"]'));
+        if (embedded) {
+          cursorNode.classList.remove('visible', 'is-link');
+          postParentCursor('stassinos-overlay-cursor', { x: pointerX, y: pointerY, isLink });
+        } else {
+          cursorNode.classList.add('visible');
+          cursorNode.classList.toggle('is-link', isLink);
+          if (!cursorFrame) cursorFrame = requestAnimationFrame(paintCursor);
+        }
       });
 
       window.addEventListener('pointerleave', hideCursor);
