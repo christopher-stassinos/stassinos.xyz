@@ -74,6 +74,35 @@
     body::-webkit-scrollbar-corner {
       background: rgba(255,255,255,0.04);
     }
+    .cursor-node {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(10, 12, 17, 0.94);
+      border: 1px solid rgba(225, 230, 238, 0.16);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 6px 18px rgba(0,0,0,0.34);
+      transform: translate(-50%, -50%);
+      transform-origin: center;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 140ms ease, transform 140ms ease, background 140ms ease, border-color 140ms ease;
+    }
+    .cursor-node.visible { opacity: 1; }
+    .cursor-node.is-link {
+      transform: translate(-50%, -50%) scale(1.12);
+      background: rgba(7, 9, 13, 0.98);
+      border-color: rgba(233, 238, 244, 0.22);
+    }
+    body.cursor-active,
+    body.cursor-active a,
+    body.cursor-active button,
+    body.cursor-active [role="button"] {
+      cursor: none;
+    }
     a { color: inherit; }
     .shell { position: relative; z-index: 2; max-width: 1180px; margin: 0 auto; padding: 28px 22px 80px; }
     .site-head {
@@ -249,6 +278,7 @@
   </style>
 </head>
 <body>
+  <div class="cursor-node" id="cursor-node" aria-hidden="true"></div>
   <div class="shell">
     <header class="site-head">
       <a class="brand" href="index.html" data-overlay-close="true">Christopher Stassinos</a>
@@ -445,6 +475,35 @@
     </footer>
   </div>
   <script>
+    (function initLabCursor() {
+      const cursorNode = document.getElementById('cursor-node');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const finePointer = window.matchMedia('(pointer: fine)').matches;
+      if (!cursorNode || reducedMotion || !finePointer) return;
+
+      document.body.classList.add('cursor-active');
+      let pointerX = window.innerWidth * 0.5;
+      let pointerY = window.innerHeight * 0.5;
+      let cursorFrame = null;
+
+      const paintCursor = () => {
+        cursorFrame = null;
+        cursorNode.style.left = pointerX + 'px';
+        cursorNode.style.top = pointerY + 'px';
+      };
+
+      window.addEventListener('pointermove', (event) => {
+        pointerX = event.clientX;
+        pointerY = event.clientY;
+        cursorNode.classList.add('visible');
+        cursorNode.classList.toggle('is-link', Boolean(event.target && event.target.closest('a, button, [role="button"]')));
+        if (!cursorFrame) cursorFrame = requestAnimationFrame(paintCursor);
+      });
+
+      window.addEventListener('pointerleave', () => cursorNode.classList.remove('visible'));
+      window.addEventListener('blur', () => cursorNode.classList.remove('visible'));
+    })();
+
     (function initOverlayCloseLinks() {
       if (window.top === window.self) return;
       document.querySelectorAll('[data-overlay-close="true"]').forEach((link) => {
