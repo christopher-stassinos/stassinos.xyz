@@ -172,38 +172,43 @@
     }
 
     html {
-      scrollbar-color: rgba(255,255,255,0.34) rgba(255,255,255,0.06);
-      scrollbar-width: thin;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
+    html::-webkit-scrollbar,
     body::-webkit-scrollbar,
     .tab-panel::-webkit-scrollbar,
     .page-overlay-viewport::-webkit-scrollbar {
-      width: 14px;
-      height: 14px;
+      width: 0;
+      height: 0;
+      display: none;
     }
+    html::-webkit-scrollbar-track,
     body::-webkit-scrollbar-track,
     .tab-panel::-webkit-scrollbar-track,
     .page-overlay-viewport::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.04);
-      border-left: 1px solid rgba(255,255,255,0.08);
+      background: transparent;
+      border: 0;
     }
+    html::-webkit-scrollbar-thumb,
     body::-webkit-scrollbar-thumb,
     .tab-panel::-webkit-scrollbar-thumb,
     .page-overlay-viewport::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, rgba(255,255,255,0.42), rgba(255,255,255,0.22));
-      border: 3px solid rgba(11,13,17,0.96);
-      border-radius: 0;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+      background: transparent;
+      border: 0;
+      box-shadow: none;
     }
+    html::-webkit-scrollbar-thumb:hover,
     body::-webkit-scrollbar-thumb:hover,
     .tab-panel::-webkit-scrollbar-thumb:hover,
     .page-overlay-viewport::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(180deg, rgba(255,255,255,0.58), rgba(255,255,255,0.3));
+      background: transparent;
     }
+    html::-webkit-scrollbar-corner,
     body::-webkit-scrollbar-corner,
     .tab-panel::-webkit-scrollbar-corner,
     .page-overlay-viewport::-webkit-scrollbar-corner {
-      background: rgba(255,255,255,0.04);
+      background: transparent;
     }
 
     .particle {
@@ -285,6 +290,12 @@
       transform: translate(-50%, -50%) scale(1.12);
       background: rgba(7, 9, 13, 0.98);
       border-color: rgba(233, 238, 244, 0.22);
+    }
+
+    @media (max-width: 720px) {
+      .cursor-node {
+        display: none;
+      }
     }
 
     body.cursor-active,
@@ -580,8 +591,8 @@
     .artifact-model {
       position: absolute;
       left: 50%;
-      top: 42%;
-      width: min(360px, 76%);
+      top: 39%;
+      width: min(344px, 72%);
       transform: translate(-50%, -50%);
       z-index: 2;
       display: grid;
@@ -792,6 +803,7 @@
       display: block;
       width: 100%;
       height: auto;
+      object-position: center 42%;
       filter: grayscale(1) contrast(1.08) brightness(0.98);
       mix-blend-mode: luminosity;
     }
@@ -835,6 +847,8 @@
       z-index: 3;
       display: grid;
       gap: 10px;
+      padding-top: 18px;
+      background: linear-gradient(180deg, rgba(11,14,19,0), rgba(11,14,19,0.72) 28%, rgba(11,14,19,0.92) 100%);
     }
 
     .artifact-caption h2 {
@@ -1520,7 +1534,6 @@
 <body>
   <div class="particle-layer" id="particle-layer" aria-hidden="true"></div>
   <div class="cursor-node" id="cursor-node" aria-hidden="true"></div>
-
   <div class="shell" id="top">
     <header class="site-head">
       <a class="brand" href="#top">CHRISTOPHER STASSINOS.XYZ</a>
@@ -1966,6 +1979,8 @@
   </div>
 
   <script>
+
+
     (function initSeamlessProjectOverlay() {
       const overlay = document.getElementById('page-overlay');
       const frame = document.getElementById('page-overlay-frame');
@@ -2250,6 +2265,19 @@
       const hostId = document.getElementById('yt-host')?.id || 'yt-host';
 
       const PLAYLIST_ID = 'PLX1pbf-obzvE';
+      const TRACKS = [
+        { id: 'u-58fgQNQ2g', title: '12 913' },
+        { id: '99ziFZuR3E4', title: 'ukgk (2021Aug mix)' },
+        { id: 'S9LpdTWE3Gs', title: 'Instupendo & Ripsquad - Zombie2' },
+        { id: 'BTTEYSem_vA', title: 'Black Sapphire' },
+        { id: 'I9_6jlOtxdg', title: 'I Used To Dream' },
+        { id: 'j7hI-e0dlqU', title: 'Transient Glowing' },
+        { id: 'nG37l_1x4xM', title: '75465086' },
+        { id: 'K_Kfpi2rwo4', title: 'Everything Turns Black to Blue' },
+        { id: 'eHXrtbhiZ4M', title: '愛のシルエット' },
+        { id: 'BuSIwouQAFE', title: 'brutal_vap' },
+        { id: 'jOx-ZsI8rA8', title: 'i3' }
+      ];
       const PLAY = 'M8 5v14l11-7z';
       const PAUSE = 'M6 5h4v14H6zm8 0h4v14h-4z';
       const STORAGE_KEY = 'stassinos-site-player-state-v1';
@@ -2258,9 +2286,8 @@
       let ready = false;
       let muted = true;
       let unmuteArmed = true;
-      let lastRenderedTitle = '';
+      let currentIndex = 0;
       let stateTimer = null;
-      let applyingSavedState = false;
 
       function readSavedState() {
         try {
@@ -2274,20 +2301,16 @@
 
       function getRuntimeState() {
         if (!player || !ready) return null;
-        let playlist = [];
-        let index = 0;
         let seconds = 0;
         let status = -1;
         try {
-          playlist = player.getPlaylist() || [];
-          index = player.getPlaylistIndex ? Math.max(0, player.getPlaylistIndex()) : 0;
           seconds = player.getCurrentTime ? Math.max(0, Math.floor(player.getCurrentTime())) : 0;
           status = player.getPlayerState ? player.getPlayerState() : -1;
         } catch (e) {}
         return {
           playlistId: PLAYLIST_ID,
-          playlistLength: playlist.length,
-          index,
+          playlistLength: TRACKS.length,
+          index: currentIndex,
           seconds,
           muted,
           shouldPlay: status === 1,
@@ -2298,7 +2321,6 @@
       function persistState() {
         const state = getRuntimeState();
         if (!state) return;
-        if (!state.playlistLength) return;
         try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
       }
 
@@ -2341,34 +2363,22 @@
       }
 
       function setSub() {
-        let total = 0, idx = 0;
-        try {
-          total = player.getPlaylist() ? player.getPlaylist().length : 0;
-          idx = (player.getPlaylistIndex && player.getPlaylistIndex() >= 0) ? player.getPlaylistIndex() : 0;
-        } catch (e) {}
         const state = player && player.getPlayerState ? player.getPlayerState() : -1;
         const playing = state === 1;
         const tag = muted ? '◼ Muted · tap to play' : (playing ? '▶ Audio · Now Playing' : '⏸ Paused');
-        const counter = total ? ('  ·  ' + String(idx + 1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0')) : '';
+        const counter = '  ·  ' + String(currentIndex + 1).padStart(2, '0') + ' / ' + String(TRACKS.length).padStart(2, '0');
         subEl.textContent = tag + counter;
       }
 
-      function setTitle(force) {
-        try {
-          const d = player.getVideoData();
-          if (d && d.title) {
-            if (!force && d.title === lastRenderedTitle) return;
-            lastRenderedTitle = d.title;
-            const safe = d.title
-              .replace(/&/g, '&amp;')
-              .replace(/</g, '&lt;')
-              .replace(/>/g, '&gt;')
-              .replace(/\"/g, '&quot;')
-              .replace(/'/g, '&#39;');
-            trackEl.innerHTML = '<span class="player-track-viewport"><span class="player-track-inner"><span class="player-track-copy">' + safe + '</span><span class="player-track-gap" aria-hidden="true"></span><span class="player-track-copy" aria-hidden="true">' + safe + '</span></span></span>';
-            updateTicker();
-          }
-        } catch (e) {}
+      function setTitle() {
+        const safe = (TRACKS[currentIndex]?.title || ('Site playlist · track ' + String(currentIndex + 1).padStart(2, '0')))
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/\"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+        trackEl.innerHTML = '<span class="player-track-viewport"><span class="player-track-inner"><span class="player-track-copy">' + safe + '</span><span class="player-track-gap" aria-hidden="true"></span><span class="player-track-copy" aria-hidden="true">' + safe + '</span></span></span>';
+        updateTicker();
       }
 
       function renderState() {
@@ -2390,82 +2400,66 @@
         persistState();
       }
 
+      function loadTrack(index, startSeconds, shouldPlay) {
+        currentIndex = ((index % TRACKS.length) + TRACKS.length) % TRACKS.length;
+        const track = TRACKS[currentIndex];
+        try {
+          player.loadVideoById({ videoId: track.id, startSeconds: Math.max(0, startSeconds || 0) });
+          if (!shouldPlay) player.pauseVideo();
+          if (muted) player.mute();
+          else { player.unMute(); player.setVolume(30); }
+        } catch (e) {}
+        setTitle();
+        renderState();
+        persistState();
+      }
+
       function applySavedState() {
         const saved = readSavedState();
-        if (!saved || saved.playlistId !== PLAYLIST_ID || !saved.playlistLength) {
-          try { player.mute(); player.playVideo(); } catch (e) {}
+        if (!saved || saved.playlistId !== PLAYLIST_ID) {
           muted = true;
           unmuteArmed = true;
-          setTitle(true);
-          renderState();
-          persistState();
+          loadTrack(0, 0, true);
           return;
         }
 
-        applyingSavedState = true;
         muted = saved.muted !== false;
         unmuteArmed = muted;
-
-        try {
-          player.loadPlaylist({
-            listType: 'playlist',
-            list: PLAYLIST_ID,
-            index: Math.max(0, saved.index || 0),
-            startSeconds: Math.max(0, saved.seconds || 0)
-          });
-        } catch (e) {
-          try { player.playVideo(); } catch (err) {}
-        }
-
-        window.setTimeout(() => {
-          try {
-            if (muted) player.mute();
-            else { player.unMute(); player.setVolume(30); }
-            player.playVideo();
-          } catch (e) {}
-          applyingSavedState = false;
-          setTitle(true);
-          renderState();
-          persistState();
-        }, 700);
+        loadTrack(Math.max(0, saved.index || 0), Math.max(0, saved.seconds || 0), saved.shouldPlay !== false);
       }
 
       function bootPlayer() {
         player = new YT.Player(hostId, {
+          videoId: TRACKS[0].id,
           height: '1',
           width: '1',
           playerVars: {
-            listType: 'playlist',
-            list: PLAYLIST_ID,
-            playlist: PLAYLIST_ID,
+            origin: window.location.origin,
             autoplay: 1,
             mute: 1,
             controls: 0,
             playsinline: 1,
-            loop: 1,
+            loop: 0,
             modestbranding: 1
           },
           events: {
             onReady: function () {
               ready = true;
+              setTitle();
               applySavedState();
               startStateSync();
             },
             onStateChange: function (event) {
               if (event && event.data === YT.PlayerState.ENDED) {
-                try {
-                  const playlist = player.getPlaylist ? player.getPlaylist() : [];
-                  const currentIndex = player.getPlaylistIndex ? player.getPlaylistIndex() : -1;
-                  if (playlist && playlist.length && currentIndex >= playlist.length - 1) {
-                    player.playVideoAt(0);
-                  }
-                } catch (e) {}
+                loadTrack(currentIndex + 1, 0, true);
+                return;
               }
-              setTitle();
               renderState();
-              if (!applyingSavedState) persistState();
+              persistState();
             },
-            onError: function () { subEl.textContent = '◼ Resume playback on interaction'; renderState(); }
+            onError: function () {
+              loadTrack(currentIndex + 1, 0, false);
+            }
           }
         });
       }
@@ -2497,8 +2491,8 @@
         else { player.playVideo(); doUnmute(); }
         persistState();
       });
-      next.addEventListener('click', () => { if (ready) { player.nextVideo(); doUnmute(); persistState(); } });
-      prev.addEventListener('click', () => { if (ready) { player.previousVideo(); doUnmute(); persistState(); } });
+      next.addEventListener('click', () => { if (ready) { loadTrack(currentIndex + 1, 0, true); doUnmute(); } });
+      prev.addEventListener('click', () => { if (ready) { loadTrack(currentIndex - 1, 0, true); doUnmute(); } });
       muteBtn.addEventListener('click', () => {
         if (!ready) return;
         if (muted) { doUnmute(); }
