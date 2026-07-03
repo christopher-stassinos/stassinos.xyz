@@ -145,7 +145,7 @@
       max-width: 60ch; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.62; color: var(--text-soft);
     }
     .hero-summary strong { color: var(--text); }
-    .hero-points { display: grid; gap: 10px; color: var(--text-soft); line-height: 1.6; font-size: 14px; }
+    .hero-points { display: grid; gap: 10px; color: var(--text-soft); line-height: 1.6; font-size: 16px; }
     .hero-points li { list-style: none; position: relative; padding-left: 22px; }
     .hero-points li::before {
       content: ''; position: absolute; left: 0; top: 8px; width: 9px; height: 9px; border: 1px solid var(--signal); background: var(--signal-dim); transform: rotate(45deg);
@@ -214,7 +214,7 @@
     .section-title {
       font-family: var(--mono); font-size: clamp(26px, 3.6vw, 42px); line-height: 0.96; text-transform: uppercase; letter-spacing: -0.05em; font-weight: 400; max-width: 18ch;
     }
-    .section-copy { max-width: 76ch; color: var(--text-soft); line-height: 1.7; font-size: 15px; }
+    .section-copy { max-width: 76ch; color: var(--text-soft); line-height: 1.7; font-size: 17px; }
     .detail-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
     .detail-card {
       border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); padding: 18px; display: grid; gap: 11px; align-content: start; position: relative; transition: border-color 220ms ease, background 220ms ease, transform 220ms ease;
@@ -225,7 +225,7 @@
     }
     .detail-card:hover::after { opacity: 1; }
     .detail-card h3 { font-size: 19px; line-height: 1.12; font-weight: 500; }
-    .detail-card p, .detail-card li { color: var(--text-soft); line-height: 1.62; font-size: 14px; }
+    .detail-card p, .detail-card li { color: var(--text-soft); line-height: 1.62; font-size: 16px; }
     .detail-card ul { padding-left: 18px; display: grid; gap: 8px; }
 
     .terminal {
@@ -285,12 +285,12 @@
           <p class="hero-summary">
             A <strong>protocol-level analysis lab</strong> built around <strong>Wireshark</strong>, <strong>tcpdump</strong>, and
             <strong>Kali Linux</strong> to inspect packets the way a responder actually would: capture the traffic, reduce noise,
-            reconstruct what happened, and turn suspicious patterns into a clean investigative narrative.
+            reconstruct what happened, and document the findings clearly.
           </p>
           <ul class="hero-points">
             <li>Worked across live captures and packet traces covering HTTP, FTP, DNS, ARP, and core TCP behavior rather than staying inside one protocol silo.</li>
             <li>Used filters, stream reconstruction, and protocol metadata to expose cleartext credentials, unusual broadcast behavior, and signs of spoofing or reconnaissance.</li>
-            <li>Built a repeatable triage workflow that moves from packet capture to protocol breakdown to concise findings that are usable for detection and incident review.</li>
+            <li>Built a repeatable triage workflow that moves from packet capture to protocol breakdown to concise findings for detection and incident review.</li>
           </ul>
           <div class="cta-row">
             <a class="btn btn-primary" href="index.html" data-overlay-close="true">Back to portfolio</a>

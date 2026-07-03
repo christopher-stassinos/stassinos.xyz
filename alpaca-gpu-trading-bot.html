@@ -228,7 +228,7 @@
     }
     .hero-summary strong { color: var(--text); }
     .hero-points {
-      display: grid; gap: 8px; padding-left: 18px; color: var(--text-soft); line-height: 1.65; font-size: 14px;
+      display: grid; gap: 8px; padding-left: 18px; color: var(--text-soft); line-height: 1.65; font-size: 16px;
     }
     .cta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
     .btn {
@@ -244,14 +244,14 @@
       border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); padding: 14px; display: grid; gap: 8px; min-height: 140px;
     }
     .metric strong { font-size: clamp(22px, 2.4vw, 34px); line-height: 1; }
-    .metric p { color: var(--text-soft); font-size: 13px; line-height: 1.55; }
+    .metric p { color: var(--text-soft); font-size: 15px; line-height: 1.6; }
     .metric.wide { grid-column: 1 / -1; }
     .section { display: grid; gap: 18px; }
     .section-title {
       font-family: var(--mono); font-size: clamp(28px, 4vw, 46px); line-height: 0.95; text-transform: uppercase; letter-spacing: -0.055em; font-weight: 400; max-width: 16ch;
     }
     .section-copy {
-      max-width: 76ch; color: var(--text-soft); line-height: 1.72; font-size: 15px;
+      max-width: 76ch; color: var(--text-soft); line-height: 1.72; font-size: 17px;
     }
     .detail-grid {
       display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px;
@@ -260,7 +260,7 @@
       border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); padding: 16px; display: grid; gap: 12px; align-content: start;
     }
     .detail-card h3 { font-size: 20px; line-height: 1.08; font-weight: 500; }
-    .detail-card p, .detail-card li { color: var(--text-soft); line-height: 1.65; font-size: 14px; }
+    .detail-card p, .detail-card li { color: var(--text-soft); line-height: 1.65; font-size: 16px; }
     .detail-card ul { padding-left: 18px; display: grid; gap: 8px; }
     footer {
       display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; padding: 10px 2px 0; flex-wrap: wrap;
@@ -292,16 +292,15 @@
           <div class="kicker">Private Repository</div>
           <h1 class="hero-title"><span>Public Market</span><span>Lab</span></h1>
           <p class="hero-summary">
-            A <strong>distributed systematic trading lab</strong> built around two different machines with two different jobs:
-            a <strong>Mac mini running Hermes Agent</strong> for collection, orchestration, research workflows, and paper-trading oversight, and a
-            <strong>5-card GPU rig</strong> for higher-throughput model training, ranking passes, and trading-side compute.
-            The stack uses the <strong>Alpaca API for algorithmic paper trading</strong> while moving market research through a repeatable system that can collect,
-            screen, evaluate, simulate, and accelerate experiments across dedicated hardware.
+            A <strong>split trading research lab</strong> built around two machines with separate roles:
+            a <strong>Mac mini running Hermes Agent</strong> for data collection, orchestration, research workflows, and paper-trading oversight, and a
+            <strong>5-card GPU rig</strong> for model training, ranking runs, and other compute-heavy analysis.
+            The stack uses the <strong>Alpaca API for algorithmic paper trading</strong> while storing market data in SQLite so research, screening, and testing stay repeatable across both systems.
           </p>
           <ul class="hero-points">
-            <li>The Mac mini acts as the always-on research node: collecting stock, options, and crypto data, managing SQLite state, driving Hermes Agent-based workflows and reporting, and supervising Alpaca paper-trading operations.</li>
-            <li>Consistent database snapshots can be handed off to the GPU machine so the heavier training and ranking work runs where the compute actually lives, while Alpaca API paper positions and strategy state remain visible through the lab tooling.</li>
-            <li>The result is a private lab that behaves like an infrastructure system — with pipeline stages, telemetry, safety rails, and division of labor between orchestration hardware and compute hardware.</li>
+            <li>The Mac mini acts as the always-on research node, collecting stock, options, and crypto data, managing SQLite state, driving Hermes Agent workflows, and supervising Alpaca paper-trading activity.</li>
+            <li>Database snapshots can be copied to the GPU machine so heavier training and ranking work runs on the hardware built for it, while Alpaca positions and strategy state remain visible in the lab tooling.</li>
+            <li>The setup separates orchestration from compute so data collection stays stable while experiments and ranking runs scale on the GPU rig.</li>
           </ul>
           <div class="cta-row">
             <a class="btn btn-primary" href="index.html" data-overlay-close="true">Back to portfolio</a>
@@ -333,7 +332,7 @@
           <div class="metric wide">
             <span class="meta-label">Operating Model</span>
             <strong>Hermes Agent + Alpaca + GPU Separation</strong>
-            <p>The lab is built around role separation: Hermes Agent and the Mac mini keep research organized, persistent, and tied to Alpaca paper-trading workflows, while the GPU rig takes on the heavier numerical work when it is time to train, rank, or test at scale.</p>
+            <p>The lab separates orchestration from compute: the Mac mini and Hermes Agent keep research organized and tied to Alpaca paper-trading workflows, while the GPU rig handles training, ranking, and larger analysis runs.</p>
           </div>
         </aside>
       </section>
@@ -342,10 +341,10 @@
         <div class="section-label">Architecture</div>
         <h2 class="section-title">How the two-machine workflow is structured</h2>
         <p class="section-copy">
-          The architecture is intentionally split. The Mac mini side continuously collects public market data, maintains the local SQLite dataset,
-          drives Hermes Agent-powered research and reporting workflows, and coordinates Alpaca API paper-trading activity. When there is enough history to do meaningful training or broader ranking work,
-          a consistent snapshot of the database is moved to the 5-card GPU rig, where the heavier experiments run without interrupting the collector.
-          That separation keeps the system practical: one node is stable and always-on, the other is optimized for bursty compute.
+          The architecture is split by job. The Mac mini continuously collects public market data, maintains the local SQLite dataset,
+          runs Hermes Agent research and reporting workflows, and coordinates Alpaca API paper-trading activity. When there is enough history for training or broader ranking work,
+          a consistent snapshot of the database is moved to the 5-card GPU rig so heavier experiments can run without interrupting collection.
+          One machine stays stable and always on; the other is reserved for larger compute jobs.
         </p>
         <div class="detail-grid">
           <article class="detail-card">
@@ -391,7 +390,7 @@
             <h3>Operational visibility built in</h3>
             <ul>
               <li>Flask dashboard surfaces candidates, P&amp;L, database health, training readiness, recent runs, and GPU telemetry.</li>
-              <li>The project is described and operated like an infrastructure platform, not a one-script bot.</li>
+              <li>Local reporting makes it easy to review positions, system health, and experiment readiness in one place.</li>
             </ul>
           </article>
         </div>
