@@ -2303,7 +2303,14 @@
       const subEl = document.getElementById('player-sub');
       const hostId = document.getElementById('yt-host')?.id || 'yt-host';
 
-      const PLAYLIST_ID = 'PLX1pbf-obzvE';
+      const PLAYLIST_URL = 'https://www.youtube.com/playlist?list=PLX1pbf-obzvE';
+      const PLAYLIST_ID = (() => {
+        try {
+          return new URL(PLAYLIST_URL).searchParams.get('list') || 'PLX1pbf-obzvE';
+        } catch (e) {
+          return 'PLX1pbf-obzvE';
+        }
+      })();
       const FALLBACK_TRACKS = [
         { id: 'u-58fgQNQ2g', title: '12 913' },
         { id: '99ziFZuR3E4', title: 'ukgk (2021Aug mix)' },
