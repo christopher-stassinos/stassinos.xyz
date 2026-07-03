@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Christopher Stassinos — Cybersecurity & IT</title>
   <meta name="description" content="Christopher Stassinos — cybersecurity specialist with MSP and enterprise IT experience across endpoint security, identity, networking, and cloud-connected infrastructure." />
+  <meta name="theme-color" content="#0a0b0e" />
+  <link rel="canonical" href="https://stassinos.xyz/" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230a0b0e'/%3E%3Crect x='9.5' y='9.5' width='13' height='13' fill='none' stroke='%23e8ebf0' stroke-width='1.5' transform='rotate(45 16 16)'/%3E%3C/svg%3E" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://stassinos.xyz/" />
+  <meta property="og:title" content="Christopher Stassinos — Cybersecurity & IT" />
+  <meta property="og:description" content="Cybersecurity specialist with MSP and enterprise IT experience across endpoint security, identity, networking, and cloud-connected infrastructure." />
+  <meta property="og:image" content="https://stassinos.xyz/icarus.jpeg" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Christopher Stassinos — Cybersecurity & IT" />
+  <meta name="twitter:description" content="Cybersecurity specialist with MSP and enterprise IT experience across endpoint security, identity, networking, and cloud-connected infrastructure." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
@@ -75,6 +86,33 @@
     }
 
     a { color: inherit; }
+
+    .skip-link {
+      position: fixed;
+      left: 18px;
+      top: -60px;
+      z-index: 300;
+      padding: 12px 16px;
+      background: #ffffff;
+      color: #101217;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: top 160ms ease;
+    }
+
+    .skip-link:focus-visible {
+      top: 18px;
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    [role="button"]:focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.9);
+      outline-offset: 2px;
+    }
 
     #about,
     #skills,
@@ -1398,8 +1436,8 @@
         font-size: 10px;
       }
 
-      .artifact-caption .section-title {
-        max-width: 7ch;
+      .artifact-caption h2 {
+        max-width: 12ch;
         font-size: 22px;
         line-height: 0.92;
       }
@@ -1452,7 +1490,7 @@
         width: min(248px, 68%);
       }
 
-      .artifact-caption .section-title {
+      .artifact-caption h2 {
         font-size: 19px;
       }
 
@@ -1532,6 +1570,7 @@
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <div class="particle-layer" id="particle-layer" aria-hidden="true"></div>
   <div class="cursor-node" id="cursor-node" aria-hidden="true"></div>
   <div class="shell" id="top">
@@ -1539,7 +1578,7 @@
       <a class="brand" href="#top">CHRISTOPHER STASSINOS.XYZ</a>
     </header>
 
-    <main>
+    <main id="main-content">
       <section class="hero">
         <article class="panel hero-copy reveal">
           <div class="hero-top">
@@ -1606,7 +1645,7 @@
             <div id="yt-host" aria-hidden="true" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;left:-9999px;top:-9999px;"></div>
             <div class="artifact-model">
               <figure class="artifact-frame">
-                <img src="icarus.jpeg" alt="Winged figure — Icarus" loading="lazy" />
+                <img src="icarus.jpeg" alt="Triumph of Icarus — painting of a winged figure by Bryan Larsen" width="450" height="419" loading="eager" fetchpriority="high" />
               </figure>
               <div class="artifact-plaque" aria-label="Artwork label">
                 <div class="artifact-plaque-title">Triumph of Icarus</div>
@@ -1616,7 +1655,7 @@
             <div class="artifact-caption">
               <div class="micro">Security Operations / Infrastructure</div>
               <h2>Cybersecurity engineer</h2>
-              <p>Enterprise support, endpoint security, and infrastructure experience presented in a cleaner, harder-edged visual system.</p>
+              <p>Enterprise support, endpoint security, and infrastructure — built in environments where uptime is non-negotiable.</p>
             </div>
           </div>
         </aside>
@@ -1737,7 +1776,7 @@
             <div class="section-kicker">Resume</div>
             <h2 class="section-title">Enterprise support experience with a security mindset</h2>
             <p>
-              Experience across enterprise support, security operations, and infrastructure troubleshooting, presented to make technical depth, operating scale, and lab work easy for recruiters and hiring managers to evaluate quickly.
+              Five years across enterprise support, security operations, and infrastructure troubleshooting — from 10,000-endpoint casino floors to engineer-led MSP work — backed by hands-on lab practice in SIEM, identity, and packet analysis.
             </p>
           </div>
           <div class="resume-stats">
@@ -2040,7 +2079,7 @@
         document.body.style.overflow = '';
         frame.removeAttribute('src');
         window.scrollTo({ top: previousScrollY, behavior: 'auto' });
-        if (pushState) history.pushState({ overlay: false }, '', 'index.html');
+        if (pushState) history.pushState({ overlay: false }, '', './');
         syncPlayerChrome();
       }
 
@@ -2089,7 +2128,6 @@
       measureAnchor();
       syncPlayerChrome();
       window.addEventListener('load', () => { measureAnchor(); syncPlayerChrome(); });
-      syncPlayerChrome();
     })();
 
     const revealTargets = document.querySelectorAll('.reveal');
@@ -2474,12 +2512,20 @@
         };
       }
 
+      function markPlayerUnavailable() {
+        if (ready) return;
+        trackEl.textContent = 'Playlist unavailable';
+        subEl.textContent = '◼ Audio offline';
+        bar.classList.add('is-muted');
+      }
+
       if (window.YT && window.YT.Player) bootPlayer();
       else {
         bindYouTubeApi();
         if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
           const tag = document.createElement('script');
           tag.src = 'https://www.youtube.com/iframe_api';
+          tag.addEventListener('error', markPlayerUnavailable, { once: true });
           document.head.appendChild(tag);
         }
       }
