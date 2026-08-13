@@ -16,7 +16,7 @@ SUMMARY = (
     "Cybersecurity engineer with <b>5+ years of MSP and enterprise IT experience</b> across security operations, "
     "identity, endpoints, networking, and cloud-connected infrastructure. Hands-on with Huntress, Microsoft Defender XDR, "
     "Microsoft 365, Entra ID, Intune, Active Directory, ConnectWise PSA, and RMM platforms. "
-    "Backed by Security+, Network+, AWS, Palo Alto, and IBM cybersecurity credentials plus home lab work "
+    "Backed by Security+, AWS Cloud Practitioner, Palo Alto, and IBM cybersecurity credentials plus home lab work "
     "in Splunk, Active Directory, pfSense, VMware, and packet analysis."
 )
 
@@ -83,8 +83,7 @@ PROJECTS = [
 ]
 
 CERTIFICATIONS = (
-    "CompTIA Security+ • CompTIA Network+ • AWS Solutions Architect Associate • AWS Cloud Practitioner • "
-    "IBM Cybersecurity Analyst • Palo Alto Networks Associate"
+    "CompTIA Security+ • AWS Cloud Practitioner • IBM Cybersecurity Analyst • Palo Alto Networks Associate"
 )
 
 SKILLS = (

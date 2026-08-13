@@ -105,4 +105,38 @@ test.describe('stassinos.xyz smoke checks', () => {
       expect(cvSource).toContain(JSON.stringify(bullet));
     }
   });
+
+  test('certifications list only current credentials', async ({ page }) => {
+    await page.goto('/index.html', { waitUntil: 'networkidle' });
+
+    const expectedCertifications = [
+      'CompTIA Security+',
+      'AWS Cloud Practitioner',
+      'IBM Cybersecurity Analyst',
+      'Palo Alto Networks Associate'
+    ];
+    const removedCertifications = [
+      'CompTIA Network+',
+      'AWS Solutions Architect Associate'
+    ];
+    const body = page.locator('body');
+    const cvSource = fs.readFileSync(path.join(__dirname, '..', 'build_cv.py'), 'utf8');
+    const credentialMetric = page.locator('.metric', { hasText: 'Credentials' });
+    const certificationStat = page.locator('.resume-stat', { hasText: 'Certifications' });
+
+    await expect(page.locator('.cert-card')).toHaveCount(4);
+    await expect(credentialMetric.locator('strong')).toHaveText('4');
+    await expect(certificationStat.locator('strong')).toHaveText('4');
+    await expect(credentialMetric).not.toContainText('Active');
+    await expect(certificationStat).not.toContainText('Active');
+
+    for (const certification of expectedCertifications) {
+      await expect(body).toContainText(certification);
+      expect(cvSource).toContain(certification);
+    }
+    for (const certification of removedCertifications) {
+      await expect(body).not.toContainText(certification);
+      expect(cvSource).not.toContain(certification);
+    }
+  });
 });
