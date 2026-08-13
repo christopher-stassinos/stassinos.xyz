@@ -29,7 +29,7 @@ EXPERIENCE = [
         "bullets": [
             "Monitor and triage Huntress and Microsoft Defender XDR incidents and alerts, reviewing endpoint timelines, user and sign-in context, and indicators to document findings and coordinate containment, remediation, or escalation.",
             "Administer Microsoft 365, Entra ID, Intune, Active Directory, MFA, Conditional Access, and user/device lifecycle workflows including onboarding, offboarding, access changes, endpoint enrollment, and policy troubleshooting.",
-            "Troubleshoot TCP/IP, DNS, DHCP, Wi-Fi, VLAN, VPN, switching, and firewall issues while managing tickets and remote support through ConnectWise PSA and RMM tooling.",
+            "Troubleshoot business networks and security infrastructure across TCP/IP, DNS, DHCP, Wi-Fi, VLANs, VPNs, switches, and firewalls while managing tickets and remote support through ConnectWise PSA and RMM tooling.",
         ],
     },
     {

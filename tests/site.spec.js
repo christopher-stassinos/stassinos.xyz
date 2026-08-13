@@ -1,4 +1,6 @@
 const { test, expect } = require('@playwright/test');
+const fs = require('fs');
+const path = require('path');
 
 async function clearPlayerState(page) {
   await page.addInitScript(() => {
@@ -73,7 +75,7 @@ test.describe('stassinos.xyz smoke checks', () => {
 
     const mspRole = page.locator('.timeline-item').filter({ hasText: 'MSP Support Engineer' });
     await expect(mspRole).toContainText('724IT · San Diego');
-    await expect(mspRole).not.toContainText('Southern California scope');
+    await expect(page.locator('body')).not.toContainText('Southern California');
 
     for (const capability of [
       'Huntress',
@@ -92,6 +94,15 @@ test.describe('stassinos.xyz smoke checks', () => {
       'firewalls'
     ]) {
       await expect(mspRole).toContainText(capability);
+    }
+
+    const mspBullets = await mspRole.locator('.timeline-points li').allInnerTexts();
+    const cvSource = fs.readFileSync(path.join(__dirname, '..', 'build_cv.py'), 'utf8');
+
+    expect(mspBullets).toHaveLength(3);
+    expect(cvSource).not.toContain('Southern California');
+    for (const bullet of mspBullets) {
+      expect(cvSource).toContain(JSON.stringify(bullet));
     }
   });
 });
