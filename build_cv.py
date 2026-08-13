@@ -4,17 +4,18 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import inch
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, KeepTogether
+from pathlib import Path
 
-OUTPUT = r"C:\Users\XRIS\stassinos.xyz\christopher-stassinos-cv.pdf"
+OUTPUT = str(Path(__file__).resolve().with_name("christopher-stassinos-cv.pdf"))
 
 NAME = "Christopher Stassinos"
 TITLE = "Cybersecurity Engineer"
 CONTACT = "San Diego, CA  •  chrisstassinos@gmail.com  •  linkedin.com/in/christopher-stassinos  •  github.com/christopher-stassinos"
 
 SUMMARY = (
-    "Cybersecurity engineer with <b>5+ years of MSP and enterprise IT experience</b> supporting "
-    "Southern California client environments across Microsoft 365, endpoint support, identity and access, "
-    "Windows/macOS/Linux administration, network troubleshooting, and cloud-connected infrastructure. "
+    "Cybersecurity engineer with <b>5+ years of MSP and enterprise IT experience</b> across security operations, "
+    "identity, endpoints, networking, and cloud-connected infrastructure. Hands-on with Huntress, Microsoft Defender XDR, "
+    "Microsoft 365, Entra ID, Intune, Active Directory, ConnectWise PSA, and RMM platforms. "
     "Backed by Security+, Network+, AWS, Palo Alto, and IBM cybersecurity credentials plus home lab work "
     "in Splunk, Active Directory, pfSense, VMware, and packet analysis."
 )
@@ -26,9 +27,9 @@ EXPERIENCE = [
         "location": "San Diego, CA",
         "dates": "Jul 2026–Present",
         "bullets": [
-            "Provide first-line MSP support for small and mid-sized business clients, handling tickets, phone support, remote troubleshooting, and occasional onsite visits across Windows 10/11, Microsoft 365, printers, Wi-Fi, VPN, and day-to-day connectivity issues.",
-            "Set up and support client accounts and equipment including Microsoft 365, ConnectWise PSA, RMM tooling, MFA, endpoint onboarding, offboarding, and general user provisioning with accurate ticket documentation and escalation notes.",
-            "Train on core managed-service platforms including ConnectWise PSA and ticketing, backup and disaster recovery workflows, VoIP systems, and the broader security stack while working directly with clients and senior engineers in a production support environment.",
+            "Monitor and triage Huntress and Microsoft Defender XDR incidents and alerts, reviewing endpoint timelines, user and sign-in context, and indicators to document findings and coordinate containment, remediation, or escalation.",
+            "Administer Microsoft 365, Entra ID, Intune, Active Directory, MFA, Conditional Access, and user/device lifecycle workflows including onboarding, offboarding, access changes, endpoint enrollment, and policy troubleshooting.",
+            "Troubleshoot TCP/IP, DNS, DHCP, Wi-Fi, VLAN, VPN, switching, and firewall issues while managing tickets and remote support through ConnectWise PSA and RMM tooling.",
         ],
     },
     {
@@ -87,10 +88,10 @@ CERTIFICATIONS = (
 )
 
 SKILLS = (
-    "<b>Security:</b> Endpoint security, SIEM, vulnerability remediation, incident response, digital forensics, identity and access support<br/>"
-    "<b>Systems:</b> Windows, macOS, Linux, iOS, Android, Active Directory, remote support, hardware diagnostics<br/>"
-    "<b>Networking:</b> TCP/IP, subnetting, VLANs, network configuration, pfSense, Palo Alto concepts, troubleshooting<br/>"
-    "<b>Cloud & Tools:</b> AWS EC2, S3, VPC, Splunk, Sysmon, Wireshark, tcpdump, VMware"
+    "<b>Security Operations:</b> Huntress, Microsoft Defender XDR, incident and alert triage, endpoint investigation, remediation<br/>"
+    "<b>Identity & Endpoints:</b> Microsoft 365, Entra ID, Intune, Active Directory, MFA, Conditional Access, RMM<br/>"
+    "<b>Networking & Firewalls:</b> TCP/IP, DNS, DHCP, VLANs, Wi-Fi, VPNs, pfSense, Palo Alto concepts, troubleshooting<br/>"
+    "<b>Cloud & Tools:</b> AWS EC2, S3, VPC, ConnectWise PSA, Splunk, Sysmon, Wireshark, tcpdump, VMware"
 )
 
 EDUCATION = [

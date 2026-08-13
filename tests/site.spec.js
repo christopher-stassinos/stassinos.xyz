@@ -67,4 +67,31 @@ test.describe('stassinos.xyz smoke checks', () => {
     expect(afterPrev).toBe(initialTrack);
     await expect(sub).toContainText('02 / 11');
   });
+
+  test('MSP experience highlights concrete security and infrastructure tools', async ({ page }) => {
+    await page.goto('/index.html', { waitUntil: 'networkidle' });
+
+    const mspRole = page.locator('.timeline-item').filter({ hasText: 'MSP Support Engineer' });
+    await expect(mspRole).toContainText('724IT · San Diego');
+    await expect(mspRole).not.toContainText('Southern California scope');
+
+    for (const capability of [
+      'Huntress',
+      'Microsoft Defender XDR',
+      'Microsoft 365',
+      'Entra ID',
+      'Intune',
+      'Active Directory',
+      'Conditional Access',
+      'ConnectWise PSA',
+      'RMM',
+      'DNS',
+      'DHCP',
+      'VLANs',
+      'VPNs',
+      'firewalls'
+    ]) {
+      await expect(mspRole).toContainText(capability);
+    }
+  });
 });
