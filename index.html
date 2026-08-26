@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Christopher Stassinos — Cybersecurity & IT</title>
   <meta name="description" content="Christopher Stassinos — cybersecurity specialist with MSP and enterprise IT experience across endpoint security, identity, networking, and cloud-connected infrastructure." />
+  <meta name="theme-color" content="#0a0b0e" />
+  <link rel="canonical" href="https://stassinos.xyz/" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230a0b0e'/%3E%3Crect x='9.5' y='9.5' width='13' height='13' fill='none' stroke='%23e8ebf0' stroke-width='1.5' transform='rotate(45 16 16)'/%3E%3C/svg%3E" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://stassinos.xyz/" />
+  <meta property="og:title" content="Christopher Stassinos — Cybersecurity & IT" />
+  <meta property="og:description" content="Cybersecurity specialist with MSP and enterprise IT experience across endpoint security, identity, networking, and cloud-connected infrastructure." />
+  <meta property="og:image" content="https://stassinos.xyz/icarus.jpeg" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Christopher Stassinos — Cybersecurity & IT" />
+  <meta name="twitter:description" content="Cybersecurity specialist with MSP and enterprise IT experience across endpoint security, identity, networking, and cloud-connected infrastructure." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
@@ -75,6 +86,33 @@
     }
 
     a { color: inherit; }
+
+    .skip-link {
+      position: fixed;
+      left: 18px;
+      top: -60px;
+      z-index: 300;
+      padding: 12px 16px;
+      background: #ffffff;
+      color: #101217;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: top 160ms ease;
+    }
+
+    .skip-link:focus-visible {
+      top: 18px;
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    [role="button"]:focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.9);
+      outline-offset: 2px;
+    }
 
     #about,
     #skills,
@@ -449,7 +487,7 @@
       max-width: 56ch;
       color: var(--text-soft);
       line-height: 1.62;
-      font-size: 14px;
+      font-size: 16px;
     }
 
     .hero-points li::marker {
@@ -481,8 +519,8 @@
 
     .metric p {
       color: var(--muted);
-      font-size: 13px;
-      line-height: 1.5;
+      font-size: 15px;
+      line-height: 1.58;
     }
 
     .cta-row {
@@ -863,8 +901,8 @@
 
     .artifact-caption p {
       max-width: 40ch;
-      font-size: 14px;
-      line-height: 1.62;
+      font-size: 16px;
+      line-height: 1.68;
       color: var(--muted);
     }
 
@@ -931,8 +969,8 @@
     .about-copy {
       display: grid;
       gap: 14px;
-      font-size: 16px;
-      line-height: 1.8;
+      font-size: 18px;
+      line-height: 1.82;
       color: var(--text-soft);
       text-wrap: pretty;
     }
@@ -981,8 +1019,8 @@
 
     .cert-name {
       color: var(--muted);
-      font-size: 14px;
-      line-height: 1.55;
+      font-size: 16px;
+      line-height: 1.62;
     }
 
     .skills-layout {
@@ -1079,8 +1117,8 @@
 
     .resume-stat p {
       color: var(--muted);
-      font-size: 14px;
-      line-height: 1.58;
+      font-size: 16px;
+      line-height: 1.64;
     }
 
     .tabs {
@@ -1150,7 +1188,8 @@
       display: grid;
       gap: 8px;
       color: var(--text-soft);
-      line-height: 1.72;
+      line-height: 1.78;
+      font-size: 17px;
     }
 
     .timeline-points li::marker {
@@ -1171,8 +1210,8 @@
 
     .contact-copy p {
       color: var(--text-soft);
-      font-size: 16px;
-      line-height: 1.8;
+      font-size: 18px;
+      line-height: 1.84;
     }
 
     .contact-links {
@@ -1398,8 +1437,8 @@
         font-size: 10px;
       }
 
-      .artifact-caption .section-title {
-        max-width: 7ch;
+      .artifact-caption h2 {
+        max-width: 12ch;
         font-size: 22px;
         line-height: 0.92;
       }
@@ -1452,7 +1491,7 @@
         width: min(248px, 68%);
       }
 
-      .artifact-caption .section-title {
+      .artifact-caption h2 {
         font-size: 19px;
       }
 
@@ -1532,6 +1571,7 @@
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <div class="particle-layer" id="particle-layer" aria-hidden="true"></div>
   <div class="cursor-node" id="cursor-node" aria-hidden="true"></div>
   <div class="shell" id="top">
@@ -1539,11 +1579,11 @@
       <a class="brand" href="#top">CHRISTOPHER STASSINOS.XYZ</a>
     </header>
 
-    <main>
+    <main id="main-content">
       <section class="hero">
         <article class="panel hero-copy reveal">
           <div class="hero-top">
-            <div class="eyebrow">Cybersecurity / IT / Operational Resilience</div>
+            <div class="eyebrow">Cybersecurity / IT / Enterprise Support</div>
             <h1 class="hero-title"><span>Christopher</span><span>Stassinos</span></h1>
             <p class="hero-summary">
               Cybersecurity engineer with <strong>5+ years of MSP and enterprise experience</strong> supporting client environments across Microsoft 365, endpoint security, identity, networking, and cloud-connected infrastructure.
@@ -1551,7 +1591,7 @@
             <ul class="hero-points">
               <li>Owns support tickets end-to-end across an engineer-led MSP environment with direct client communication and practical issue resolution.</li>
               <li>Hands-on with Windows endpoints, Microsoft 365, onboarding and offboarding, account setup, MFA, remote support, and day-to-day operational troubleshooting.</li>
-              <li>Brings a security-minded approach shaped by enterprise support roles and home lab work in SIEM, Active Directory, and traffic analysis.</li>
+              <li>Applies a security-focused approach shaped by enterprise support work and hands-on lab practice in SIEM, Active Directory, and packet analysis.</li>
             </ul>
             <div class="metrics">
               <div class="metric">
@@ -1567,7 +1607,7 @@
               <div class="metric">
                 <span class="stat-label">Core Stack</span>
                 <strong>Windows · Linux · AWS</strong>
-                <p>Identity, endpoints, infrastructure, and cloud-connected tools with an operations-first mindset.</p>
+                <p>Identity, endpoints, infrastructure, and cloud tools used in day-to-day support and security work.</p>
               </div>
             </div>
           </div>
@@ -1606,7 +1646,7 @@
             <div id="yt-host" aria-hidden="true" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;left:-9999px;top:-9999px;"></div>
             <div class="artifact-model">
               <figure class="artifact-frame">
-                <img src="icarus.jpeg" alt="Winged figure — Icarus" loading="lazy" />
+                <img src="icarus.jpeg" alt="Triumph of Icarus — painting of a winged figure by Bryan Larsen" width="450" height="419" loading="eager" fetchpriority="high" />
               </figure>
               <div class="artifact-plaque" aria-label="Artwork label">
                 <div class="artifact-plaque-title">Triumph of Icarus</div>
@@ -1616,7 +1656,7 @@
             <div class="artifact-caption">
               <div class="micro">Security Operations / Infrastructure</div>
               <h2>Cybersecurity engineer</h2>
-              <p>Enterprise support, endpoint security, and infrastructure experience presented in a cleaner, harder-edged visual system.</p>
+              <p>Enterprise support, endpoint security, and infrastructure experience across production business environments.</p>
             </div>
           </div>
         </aside>
@@ -1677,7 +1717,7 @@
             </div>
           </div>
           <div class="about-copy">
-            <p>Cybersecurity and IT specialist with <strong>5+ years of MSP and enterprise experience</strong>, supporting 10,000+ computers, servers, networking equipment, and cloud-connected systems across casino and small-business environments where uptime and operational continuity matter.</p>
+            <p>Cybersecurity and IT specialist with <strong>5+ years of MSP and enterprise experience</strong>, supporting 10,000+ computers, servers, networking equipment, and cloud-connected systems across casino and small-business environments.</p>
             <p>Hands-on with <strong>Microsoft 365 administration, endpoint and identity support, onboarding and offboarding, ticketing workflows, remote support, and cross-platform troubleshooting</strong> across Windows, macOS, Linux, iOS, and Android.</p>
           </div>
           <div class="chip-wrap">
@@ -1735,7 +1775,7 @@
             <div class="section-kicker">Resume</div>
             <h2 class="section-title">Enterprise support experience with a security mindset</h2>
             <p>
-              Experience across enterprise support, security operations, and infrastructure troubleshooting, presented to make technical depth, operating scale, and lab work easy for recruiters and hiring managers to evaluate quickly.
+              Five years across enterprise support, security operations, and infrastructure troubleshooting — from 10,000-endpoint casino floors to engineer-led MSP work — backed by hands-on lab practice in SIEM, identity, and packet analysis.
             </p>
           </div>
           <div class="resume-stats">
@@ -1885,9 +1925,9 @@
                 <h3>Public Market Lab / Systematic Trading Research Stack</h3>
                 <div class="timeline-sub">Mac mini · Hermes Agent · Alpaca API · Algorithmic Paper Trading · SQLite · Flask · CUDA · 5-GPU Rig</div>
                 <ul class="timeline-points">
-                  <li>Built a split-architecture systematic trading lab where a Mac mini continuously handles collection, orchestration, and research workflows through Hermes Agent, while a dedicated 5-card GPU rig handles higher-throughput model experiments, ranking passes, and trading-side compute.</li>
-                  <li>Uses the Alpaca API for algorithmic paper trading while collecting stock, options, and crypto data into SQLite, copying consistent snapshots between systems, and running deterministic screening, risk controls, and GPU-assisted research over time-ordered market data.</li>
-                  <li>Exposed the stack through a local Flask dashboard and reporting layer that surfaces candidates, paper positions, P&amp;L, training readiness, database health, and live GPU telemetry so the project reads as a real systematic trading environment rather than a toy bot.</li>
+                  <li>Built a split-architecture trading lab where a Mac mini handles collection, orchestration, and research workflows through Hermes Agent, while a dedicated 5-card GPU rig handles higher-throughput model experiments and ranking runs.</li>
+                  <li>Uses the Alpaca API for algorithmic paper trading while collecting stock, options, and crypto data into SQLite, copying consistent snapshots between systems, and applying deterministic screening and risk controls to time-ordered market data.</li>
+                  <li>Exposes the stack through a local Flask dashboard and reporting layer that surfaces candidates, paper positions, P&amp;L, training readiness, database health, and live GPU telemetry.</li>
                 </ul>
                 <div class="cta-row">
                   <a class="btn btn-secondary" href="alpaca-gpu-trading-bot.html">View project brief</a>
@@ -2022,7 +2062,7 @@
         document.body.style.overflow = '';
         frame.removeAttribute('src');
         window.scrollTo({ top: previousScrollY, behavior: 'auto' });
-        if (pushState) history.pushState({ overlay: false }, '', 'index.html');
+        if (pushState) history.pushState({ overlay: false }, '', './');
         syncPlayerChrome();
       }
 
@@ -2071,7 +2111,6 @@
       measureAnchor();
       syncPlayerChrome();
       window.addEventListener('load', () => { measureAnchor(); syncPlayerChrome(); });
-      syncPlayerChrome();
     })();
 
     const revealTargets = document.querySelectorAll('.reveal');
@@ -2246,8 +2285,15 @@
       const subEl = document.getElementById('player-sub');
       const hostId = document.getElementById('yt-host')?.id || 'yt-host';
 
-      const PLAYLIST_ID = 'PLX1pbf-obzvE';
-      const TRACKS = [
+      const PLAYLIST_URL = 'https://www.youtube.com/playlist?list=PLX1pbf-obzvE';
+      const PLAYLIST_ID = (() => {
+        try {
+          return new URL(PLAYLIST_URL).searchParams.get('list') || 'PLX1pbf-obzvE';
+        } catch (e) {
+          return 'PLX1pbf-obzvE';
+        }
+      })();
+      const FALLBACK_TRACKS = [
         { id: 'u-58fgQNQ2g', title: '12 913' },
         { id: '99ziFZuR3E4', title: 'ukgk (2021Aug mix)' },
         { id: 'S9LpdTWE3Gs', title: 'Instupendo & Ripsquad - Zombie2' },
@@ -2270,6 +2316,10 @@
       let unmuteArmed = true;
       let currentIndex = 0;
       let stateTimer = null;
+      let playlistMode = 'playlist';
+      let playlistTracks = FALLBACK_TRACKS.map((track) => ({ ...track }));
+      let playlistReady = false;
+      let playlistLoadRequested = false;
 
       function readSavedState() {
         try {
@@ -2279,6 +2329,17 @@
         } catch (e) {
           return null;
         }
+      }
+
+      function getPlaylistLength() {
+        return Math.max(playlistTracks.length, FALLBACK_TRACKS.length, 1);
+      }
+
+      function getTrackAt(index) {
+        const source = playlistTracks.length ? playlistTracks : FALLBACK_TRACKS;
+        if (!source.length) return null;
+        const safeIndex = ((index % source.length) + source.length) % source.length;
+        return source[safeIndex] || null;
       }
 
       function getRuntimeState() {
@@ -2291,7 +2352,8 @@
         } catch (e) {}
         return {
           playlistId: PLAYLIST_ID,
-          playlistLength: TRACKS.length,
+          playlistLength: getPlaylistLength(),
+          playlistMode,
           index: currentIndex,
           seconds,
           muted,
@@ -2348,12 +2410,13 @@
         const state = player && player.getPlayerState ? player.getPlayerState() : -1;
         const playing = state === 1;
         const tag = muted ? '◼ Muted · tap to play' : (playing ? '▶ Audio · Now Playing' : '⏸ Paused');
-        const counter = '  ·  ' + String(currentIndex + 1).padStart(2, '0') + ' / ' + String(TRACKS.length).padStart(2, '0');
+        const counter = '  ·  ' + String(currentIndex + 1).padStart(2, '0') + ' / ' + String(getPlaylistLength()).padStart(2, '0');
         subEl.textContent = tag + counter;
       }
 
-      function setTitle() {
-        const safe = (TRACKS[currentIndex]?.title || ('Site playlist · track ' + String(currentIndex + 1).padStart(2, '0')))
+      function setTitle(rawTitle) {
+        const fallbackTitle = 'Site playlist · track ' + String(currentIndex + 1).padStart(2, '0');
+        const safe = String(rawTitle || getTrackAt(currentIndex)?.title || fallbackTitle)
           .replace(/&/g, '&amp;')
           .replace(/</g, '&lt;')
           .replace(/>/g, '&gt;')
@@ -2363,6 +2426,36 @@
         updateTicker();
       }
 
+      function syncCurrentTrackFromPlayer() {
+        if (!player || !ready) return;
+        try {
+          const data = player.getVideoData ? player.getVideoData() : null;
+          const list = player.getPlaylist ? player.getPlaylist() : null;
+          const rawIndex = player.getPlaylistIndex ? player.getPlaylistIndex() : currentIndex;
+          if (Array.isArray(list) && list.length) {
+            currentIndex = Math.max(0, rawIndex || 0);
+            playlistTracks = list.map((videoId, idx) => {
+              const existing = playlistTracks[idx] || FALLBACK_TRACKS.find((track) => track.id === videoId) || {};
+              const title = idx === currentIndex && data && data.title ? data.title : (existing.title || 'Track ' + String(idx + 1).padStart(2, '0'));
+              return { id: videoId, title };
+            });
+            playlistReady = true;
+          }
+          if (data && data.video_id) {
+            if (Array.isArray(playlistTracks) && playlistTracks[currentIndex]) {
+              playlistTracks[currentIndex].title = data.title || playlistTracks[currentIndex].title;
+              playlistTracks[currentIndex].id = data.video_id;
+            }
+            setTitle(data.title);
+          } else {
+            setTitle();
+          }
+        } catch (e) {
+          setTitle();
+        }
+        setSub();
+      }
+
       function renderState() {
         const state = player && player.getPlayerState ? player.getPlayerState() : -1;
         const playing = state === 1;
@@ -2370,7 +2463,7 @@
         bar.classList.toggle('is-playing', playing && !muted);
         bar.classList.toggle('is-muted', muted);
         toggle.setAttribute('aria-label', playing ? 'Pause' : 'Play');
-        setSub();
+        syncCurrentTrackFromPlayer();
       }
 
       function doUnmute() {
@@ -2382,18 +2475,70 @@
         persistState();
       }
 
-      function loadTrack(index, startSeconds, shouldPlay) {
-        currentIndex = ((index % TRACKS.length) + TRACKS.length) % TRACKS.length;
-        const track = TRACKS[currentIndex];
+      function applyMutePreference() {
         try {
-          player.loadVideoById({ videoId: track.id, startSeconds: Math.max(0, startSeconds || 0) });
-          if (!shouldPlay) player.pauseVideo();
           if (muted) player.mute();
           else { player.unMute(); player.setVolume(30); }
         } catch (e) {}
+      }
+
+      function loadFallbackTrack(index, startSeconds, shouldPlay) {
+        playlistMode = 'fallback';
+        currentIndex = ((index % FALLBACK_TRACKS.length) + FALLBACK_TRACKS.length) % FALLBACK_TRACKS.length;
+        const track = FALLBACK_TRACKS[currentIndex];
+        playlistTracks = FALLBACK_TRACKS.map((item) => ({ ...item }));
+        try {
+          player.loadVideoById({ videoId: track.id, startSeconds: Math.max(0, startSeconds || 0) });
+          if (!shouldPlay) player.pauseVideo();
+          applyMutePreference();
+        } catch (e) {}
+        setTitle(track.title);
+        renderState();
+        persistState();
+      }
+
+      function loadPlaylistIndex(index, startSeconds, shouldPlay) {
+        playlistMode = 'playlist';
+        currentIndex = Math.max(0, index || 0);
+        try {
+          player.loadPlaylist({
+            listType: 'playlist',
+            list: PLAYLIST_ID,
+            index: currentIndex,
+            startSeconds: Math.max(0, startSeconds || 0)
+          });
+          if (!shouldPlay) player.pauseVideo();
+          applyMutePreference();
+        } catch (e) {
+          loadFallbackTrack(index, startSeconds, shouldPlay);
+          return;
+        }
         setTitle();
         renderState();
         persistState();
+      }
+
+      function loadActiveTrack(index, startSeconds, shouldPlay) {
+        if (playlistMode === 'playlist') {
+          loadPlaylistIndex(index, startSeconds, shouldPlay);
+        } else {
+          loadFallbackTrack(index, startSeconds, shouldPlay);
+        }
+      }
+
+      function movePlaylist(delta) {
+        if (!ready) return;
+        if (playlistMode === 'playlist' && player.nextVideo && player.previousVideo) {
+          try {
+            if (delta > 0) player.nextVideo();
+            else player.previousVideo();
+            if (!muted) { player.unMute(); player.setVolume(30); }
+            doUnmute();
+            return;
+          } catch (e) {}
+        }
+        loadFallbackTrack(currentIndex + delta, 0, true);
+        doUnmute();
       }
 
       function applySavedState() {
@@ -2401,18 +2546,18 @@
         if (!saved || saved.playlistId !== PLAYLIST_ID) {
           muted = true;
           unmuteArmed = true;
-          loadTrack(0, 0, true);
+          loadPlaylistIndex(0, 0, true);
           return;
         }
 
         muted = saved.muted !== false;
         unmuteArmed = muted;
-        loadTrack(Math.max(0, saved.index || 0), Math.max(0, saved.seconds || 0), saved.shouldPlay !== false);
+        playlistMode = saved.playlistMode === 'fallback' ? 'fallback' : 'playlist';
+        loadActiveTrack(Math.max(0, saved.index || 0), Math.max(0, saved.seconds || 0), saved.shouldPlay !== false);
       }
 
       function bootPlayer() {
         player = new YT.Player(hostId, {
-          videoId: TRACKS[0].id,
           height: '1',
           width: '1',
           playerVars: {
@@ -2422,25 +2567,38 @@
             controls: 0,
             playsinline: 1,
             loop: 0,
-            modestbranding: 1
+            modestbranding: 1,
+            listType: 'playlist',
+            list: PLAYLIST_ID
           },
           events: {
             onReady: function () {
               ready = true;
+              playlistLoadRequested = true;
               setTitle();
               applySavedState();
               startStateSync();
             },
             onStateChange: function (event) {
-              if (event && event.data === YT.PlayerState.ENDED) {
-                loadTrack(currentIndex + 1, 0, true);
+              if (event && event.data === YT.PlayerState.CUED && playlistMode === 'playlist') {
+                syncCurrentTrackFromPlayer();
+              }
+              if (event && event.data === YT.PlayerState.PLAYING) {
+                syncCurrentTrackFromPlayer();
+              }
+              if (event && event.data === YT.PlayerState.ENDED && playlistMode === 'fallback') {
+                loadFallbackTrack(currentIndex + 1, 0, true);
                 return;
               }
               renderState();
               persistState();
             },
             onError: function () {
-              loadTrack(currentIndex + 1, 0, false);
+              if (playlistMode === 'playlist') {
+                loadFallbackTrack(currentIndex || 0, 0, false);
+              } else {
+                loadFallbackTrack(currentIndex + 1, 0, false);
+              }
             }
           }
         });
@@ -2456,12 +2614,24 @@
         };
       }
 
+      function markPlayerUnavailable() {
+        if (ready && playlistMode === 'fallback') return;
+        if (ready) {
+          loadFallbackTrack(currentIndex || 0, 0, false);
+          return;
+        }
+        trackEl.textContent = 'Playlist unavailable';
+        subEl.textContent = '◼ Audio offline';
+        bar.classList.add('is-muted');
+      }
+
       if (window.YT && window.YT.Player) bootPlayer();
       else {
         bindYouTubeApi();
         if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
           const tag = document.createElement('script');
           tag.src = 'https://www.youtube.com/iframe_api';
+          tag.addEventListener('error', markPlayerUnavailable, { once: true });
           document.head.appendChild(tag);
         }
       }
@@ -2473,8 +2643,8 @@
         else { player.playVideo(); doUnmute(); }
         persistState();
       });
-      next.addEventListener('click', () => { if (ready) { loadTrack(currentIndex + 1, 0, true); doUnmute(); } });
-      prev.addEventListener('click', () => { if (ready) { loadTrack(currentIndex - 1, 0, true); doUnmute(); } });
+      next.addEventListener('click', () => { if (ready) movePlaylist(1); });
+      prev.addEventListener('click', () => { if (ready) movePlaylist(-1); });
       muteBtn.addEventListener('click', () => {
         if (!ready) return;
         if (muted) { doUnmute(); }

@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SIEM Home Lab — Christopher Stassinos</title>
   <meta name="description" content="Detection-engineering home lab by Christopher Stassinos built on VMware, Windows Server Active Directory, pfSense, Sysmon, and Splunk — collecting host and identity telemetry, simulating attacks, and writing real-time detections." />
+  <meta name="theme-color" content="#0a0b0e" />
+  <link rel="canonical" href="https://stassinos.xyz/siem-home-lab.html" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230a0b0e'/%3E%3Crect x='9.5' y='9.5' width='13' height='13' fill='none' stroke='%23e8ebf0' stroke-width='1.5' transform='rotate(45 16 16)'/%3E%3C/svg%3E" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://stassinos.xyz/siem-home-lab.html" />
+  <meta property="og:title" content="SIEM Home Lab — Christopher Stassinos" />
+  <meta property="og:description" content="Detection-engineering home lab by Christopher Stassinos built on VMware, Windows Server Active Directory, pfSense, Sysmon, and Splunk — collecting host and identity telemetry, simulating attacks, and " />
+  <meta name="twitter:card" content="summary" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
@@ -142,7 +150,7 @@
     }
     .hero-summary strong { color: var(--text); }
     .hero-points {
-      display: grid; gap: 10px; color: var(--text-soft); line-height: 1.6; font-size: 14px;
+      display: grid; gap: 10px; color: var(--text-soft); line-height: 1.6; font-size: 16px;
     }
     .hero-points li { list-style: none; position: relative; padding-left: 22px; }
     .hero-points li::before {
@@ -216,7 +224,7 @@
       font-family: var(--mono); font-size: clamp(26px, 3.6vw, 42px); line-height: 0.96; text-transform: uppercase; letter-spacing: -0.05em; font-weight: 400; max-width: 18ch;
     }
     .section-copy {
-      max-width: 76ch; color: var(--text-soft); line-height: 1.7; font-size: 15px;
+      max-width: 76ch; color: var(--text-soft); line-height: 1.7; font-size: 17px;
     }
     .detail-grid {
       display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px;
@@ -230,7 +238,7 @@
     }
     .detail-card:hover::after { opacity: 1; }
     .detail-card h3 { font-size: 19px; line-height: 1.12; font-weight: 500; }
-    .detail-card p, .detail-card li { color: var(--text-soft); line-height: 1.62; font-size: 14px; }
+    .detail-card p, .detail-card li { color: var(--text-soft); line-height: 1.62; font-size: 16px; }
     .detail-card ul { padding-left: 18px; display: grid; gap: 8px; }
 
     /* ---- Terminal-style detections ---- */
@@ -293,14 +301,14 @@
           <p class="hero-summary">
             A <strong>self-contained security operations lab</strong> on VMware, where a
             <strong>Windows Active Directory domain</strong> behind a <strong>pfSense firewall</strong> feeds host,
-            identity, and network telemetry into <strong>Splunk</strong>. Built to run one loop well:
-            generate real attacker behavior, capture the right logs, and turn them into
+            identity, and network telemetry into <strong>Splunk</strong>. The workflow is straightforward:
+            generate test activity, collect the right logs, and turn that data into
             <strong>working detections</strong>.
           </p>
           <ul class="hero-points">
             <li>Windows Server runs Active Directory and Group Policy; domain-joined clients produce real authentication, account, and policy events.</li>
             <li>Sysmon and Windows Event Forwarding ship endpoint and identity telemetry into a single Splunk index.</li>
-            <li>Brute force, lockouts, and privilege escalation are simulated on purpose — then each one is caught with a purpose-written Splunk search.</li>
+            <li>Brute force attempts, lockouts, and privilege escalation are simulated on purpose, then each one is detected with a focused Splunk search.</li>
           </ul>
           <div class="cta-row">
             <a class="btn btn-primary" href="index.html" data-overlay-close="true">Back to portfolio</a>
@@ -445,7 +453,7 @@
             <div class="meta-label">Detection Engineering</div>
             <h3>From event to alert</h3>
             <ul>
-              <li>Maps real attacker behavior to specific Windows security event IDs and Sysmon telemetry.</li>
+              <li>Maps test activity to specific Windows security event IDs and Sysmon telemetry.</li>
               <li>Produces validated Splunk searches that fire on the intended activity and stay quiet otherwise.</li>
             </ul>
           </article>

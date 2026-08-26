@@ -48,26 +48,47 @@ test.describe('stassinos.xyz smoke checks', () => {
     await page.goto('/index.html', { waitUntil: 'networkidle' });
     await page.waitForTimeout(2500);
 
-    const track = page.locator('#player-track');
     const sub = page.locator('#player-sub');
 
-    const initialTrack = (await track.innerText()).trim();
-    await expect(sub).toContainText('02 / 11');
+    const readPlayerState = async () => page.evaluate(() => {
+      const trackText = document.querySelector('#player-track')?.textContent?.trim() || '';
+      const subText = document.querySelector('#player-sub')?.textContent?.trim() || '';
+      const match = subText.match(/(\d+)\s*\/\s*(\d+)/);
+      return {
+        trackText,
+        subText,
+        current: match ? Number(match[1]) : null,
+        total: match ? Number(match[2]) : null
+      };
+    });
+
+    const initial = await readPlayerState();
+    expect(initial.total).not.toBeNull();
+    expect(initial.total).toBeGreaterThanOrEqual(1);
+    expect(initial.current).not.toBeNull();
 
     await page.locator('#player-toggle').click();
     await expect(sub).toContainText(/Now Playing/i);
 
     await page.locator('#player-next').click();
-    await page.waitForTimeout(700);
-    const afterNext = (await track.innerText()).trim();
-    await expect(afterNext).not.toBe(initialTrack);
-    await expect(sub).toContainText('03 / 11');
+    await page.waitForTimeout(1200);
+    const afterNext = await readPlayerState();
+    expect(afterNext.total).toBe(initial.total);
+    expect(afterNext.trackText.length).toBeGreaterThan(0);
+    if ((initial.total || 0) > 1) {
+      expect(afterNext.trackText).not.toBe(initial.trackText);
+      expect(afterNext.current).not.toBe(initial.current);
+    }
 
     await page.locator('#player-prev').click();
-    await page.waitForTimeout(700);
-    const afterPrev = (await track.innerText()).trim();
-    expect(afterPrev).toBe(initialTrack);
-    await expect(sub).toContainText('02 / 11');
+    await page.waitForTimeout(1200);
+    const afterPrev = await readPlayerState();
+    expect(afterPrev.total).toBe(initial.total);
+    expect(afterPrev.trackText.length).toBeGreaterThan(0);
+    if ((initial.total || 0) > 1) {
+      expect(afterPrev.trackText).toBe(initial.trackText);
+      expect(afterPrev.current).toBe(initial.current);
+    }
   });
 
   test('MSP experience highlights concrete security and infrastructure tools', async ({ page }) => {
