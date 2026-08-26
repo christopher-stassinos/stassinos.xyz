@@ -91,6 +91,28 @@ test.describe('stassinos.xyz smoke checks', () => {
     }
   });
 
+  test('custom cursor uses the lighter dark-gray treatment across site pages', async ({ page }) => {
+    const routes = [
+      '/index.html',
+      '/alpaca-gpu-trading-bot.html',
+      '/network-traffic-analysis.html',
+      '/siem-home-lab.html'
+    ];
+
+    for (const route of routes) {
+      await page.goto(route, { waitUntil: 'networkidle' });
+      await page.mouse.move(240, 240);
+
+      const cursor = page.locator('#cursor-node');
+      await expect(cursor).toHaveClass(/visible/);
+      await expect(cursor).toHaveCSS('background-color', 'rgba(46, 50, 58, 0.96)');
+
+      await page.locator('.brand').hover();
+      await expect(cursor).toHaveClass(/is-link/);
+      await expect(cursor).toHaveCSS('background-color', 'rgba(58, 64, 74, 0.98)');
+    }
+  });
+
   test('MSP experience highlights concrete security and infrastructure tools', async ({ page }) => {
     await page.goto('/index.html', { waitUntil: 'networkidle' });
 
