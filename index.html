@@ -1023,6 +1023,53 @@
       line-height: 1.62;
     }
 
+    .cert-targets {
+      display: grid;
+      margin-top: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.015);
+    }
+
+    .cert-targets-head,
+    .cert-target {
+      display: grid;
+      grid-template-columns: 76px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+      padding: 11px 12px;
+    }
+
+    .cert-targets-head {
+      color: var(--text-soft);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      line-height: 1.5;
+      text-transform: uppercase;
+    }
+
+    .cert-targets-head span:last-child {
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    .cert-target {
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .cert-target strong {
+      color: var(--text-soft);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+    }
+
+    .cert-target span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
     .skills-layout {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1707,6 +1754,12 @@
             <div class="cert-card"><div class="cert-code">IBM</div><div class="cert-name">IBM Cybersecurity Analyst</div></div>
             <div class="cert-card"><div class="cert-code">PANA</div><div class="cert-name">Palo Alto Networks Associate</div></div>
           </div>
+          <div class="cert-targets" aria-label="Next certification targets">
+            <div class="cert-targets-head"><span>Next</span><span>Planned · Pearson VUE / OnVUE</span></div>
+            <div class="cert-target"><strong>SC-200</strong><span>Security Operations Analyst Associate</span></div>
+            <div class="cert-target"><strong>CySA+</strong><span>CompTIA Cybersecurity Analyst</span></div>
+            <div class="cert-target"><strong>SC-300</strong><span>Identity and Access Administrator Associate</span></div>
+          </div>
         </article>
 
         <article id="about" class="panel sub-panel col-4 reveal delay-3">
@@ -1895,6 +1948,30 @@
                 <h3>Palo Alto Networks Associate</h3>
                 <div class="timeline-sub">Palo Alto Networks</div>
                 <ul class="timeline-points"><li>Network security fundamentals, next-gen firewall concepts, and enterprise security operations.</li></ul>
+              </div>
+            </article>
+            <article class="timeline-item is-target">
+              <div class="timeline-date">Target</div>
+              <div class="timeline-role">
+                <h3>Microsoft SC-200 · Security Operations Analyst Associate</h3>
+                <div class="timeline-sub">Microsoft · Pearson VUE / OnVUE eligible</div>
+                <ul class="timeline-points"><li>Highest-leverage target for current security operations work: Defender XDR and Huntress alert triage, sign-in and endpoint timeline review, containment, and incident coordination.</li></ul>
+              </div>
+            </article>
+            <article class="timeline-item is-target">
+              <div class="timeline-date">Target</div>
+              <div class="timeline-role">
+                <h3>CompTIA Cybersecurity Analyst (CySA+)</h3>
+                <div class="timeline-sub">CompTIA · Pearson VUE / OnVUE eligible</div>
+                <ul class="timeline-points"><li>Natural next step beyond Security+, covering SIEM and log review, incident response, vulnerability management, and remediation.</li></ul>
+              </div>
+            </article>
+            <article class="timeline-item is-target">
+              <div class="timeline-date">Target</div>
+              <div class="timeline-role">
+                <h3>Microsoft SC-300 · Identity and Access Administrator Associate</h3>
+                <div class="timeline-sub">Microsoft · Pearson VUE / OnVUE eligible</div>
+                <ul class="timeline-points"><li>Maps to daily Entra ID, Conditional Access, MFA, and onboarding/offboarding lifecycle work; pairs naturally with SC-200 for MSP and security-operations roles.</li></ul>
               </div>
             </article>
           </div>
