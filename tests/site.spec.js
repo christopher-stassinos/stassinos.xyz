@@ -183,23 +183,16 @@ test.describe('stassinos.xyz smoke checks', () => {
     }
   });
 
-  test('certification roadmap clearly separates planned targets from earned credentials', async ({ page }) => {
+  test('certification roadmap does not publish unearned targets', async ({ page }) => {
     await page.goto('/index.html', { waitUntil: 'networkidle' });
 
-    const targets = page.locator('.cert-target');
-    await expect(targets).toHaveCount(3);
-    await expect(page.locator('.cert-targets-head')).toContainText('Planned');
-    await expect(page.locator('.cert-targets')).toContainText('SC-200');
-    await expect(page.locator('.cert-targets')).toContainText('CySA+');
-    await expect(page.locator('.cert-targets')).toContainText('SC-300');
+    await expect(page.locator('.cert-targets')).toHaveCount(0);
+    await expect(page.locator('.timeline-item.is-target')).toHaveCount(0);
+    await expect(page.locator('body')).not.toContainText('Pearson VUE / OnVUE');
 
     await page.locator('[data-tab="certs"]').click();
     await expect(page.locator('#tab-certs')).toHaveClass(/active/);
-    await expect(page.locator('#tab-certs .timeline-item.is-target')).toHaveCount(3);
-    await expect(page.locator('#tab-certs')).toContainText('Security Operations Analyst Associate');
-    await expect(page.locator('#tab-certs')).toContainText('Cybersecurity Analyst (CySA+)');
-    await expect(page.locator('#tab-certs')).toContainText('Identity and Access Administrator Associate');
-    await expect(page.locator('#tab-certs')).toContainText('Pearson VUE / OnVUE eligible');
+    await expect(page.locator('#tab-certs .timeline-item')).toHaveCount(4);
     await expect(page.locator('.metric', { hasText: 'Credentials' }).locator('strong')).toHaveText('4');
   });
 });
