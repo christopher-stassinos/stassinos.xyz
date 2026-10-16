@@ -94,8 +94,8 @@ SKILLS = (
 )
 
 EDUCATION = [
-    "<b>B.S. IT Business Management</b> — Western Governors University (In Progress)",
-    "<b>Network Security Program</b> — City College of San Francisco (Completed)",
+    "<b>B.S. IT Business Management</b> — Western Governors University",
+    "<b>Network Security Program</b> — City College of San Francisco",
 ]
 
 
