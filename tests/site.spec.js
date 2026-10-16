@@ -91,7 +91,7 @@ test.describe('stassinos.xyz smoke checks', () => {
     }
   });
 
-  test('custom cursor uses the lighter dark-gray treatment across site pages', async ({ page }) => {
+  test('site uses the native cursor across site pages', async ({ page }) => {
     const routes = [
       '/index.html',
       '/alpaca-gpu-trading-bot.html',
@@ -101,15 +101,9 @@ test.describe('stassinos.xyz smoke checks', () => {
 
     for (const route of routes) {
       await page.goto(route, { waitUntil: 'networkidle' });
-      await page.mouse.move(240, 240);
-
-      const cursor = page.locator('#cursor-node');
-      await expect(cursor).toHaveClass(/visible/);
-      await expect(cursor).toHaveCSS('background-color', 'rgba(46, 50, 58, 0.96)');
-
-      await page.locator('.brand').hover();
-      await expect(cursor).toHaveClass(/is-link/);
-      await expect(cursor).toHaveCSS('background-color', 'rgba(58, 64, 74, 0.98)');
+      await expect(page.locator('#cursor-node')).toHaveCount(0);
+      await expect(page.locator('body')).not.toHaveClass(/cursor-active/);
+      await expect(page.locator('body')).toHaveCSS('cursor', 'auto');
     }
   });
 
@@ -181,6 +175,25 @@ test.describe('stassinos.xyz smoke checks', () => {
       await expect(body).not.toContainText(certification);
       expect(cvSource).not.toContain(certification);
     }
+  });
+
+  test('certification cards stay packed beneath the heading', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/index.html', { waitUntil: 'networkidle' });
+
+    const spacing = await page.locator('#certifications').evaluate((panel) => {
+      const heading = panel.querySelector('.section-head')?.getBoundingClientRect();
+      const grid = panel.querySelector('.cert-grid')?.getBoundingClientRect();
+      return {
+        alignContent: getComputedStyle(panel).alignContent,
+        gap: heading && grid ? grid.top - heading.bottom : Number.POSITIVE_INFINITY,
+        gridHeight: grid?.height || Number.POSITIVE_INFINITY
+      };
+    });
+
+    expect(spacing.alignContent).toBe('start');
+    expect(spacing.gap).toBeLessThan(36);
+    expect(spacing.gridHeight).toBeLessThan(320);
   });
 
   test('certification roadmap does not publish unearned targets', async ({ page }) => {

@@ -122,12 +122,8 @@
       scroll-margin-top: 36px;
     }
 
-    .particle-layer {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 5;
-      overflow: hidden;
+    #certifications {
+      align-content: start;
     }
 
     .page-overlay {
@@ -247,100 +243,6 @@
     .tab-panel::-webkit-scrollbar-corner,
     .page-overlay-viewport::-webkit-scrollbar-corner {
       background: transparent;
-    }
-
-    .particle {
-      position: absolute;
-      width: 3px;
-      height: 3px;
-      left: 0;
-      top: 0;
-      background: rgba(121, 133, 151, 0.42);
-      transform: translate(-50%, -50%);
-      animation: particle-burst var(--particle-duration, 760ms) cubic-bezier(.16,.7,.22,1) forwards;
-      opacity: var(--particle-opacity, 0.42);
-      box-shadow: 0 0 8px rgba(10, 12, 17, 0.18);
-      mix-blend-mode: normal;
-      will-change: transform, opacity;
-    }
-
-    .particle.dot {
-      border-radius: 50%;
-    }
-
-    .particle.star {
-      width: 7px;
-      height: 7px;
-      background: transparent;
-      box-shadow: none;
-    }
-
-    .particle.star::before,
-    .particle.star::after {
-      content: '';
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 7px;
-      height: 1px;
-      background: rgba(157, 170, 190, 0.34);
-      transform: translate(-50%, -50%);
-      box-shadow: 0 0 6px rgba(14, 17, 24, 0.18);
-    }
-
-    .particle.star::after {
-      transform: translate(-50%, -50%) rotate(90deg);
-    }
-
-    .particle.core {
-      width: 6px;
-      height: 6px;
-      background: rgba(27, 31, 40, 0.92);
-      border: 1px solid rgba(215, 221, 232, 0.14);
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 0 12px rgba(0,0,0,0.26);
-      animation-duration: 300ms;
-      opacity: 0.82;
-    }
-
-    .cursor-node {
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 12px;
-      height: 12px;
-      border-radius: 999px;
-      background: rgba(46, 50, 58, 0.96);
-      border: 1px solid rgba(225, 230, 238, 0.16);
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 6px 18px rgba(0,0,0,0.34);
-      transform: translate(-50%, -50%);
-      transform-origin: center;
-      pointer-events: none;
-      z-index: 220;
-      opacity: 0;
-      transition: opacity 140ms ease, transform 140ms ease, background 140ms ease, border-color 140ms ease;
-    }
-
-    .cursor-node.visible {
-      opacity: 1;
-    }
-
-    .cursor-node.is-link {
-      transform: translate(-50%, -50%) scale(1.12);
-      background: rgba(58, 64, 74, 0.98);
-      border-color: rgba(233, 238, 244, 0.22);
-    }
-
-    @media (max-width: 720px) {
-      .cursor-node {
-        display: none;
-      }
-    }
-
-    body.cursor-active,
-    body.cursor-active a,
-    body.cursor-active button,
-    body.cursor-active [role="button"] {
-      cursor: none;
     }
 
     .shell {
@@ -1509,21 +1411,6 @@
       }
     }
 
-    @media (hover: none), (pointer: coarse) {
-      .particle-layer,
-      .cursor-node {
-        display: none !important;
-      }
-
-      body,
-      body.cursor-active,
-      body.cursor-active a,
-      body.cursor-active button,
-      body.cursor-active [role="button"] {
-        cursor: auto !important;
-      }
-    }
-
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after {
@@ -1532,8 +1419,6 @@
         transition-duration: 0.01ms !important;
       }
       .reveal { opacity: 1; transform: none; }
-      .particle-layer,
-      .cursor-node { display: none !important; }
     }
 
     @keyframes scan-flicker {
@@ -1558,22 +1443,10 @@
       50% { transform: translate(-50%, calc(-50% - 8px)); }
     }
 
-    @keyframes particle-burst {
-      0% {
-        opacity: var(--particle-opacity, 0.42);
-        transform: translate(-50%, -50%) translate(0, 0) scale(1);
-      }
-      100% {
-        opacity: 0;
-        transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(var(--particle-scale, 0.44)) rotate(var(--rot, 0deg));
-      }
-    }
   </style>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
-  <div class="particle-layer" id="particle-layer" aria-hidden="true"></div>
-  <div class="cursor-node" id="cursor-node" aria-hidden="true"></div>
   <div class="shell" id="top">
     <header class="site-head">
       <a class="brand" href="#top">CHRISTOPHER STASSINOS.XYZ</a>
@@ -2159,119 +2032,6 @@
         if (panel) panel.classList.add('active');
       });
     });
-
-    const particleLayer = document.getElementById('particle-layer');
-    const cursorNode = document.getElementById('cursor-node');
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const finePointer = window.matchMedia('(pointer: fine)').matches;
-
-    if (!reducedMotion && finePointer) {
-      document.body.classList.add('cursor-active');
-      let lastTrail = 0;
-      let lastX = window.innerWidth * 0.5;
-      let lastY = window.innerHeight * 0.5;
-      let pointerX = lastX;
-      let pointerY = lastY;
-      let cursorFrame = null;
-      let cursorSourceNonce = 0;
-
-      const burst = (x, y, vx = 0, vy = 0) => {
-        const speed = Math.hypot(vx, vy);
-        const backX = speed > 0.35 ? -(vx / speed) : 0;
-        const backY = speed > 0.35 ? -(vy / speed) : -1;
-        const sideX = -backY;
-        const sideY = backX;
-        const specs = [
-          { type: 'core', dist: 0, spread: 0, drift: 3, opacity: 0.78, scale: 0.76, duration: 280 },
-          { type: 'dot', dist: 6, spread: 2, drift: 8, opacity: 0.34, scale: 0.58, duration: 420 },
-          { type: 'dot', dist: 12, spread: 3, drift: 12, opacity: 0.26, scale: 0.48, duration: 560 },
-          { type: 'star', dist: 18, spread: 4, drift: 16, opacity: 0.22, scale: 0.44, duration: 680 },
-          { type: 'dot', dist: 24, spread: 5, drift: 21, opacity: 0.14, scale: 0.38, duration: 820 }
-        ];
-
-        specs.forEach((spec) => {
-          const particle = document.createElement('span');
-          const isCore = spec.type === 'core';
-          const isStar = spec.type === 'star';
-          particle.className = 'particle ' + (isStar ? 'star' : 'dot') + (isCore ? ' core' : '');
-          const spread = isCore ? 0 : (Math.random() - 0.5) * spec.spread;
-          particle.style.left = (x + backX * spec.dist + sideX * spread) + 'px';
-          particle.style.top = (y + backY * spec.dist + sideY * spread) + 'px';
-          particle.style.setProperty('--dx', (backX * spec.drift + sideX * ((Math.random() - 0.5) * 2.4)).toFixed(2) + 'px');
-          particle.style.setProperty('--dy', (backY * spec.drift + sideY * ((Math.random() - 0.5) * 2.4)).toFixed(2) + 'px');
-          particle.style.setProperty('--rot', ((Math.random() - 0.5) * 28).toFixed(2) + 'deg');
-          particle.style.setProperty('--particle-opacity', spec.opacity);
-          particle.style.setProperty('--particle-scale', spec.scale);
-          particle.style.setProperty('--particle-duration', spec.duration + 'ms');
-          particleLayer.appendChild(particle);
-          particle.addEventListener('animationend', () => particle.remove(), { once: true });
-        });
-      };
-
-      const paintCursor = () => {
-        cursorFrame = null;
-        if (!cursorNode) return;
-        cursorNode.style.left = pointerX + 'px';
-        cursorNode.style.top = pointerY + 'px';
-      };
-
-      window.addEventListener('pointermove', (event) => {
-        const now = performance.now();
-        const moveX = event.movementX || (event.clientX - lastX);
-        const moveY = event.movementY || (event.clientY - lastY);
-
-        pointerX = event.clientX;
-        pointerY = event.clientY;
-        if (cursorNode) {
-          cursorNode.classList.add('visible');
-          cursorNode.classList.toggle('is-link', Boolean(event.target && event.target.closest('a, button, .tab, [role="button"]')));
-        }
-        if (!cursorFrame) cursorFrame = requestAnimationFrame(paintCursor);
-
-        if (now - lastTrail > 28) {
-          burst(event.clientX, event.clientY, moveX, moveY);
-          lastTrail = now;
-        }
-
-        lastX = event.clientX;
-        lastY = event.clientY;
-      });
-
-      window.addEventListener('pointerleave', () => {
-        if (cursorNode) cursorNode.classList.remove('visible');
-      });
-
-      window.addEventListener('blur', () => {
-        if (cursorNode) cursorNode.classList.remove('visible');
-      });
-
-      window.addEventListener('message', (event) => {
-        if (event.origin !== window.location.origin || !event.data || typeof event.data !== 'object') return;
-        if (!cursorNode) return;
-
-        if (event.data.type === 'stassinos-overlay-cursor') {
-          const frame = document.getElementById('page-overlay-frame');
-          const overlay = document.getElementById('page-overlay');
-          if (!frame || !overlay || !overlay.classList.contains('is-open')) return;
-          const rect = frame.getBoundingClientRect();
-          pointerX = rect.left + Number(event.data.x || 0);
-          pointerY = rect.top + Number(event.data.y || 0);
-          cursorNode.classList.add('visible');
-          cursorNode.classList.toggle('is-link', Boolean(event.data.isLink));
-          cursorSourceNonce += 1;
-          if (!cursorFrame) cursorFrame = requestAnimationFrame(paintCursor);
-          return;
-        }
-
-        if (event.data.type === 'stassinos-overlay-cursor-hide') {
-          const nonceAtHide = ++cursorSourceNonce;
-          window.setTimeout(() => {
-            if (nonceAtHide !== cursorSourceNonce) return;
-            cursorNode.classList.remove('visible', 'is-link');
-          }, 24);
-        }
-      });
-    }
 
     (function initPlayer() {
       const bar = document.getElementById('artifact-player');
