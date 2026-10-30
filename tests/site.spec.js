@@ -60,7 +60,7 @@ test.describe('stassinos.xyz smoke checks', () => {
     await expect(page.locator('.museum-nav a[data-route="trajectory"]')).toHaveAttribute('aria-current', 'page');
     await page.getByRole('link', { name: 'All projects' }).click();
     await expect(page.locator('#portfolio-page h1')).toContainText('Labs + projects');
-    await expect(page.locator('.project-records > article')).toHaveCount(3);
+    await expect(page.locator('.project-records > article')).toHaveCount(4);
   });
 
   test('MSP experience and the CV describe the same work', async ({ page }) => {
