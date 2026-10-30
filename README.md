@@ -2,7 +2,7 @@
 
 Christopher Stassinos — cybersecurity and enterprise IT.
 
-Live site: https://stassinos.xyz/
+Live site: https://www.stassinos.xyz/ (the bare domain redirects here).
 
 A static portfolio with seven connected ocean scenes, a relief-lit lunar sphere, responsive navigation, and a persistent YouTube music player. The artwork supports WebGL2, a Canvas fallback, and reduced motion. Playback starts only after pressing Play.
 
@@ -25,7 +25,7 @@ Legacy project HTML pages and the root CV URL remain available.
 - assets/site-content.js contains the profile, project briefs, credentials, and music selection.
 - assets/portfolio.js and assets/portfolio.css provide the interface.
 - assets/ocean-worlds.js, assets/ocean-canvas.js, and assets/lunar-detail.js provide the art.
-- GitHub Pages deploys the main branch. CNAME retains stassinos.xyz.
+- GitHub Pages deploys the main branch. CNAME uses www.stassinos.xyz; GitHub Pages redirects the bare domain to it.
 - Runtime asset URLs include content hashes to refresh changed files after releases.
 - build_cv.py regenerates the root PDF; copy the finished PDF into assets/ as well.
 

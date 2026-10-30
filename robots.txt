@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://stassinos.xyz/sitemap.xml
+Sitemap: https://www.stassinos.xyz/sitemap.xml
