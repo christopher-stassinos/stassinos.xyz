@@ -8,43 +8,43 @@
   const multipleTracks = content.music.tracks.length > 1;
 
   const routes = [
-    ['home', 'Overview', 'Profile / 01'],
-    ['bot', 'Experience', 'Experience / 02'],
-    ['memory', 'Credentials', 'Credentials / 03'],
-    ['history', 'Education', 'Education / 04'],
-    ['trajectory', 'Projects', 'Projects / 05'],
-    ['metrics', 'Skills', 'Capability / 06'],
-    ['console', 'Contact', 'Contact / 07'],
+    ['home', 'Overview'],
+    ['bot', 'Experience'],
+    ['memory', 'Credentials'],
+    ['history', 'Education'],
+    ['trajectory', 'Projects'],
+    ['metrics', 'Skills'],
+    ['console', 'Contact'],
   ];
   const cv = 'assets/christopher-stassinos-cv.pdf';
   const escape = (text) => String(text).replace(/[&<>"']/g, (char) => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[char]));
   const actions = `<div class="cta-row"><a class="btn btn-primary" href="${cv}" download>Download CV <span aria-hidden="true">↗</span></a><a class="btn btn-secondary" href="https://linkedin.com/in/christopher-stassinos" target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a></div>`;
-  const heading = (title, introduction = '') => `<header class="page-intro"><span class="eyebrow" data-section-label></span><h1 tabindex="-1">${title}<span class="title-stop" aria-hidden="true">.</span></h1>${introduction ? `<p>${introduction}</p>` : ''}</header>`;
-  const section = (number, title, body, extra = '') => `<section class="exhibit ${extra}"><div class="section-heading"><span class="section-number">${number}</span><h2>${title}</h2></div>${body}</section>`;
+  const heading = (title, introduction = '') => `<header class="page-intro"><h1 tabindex="-1">${title}<span class="title-stop" aria-hidden="true">.</span></h1>${introduction ? `<p>${introduction}</p>` : ''}</header>`;
+  const section = (title, body, extra = '') => `<section class="exhibit ${extra}"><div class="section-heading"><h2>${title}</h2></div>${body}</section>`;
 
   const views = {
     home: () => `
       <section class="profile-hero">
-        <div class="profile-hero__copy"><span class="eyebrow">Cybersecurity engineer / Enterprise IT</span><h1 tabindex="-1">Christopher<br>Stassinos<span class="title-stop" aria-hidden="true">.</span></h1><p class="lead">${content.summary}</p>${actions}<a class="profile-continue" href="#/bot"><span>Explore the experience</span><span aria-hidden="true">↓</span></a></div>
+        <div class="profile-hero__copy"><h1 tabindex="-1">Christopher<br>Stassinos<span class="title-stop" aria-hidden="true">.</span></h1><p class="lead">${content.summary}</p>${actions}<a class="profile-continue" href="#/bot"><span>View experience</span><span aria-hidden="true">↓</span></a></div>
       </section>
       <section class="metrics" aria-label="Profile summary">${content.metrics}</section>
-      <div class="overview-columns">${section('01', 'Background', `<div class="about-copy">${content.about}</div><div class="chip-wrap">${content.tags}</div>`)}${section('02', 'Snapshot', `<div class="profile-list">${content.snapshot}</div>`)}</div>
-      ${section('03', 'Current practice', `<ul class="hero-points">${content.points}</ul>`)}
-      <nav class="explore-grid" aria-label="Explore the portfolio"><a href="#/bot"><span>02 / Experience</span><strong>Production environments ↗</strong></a><a href="#/trajectory"><span>05 / Projects</span><strong>Labs, systems, research ↗</strong></a><a href="#/memory"><span>03 / Credentials</span><strong>Security + cloud ↗</strong></a></nav>`,
+      <div class="overview-columns">${section('Background', `<div class="about-copy">${content.about}</div><div class="chip-wrap">${content.tags}</div>`)}${section('Snapshot', `<div class="profile-list">${content.snapshot}</div>`)}</div>
+      ${section('Current practice', `<ul class="hero-points">${content.points}</ul>`)}
+      <nav class="explore-grid" aria-label="Explore the portfolio"><a href="#/bot"><span>Experience</span><strong>Production environments ↗</strong></a><a href="#/trajectory"><span>Projects</span><strong>Labs, systems, research ↗</strong></a><a href="#/memory"><span>Credentials</span><strong>Security + cloud ↗</strong></a></nav>`,
     bot: () => `${heading('Experience', 'Enterprise support experience with a security mindset. Five years across MSP and enterprise support, security operations, and infrastructure troubleshooting.')}<div class="record-list">${content.experience}</div>${actions}`,
-    memory: () => `${heading('Certifications', 'Security, cloud, cybersecurity analysis, and firewall credentials spanning core IT and security domains.')}<div class="cert-grid">${content.certifications}</div>${section('03', 'Credential details', `<div class="record-list compact-records">${content.certificationDetails}</div>`)}${actions}`,
-    history: () => `${heading('Education', 'IT systems, network defense, business operations, and hands-on security training.')}<div class="record-list education-records">${content.education}</div><div class="route-note"><span>Explore further</span><a href="#/memory">Certifications ↗</a><a href="#/trajectory">Hands-on labs ↗</a></div>${actions}`,
+    memory: () => `${heading('Certifications', 'Security, cloud, cybersecurity analysis, and firewall credentials spanning core IT and security domains.')}<div class="cert-grid">${content.certifications}</div>${section('Credential details', `<div class="record-list compact-records">${content.certificationDetails}</div>`)}${actions}`,
+    history: () => `${heading('Education', 'IT systems, network defense, business operations, and hands-on security training.')}<div class="record-list education-records">${content.education}</div><div class="route-note"><a href="#/memory">Certifications ↗</a><a href="#/trajectory">Hands-on labs ↗</a></div>${actions}`,
     trajectory: () => `${heading('Labs + projects', 'Selected work in security operations, packet analysis, and systematic trading research.')}<div class="record-list project-records">${content.labs}</div>`,
-    metrics: () => `${heading('Core skills', 'Endpoint security, identity and access, networking, SIEM, and cloud-connected infrastructure.')}<section class="skills-layout" aria-label="Capability matrix">${content.skills}</section>${section('06', 'Working environments', `<div class="chip-wrap">${content.tags}</div><div class="about-copy">${content.about}</div>`)}<div class="route-note"><span>Applied in practice</span><a href="#/bot">Experience ↗</a><a href="#/trajectory">Project archive ↗</a></div>`,
-    console: () => `${heading('Contact')}<section class="contact-panel">${content.contact}</section><div class="contact-directory"><a href="mailto:chrisstassinos@gmail.com"><span>Email</span><strong>chrisstassinos@gmail.com</strong><b aria-hidden="true">↗</b></a><a href="https://linkedin.com/in/christopher-stassinos" target="_blank" rel="noreferrer"><span>LinkedIn</span><strong>Christopher Stassinos</strong><b aria-hidden="true">↗</b></a><a href="https://github.com/christopher-stassinos" target="_blank" rel="noreferrer"><span>GitHub</span><strong>christopher-stassinos</strong><b aria-hidden="true">↗</b></a></div>${section('07', 'Résumé', `<div class="resume-download"><p>Experience, certifications, education, and selected projects.</p><div class="cta-row"><a class="btn btn-primary" href="${cv}" download>Download CV ↗</a><a class="btn btn-secondary" href="${cv}" target="_blank" rel="noreferrer">View PDF ↗</a></div></div>`)}`,
+    metrics: () => `${heading('Core skills', 'Endpoint security, identity and access, networking, SIEM, and cloud-connected infrastructure.')}<section class="skills-layout" aria-label="Capability matrix">${content.skills}</section>${section('Working environments', `<div class="chip-wrap">${content.tags}</div><div class="about-copy">${content.about}</div>`)}<div class="route-note"><a href="#/bot">Experience ↗</a><a href="#/trajectory">Project archive ↗</a></div>`,
+    console: () => `${heading('Contact')}<section class="contact-panel">${content.contact}</section><div class="contact-directory"><a href="mailto:chrisstassinos@gmail.com"><span>Email</span><strong>chrisstassinos@gmail.com</strong><b aria-hidden="true">↗</b></a><a href="https://linkedin.com/in/christopher-stassinos" target="_blank" rel="noreferrer"><span>LinkedIn</span><strong>Christopher Stassinos</strong><b aria-hidden="true">↗</b></a><a href="https://github.com/christopher-stassinos" target="_blank" rel="noreferrer"><span>GitHub</span><strong>christopher-stassinos</strong><b aria-hidden="true">↗</b></a></div>${section('Résumé', `<div class="resume-download"><p>Experience, certifications, education, and selected projects.</p><div class="cta-row"><a class="btn btn-primary" href="${cv}" download>Download CV ↗</a><a class="btn btn-secondary" href="${cv}" target="_blank" rel="noreferrer">View PDF ↗</a></div></div>`)}`,
   };
 
   const root = document.createElement('div');
   root.className = 'museum-app';
   root.innerHTML = `
     <a class="portfolio-skip" href="#portfolio-page">Skip to content</a>
-    <aside class="museum-rail"><div class="museum-identity"><a class="museum-name" href="#/home">Christopher Stassinos</a><a class="museum-brand" href="#/home">STASSINOS<span>.XYZ</span></a></div><p class="rail-subtitle">Security. Systems.<br>Infrastructure.</p><span class="rail-index">Contents / 01—07</span><nav class="museum-nav" aria-label="Portfolio sections">${routes.map(([id, name], i) => `<a href="#/${id}" data-route="${id}"><span>${String(i + 1).padStart(2, '0')}</span><b>${name}</b><i aria-hidden="true">↗</i></a>`).join('')}</nav><div class="rail-bottom"><a class="rail-cv" href="${cv}" download>Download CV <span>↓</span></a><span>Christopher Stassinos</span><span>Personal portfolio</span></div></aside>
-    <div class="museum-workspace"><header class="museum-topbar"><span data-breadcrumb>Profile / 01</span><div><time data-clock></time></div></header><main id="portfolio-page" tabindex="-1"></main><footer class="museum-footer"><span>© Christopher Stassinos</span><a href="#/console">Contact ↗</a><a href="${cv}" download>CV ↓</a></footer></div>
+    <aside class="museum-rail"><div class="museum-identity"><a class="museum-name" href="#/home">Christopher Stassinos</a><a class="museum-brand" href="#/home">stassinos<span>.xyz</span></a></div><nav class="museum-nav" aria-label="Portfolio sections">${routes.map(([id, name]) => `<a href="#/${id}" data-route="${id}"><b>${name}</b><i aria-hidden="true">↗</i></a>`).join('')}</nav><div class="rail-bottom"><a class="rail-cv" href="${cv}" download>Download CV <span>↓</span></a></div></aside>
+    <div class="museum-workspace"><main id="portfolio-page" tabindex="-1"></main><footer class="museum-footer"><span>© Christopher Stassinos</span><a href="#/console">Contact ↗</a><a href="${cv}" download>CV ↓</a></footer></div>
     <section class="music-player" aria-label="Site music"><div class="music-player__heading"><a href="${escape(musicUrl)}" target="_blank" rel="noreferrer">Site music ↗</a><button type="button" data-music-expand aria-expanded="false" aria-controls="music-video">Expand</button></div><div id="music-video" class="music-video" hidden><div id="yt-preview-player"></div></div><div class="music-player__track"><strong data-track-title>${escape(content.music.tracks[0].title)}</strong><span data-track-state role="status">Paused</span></div><div class="music-controls">${multipleTracks ? '<button type="button" data-music-prev aria-label="Previous track">|◀</button>' : ''}<button type="button" data-music-play aria-label="Play music">Play</button>${multipleTracks ? '<button type="button" data-music-next aria-label="Next track">▶|</button>' : ''}<button type="button" data-music-mute aria-label="Mute music" aria-pressed="false">Mute</button><label>Vol <input type="range" data-music-volume min="0" max="100" value="30" aria-label="Music volume"></label></div><div class="music-scrub"><time data-music-time>0:00 / —</time><input type="range" data-music-progress min="0" max="100" value="0" aria-label="Music progress" disabled></div><a class="music-help" data-music-help href="${escape(musicUrl)}" target="_blank" rel="noreferrer" hidden>Open on YouTube ↗</a></section>`;
   root.querySelector('.rail-bottom').before(root.querySelector('.music-player'));
   document.body.appendChild(root);
@@ -62,17 +62,14 @@
     const exhibit = exhibits[route[0]];
     if (activePath) routeScroll.set(activePath, page.scrollTop);
     activePath = project ? `${route[0]}/${parts[1]}` : route[0];
-    page.innerHTML = project ? `<div class="project-breadcrumb"><a class="btn btn-secondary" href="#/trajectory">← All projects</a><span>Project brief</span></div><div class="project-brief">${project.html}</div>` : views[route[0]]();
+    page.innerHTML = project ? `<div class="project-breadcrumb"><a class="btn btn-secondary" href="#/trajectory">← All projects</a></div><div class="project-brief">${project.html}</div>` : views[route[0]]();
     page.dataset.section = route[0];
     root.dataset.exhibit = route[0];
     root.style.setProperty('--scene-rgb', exhibit.accent);
-    const sectionLabel = page.querySelector('[data-section-label]');
-    if (sectionLabel) sectionLabel.textContent = `${exhibit.number} / ${route[1]}`;
     const routeIndex = routes.findIndex(([key]) => key === route[0]);
     const previousRoute = routes[(routeIndex + routes.length - 1) % routes.length];
     const nextRoute = routes[(routeIndex + 1) % routes.length];
-    page.insertAdjacentHTML('beforeend', `<nav class="section-pagination" aria-label="Continue through the portfolio"><a href="#/${previousRoute[0]}"><span>Previous section</span><strong>← ${previousRoute[1]}</strong></a><div>${exhibit.number}<span>/ 07</span></div><a href="#/${nextRoute[0]}"><span>Next section</span><strong>${nextRoute[1]} →</strong></a></nav>`);
-    root.querySelector('[data-breadcrumb]').textContent = project ? `Projects / ${project.title}` : route[2];
+    page.insertAdjacentHTML('beforeend', `<nav class="section-pagination" aria-label="Continue through the portfolio"><a href="#/${previousRoute[0]}" aria-label="Previous: ${previousRoute[1]}"><strong>← ${previousRoute[1]}</strong></a><a href="#/${nextRoute[0]}" aria-label="Next: ${nextRoute[1]}"><strong>${nextRoute[1]} →</strong></a></nav>`);
     root.querySelectorAll('[data-route]').forEach((link) => {
       const selected = link.dataset.route === route[0];
       link.classList.toggle('is-active', selected);
@@ -116,9 +113,6 @@
       location.hash = `#/${routes[Number(event.key) - 1][0]}`;
     }
   }, true);
-  function clock() {root.querySelector('[data-clock]').textContent = new Date().toLocaleTimeString('en-US', {hour12: false, hour: '2-digit', minute: '2-digit'});}
-  clock();
-  setInterval(clock, 30000);
   renderRoute();
 
   // Play the configured video directly; playlist loading is used only for a real list.
