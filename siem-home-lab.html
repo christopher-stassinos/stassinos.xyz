@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SIEM Home Lab — Christopher Stassinos</title>
-  <meta name="description" content="Detection-engineering home lab by Christopher Stassinos built on VMware, Windows Server Active Directory, pfSense, Sysmon, and Splunk — collecting host and identity telemetry, simulating attacks, and writing real-time detections." />
+  <title>Wazuh SIEM &amp; Active Directory Lab — Christopher Stassinos</title>
+  <meta name="description" content="VMware security lab with Wazuh, Windows Server AD DS/DNS, Sysmon telemetry, non-admin domain logon tests, and verified snapshot and index recovery workflows." />
   <meta name="theme-color" content="#0a0b0e" />
-  <link rel="canonical" href="https://stassinos.xyz/siem-home-lab.html" />
+  <link rel="canonical" href="https://www.stassinos.xyz/siem-home-lab.html" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230a0b0e'/%3E%3Crect x='9.5' y='9.5' width='13' height='13' fill='none' stroke='%23e8ebf0' stroke-width='1.5' transform='rotate(45 16 16)'/%3E%3C/svg%3E" />
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://stassinos.xyz/siem-home-lab.html" />
-  <meta property="og:title" content="SIEM Home Lab — Christopher Stassinos" />
-  <meta property="og:description" content="Detection-engineering home lab by Christopher Stassinos built on VMware, Windows Server Active Directory, pfSense, Sysmon, and Splunk — collecting host and identity telemetry, simulating attacks, and " />
+  <meta property="og:url" content="https://www.stassinos.xyz/siem-home-lab.html" />
+  <meta property="og:title" content="Wazuh SIEM &amp; Active Directory Lab — Christopher Stassinos" />
+  <meta property="og:description" content="VMware security lab with Wazuh, Windows Server AD DS/DNS, Sysmon telemetry, non-admin domain logon tests, and verified snapshot and index recovery workflows." />
   <meta name="twitter:card" content="summary" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -258,211 +258,55 @@
 </head>
 <body>
   <div class="shell">
-    <header class="site-head">
-      <a class="brand" href="index.html" data-overlay-close="true">Christopher Stassinos</a>
-      <div class="micro">Labs / Private Project Brief</div>
-    </header>
-
-    <main>
-      <section class="hero">
-        <article class="panel hero-copy">
-          <div class="kicker">Detection Engineering · Home Lab</div>
-          <h1 class="hero-title"><span>SIEM</span><span><em>Detection</em> Lab</span></h1>
-          <p class="hero-summary">
-            A <strong>self-contained security operations lab</strong> on VMware, where a
-            <strong>Windows Active Directory domain</strong> behind a <strong>pfSense firewall</strong> feeds host,
-            identity, and network telemetry into <strong>Splunk</strong>. The workflow is straightforward:
-            generate test activity, collect the right logs, and turn that data into
-            <strong>working detections</strong>.
-          </p>
-          <ul class="hero-points">
-            <li>Windows Server runs Active Directory and Group Policy; domain-joined clients produce real authentication, account, and policy events.</li>
-            <li>Sysmon and Windows Event Forwarding ship endpoint and identity telemetry into a single Splunk index.</li>
-            <li>Brute force attempts, lockouts, and privilege escalation are simulated on purpose, then each one is detected with a focused Splunk search.</li>
-          </ul>
-          <div class="cta-row">
-            <a class="btn btn-primary" href="index.html" data-overlay-close="true">Back to portfolio</a>
-            <a class="btn btn-secondary" href="christopher-stassinos-cv.pdf" download>Download CV</a>
-          </div>
-        </article>
-
-        <aside class="panel hero-visual" aria-label="SOC console overview">
-          <div class="console-head">
-            <span class="console-dots"><span></span><span></span><span></span></span>
-            <span class="console-title">soc-console · home.lab</span>
-          </div>
-
-          <div class="stat-row">
-            <div class="stat"><strong>4</strong><span>Detections</span></div>
-            <div class="stat"><strong>6</strong><span>Log Sources</span></div>
-            <div class="stat alert"><strong>3</strong><span>Sev Tiers</span></div>
-          </div>
-
-          <div class="flow">
-            <span class="flow-label">Telemetry Pipeline</span>
-            <div class="flow-chain">
-              <div class="node"><b>Endpoints</b><small>AD · Clients</small></div>
-              <div class="arrow">→</div>
-              <div class="node"><b>Sysmon</b><small>WEF</small></div>
-              <div class="arrow">→</div>
-              <div class="node sink"><b>Splunk</b><small>Index</small></div>
-            </div>
-          </div>
-
-          <div class="flow">
-            <span class="flow-label">Recent Alerts</span>
-            <div class="alert-feed">
-              <div class="alert-line"><span class="sev high"></span><span class="name">Brute Force — Failed Logons</span><span class="eid">4625</span></div>
-              <div class="alert-line"><span class="sev med"></span><span class="name">Account Lockout Spike</span><span class="eid">4740</span></div>
-              <div class="alert-line"><span class="sev high"></span><span class="name">Privilege Escalation</span><span class="eid">4672</span></div>
-              <div class="alert-line"><span class="sev low"></span><span class="name">Suspicious Process Tree</span><span class="eid">SYS-1</span></div>
-            </div>
-          </div>
-
-          <div class="flow">
-            <span class="flow-label">Lab Stack</span>
-            <div class="stack-grid">
-              <span class="stack-item">VMware</span>
-              <span class="stack-item">Windows Server</span>
-              <span class="stack-item">Active Directory</span>
-              <span class="stack-item">pfSense</span>
-              <span class="stack-item">Sysmon</span>
-              <span class="stack-item">Splunk</span>
-            </div>
-          </div>
-        </aside>
-      </section>
-
-      <section class="panel section">
-        <div class="section-label">Architecture</div>
-        <h2 class="section-title">How the lab is wired together</h2>
-        <p class="section-copy">
-          One VMware host, four roles. pfSense sits at the edge and segments the lab network. A Windows Server domain
-          controller runs Active Directory and Group Policy while domain-joined clients generate real logon and account
-          traffic. Sysmon and Windows Event Forwarding stream that activity into a single Splunk index — one pane of
-          glass to search, correlate, and alert across the whole domain.
-        </p>
-        <div class="detail-grid">
-          <article class="detail-card">
-            <div class="meta-label">01 / Domain</div>
-            <h3>Windows Server + Active Directory</h3>
-            <p>A domain controller provides AD authentication, Group Policy, and OU structure, while domain-joined clients produce realistic logon, account, and policy-change events.</p>
-          </article>
-          <article class="detail-card">
-            <div class="meta-label">02 / Telemetry</div>
-            <h3>Sysmon + Event Forwarding</h3>
-            <p>Sysmon enriches endpoint visibility with process, network, and registry events, and Windows Event Forwarding centralizes host and identity logs for ingestion into Splunk.</p>
-          </article>
-          <article class="detail-card">
-            <div class="meta-label">03 / Analytics</div>
-            <h3>Splunk index and search</h3>
-            <p>All forwarded data lands in Splunk, where saved searches and dashboards turn raw Windows and Sysmon events into detections, timelines, and investigative views.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="panel section">
-        <div class="section-label">Detections</div>
-        <h2 class="section-title">Attacks simulated, then caught</h2>
-        <p class="section-copy">
-          Same discipline every time: run the attack against the domain, confirm the events land in Splunk, then write a
-          search that isolates that behavior and nothing else. Detection logic is pinned to specific Windows security
-          event IDs — not keyword guesses.
-        </p>
-        <div class="terminal">
-          <div class="terminal-bar">
-            <span class="console-dots"><span></span><span></span><span></span></span>
-            <span class="path">splunk &gt; search · detections.spl</span>
-          </div>
-
-          <div class="query">
-            <div class="query-head">
-              <span class="query-name">Brute Force Logons</span>
-              <span class="chip eid">EventCode 4625</span>
-              <span class="chip sev-high">High</span>
-            </div>
-<pre class="spl"><span class="prompt">&gt; </span><span class="field">EventCode</span>=<span class="val">4625</span> <span class="pipe">|</span> <span class="cmd">stats</span> <span class="cmd">count</span> <span class="cmd">by</span> <span class="field">src_ip</span>, <span class="field">user</span> <span class="pipe">|</span> <span class="cmd">where</span> <span class="field">count</span> &gt; <span class="val">15</span></pre>
-          </div>
-
-          <div class="query">
-            <div class="query-head">
-              <span class="query-name">Account Lockouts</span>
-              <span class="chip eid">EventCode 4740</span>
-              <span class="chip sev-med">Medium</span>
-            </div>
-<pre class="spl"><span class="prompt">&gt; </span><span class="field">EventCode</span>=<span class="val">4740</span> <span class="pipe">|</span> <span class="cmd">stats</span> <span class="cmd">count</span> <span class="cmd">by</span> <span class="field">user</span>, <span class="field">ComputerName</span> <span class="pipe">|</span> <span class="cmd">sort</span> - <span class="field">count</span></pre>
-          </div>
-
-          <div class="query">
-            <div class="query-head">
-              <span class="query-name">Privilege Escalation</span>
-              <span class="chip eid">4672 · 4728 · 4732</span>
-              <span class="chip sev-high">High</span>
-            </div>
-<pre class="spl"><span class="prompt">&gt; </span>(<span class="field">EventCode</span>=<span class="val">4672</span> <span class="cmd">OR</span> <span class="field">EventCode</span>=<span class="val">4728</span> <span class="cmd">OR</span> <span class="field">EventCode</span>=<span class="val">4732</span>)
-  <span class="pipe">|</span> <span class="cmd">table</span> <span class="field">_time</span>, <span class="field">user</span>, <span class="field">Group_Name</span></pre>
-          </div>
-
-          <div class="query">
-            <div class="query-head">
-              <span class="query-name">Suspicious Process Tree</span>
-              <span class="chip eid">Sysmon EID 1</span>
-              <span class="chip sev-med">Medium</span>
-            </div>
-<pre class="spl"><span class="prompt">&gt; </span><span class="field">source</span>=<span class="val">"WinEventLog:Microsoft-Windows-Sysmon/Operational"</span> <span class="field">EventCode</span>=<span class="val">1</span>
-  <span class="pipe">|</span> <span class="cmd">stats</span> <span class="cmd">count</span> <span class="cmd">by</span> <span class="field">ParentImage</span>, <span class="field">Image</span></pre>
-          </div>
-        </div>
-      </section>
-
-      <section class="panel section">
-        <div class="section-label">Outcomes</div>
-        <h2 class="section-title">What the lab demonstrates</h2>
-        <div class="detail-grid">
-          <article class="detail-card">
-            <div class="meta-label">Detection Engineering</div>
-            <h3>From event to alert</h3>
-            <ul>
-              <li>Maps test activity to specific Windows security event IDs and Sysmon telemetry.</li>
-              <li>Produces validated Splunk searches that fire on the intended activity and stay quiet otherwise.</li>
-            </ul>
-          </article>
-          <article class="detail-card">
-            <div class="meta-label">SOC Fundamentals</div>
-            <h3>Centralized visibility</h3>
-            <ul>
-              <li>Consolidates host, identity, and network signals into one searchable Splunk index.</li>
-              <li>Builds the muscle memory of triage, correlation, and investigation across a domain.</li>
-            </ul>
-          </article>
-          <article class="detail-card">
-            <div class="meta-label">Infrastructure</div>
-            <h3>Realistic environment</h3>
-            <ul>
-              <li>Stands up AD, Group Policy, and a segmented network rather than a single test box.</li>
-              <li>Operates the lab like a small enterprise so detections reflect production-style data.</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-    </main>
-
-    <footer>
-      <span>Christopher Stassinos</span>
-      <span>Private home lab · summary page only</span>
-    </footer>
+    <header class="site-head"><a class="brand" href="/">Christopher Stassinos</a><a class="btn btn-secondary" href="/#/trajectory">All projects</a></header>
+    <main><section class="hero">
+  <article class="panel hero-copy">
+    <h1 class="hero-title"><span>Virtual SOC</span><span><em>Wazuh + Active Directory</em></span></h1>
+    <p class="hero-summary">Built a <strong>VMware security lab</strong> around a Windows Server domain, monitored Windows and Linux guests, and a <strong>Wazuh SIEM</strong>. The focus is practical verification: prove identity works, trace fresh endpoint events into the SIEM, preserve evidence, and test recovery.</p>
+    <ul class="hero-points">
+      <li>Configured Active Directory Domain Services and DNS, joined a Windows endpoint, and validated sign-in with a non-administrator domain account.</li>
+      <li>Confirmed fresh Sysmon and domain-controller telemetry reached Wazuh, including a repeat check after restoring the Windows endpoint.</li>
+      <li>Verified checkpoint recovery for Windows and a network-disconnected Kali test clone, plus a logical restore of 5,181 historical SIEM records.</li>
+    </ul>
+  </article>
+  <aside class="panel hero-visual" aria-label="Verified lab outcomes">
+    <h2 class="section-title">Verified lab results</h2>
+    <div class="stat-row">
+      <div class="stat"><strong>5,181</strong><span>SIEM records restored</span></div>
+      <div class="stat"><strong>2</strong><span>Reset workflows verified</span></div>
+      <div class="stat"><strong>1</strong><span>Active Directory domain</span></div>
+    </div>
+    <div class="summary-grid">
+      <div class="metric"><span class="stat-label">Telemetry</span><p>Windows events and Sysmon → Wazuh manager → indexer → dashboard.</p></div>
+      <div class="metric"><span class="stat-label">Identity</span><p>Domain join, interactive sign-in, Kerberos tickets, and SYSVOL access.</p></div>
+      <div class="metric"><span class="stat-label">Recovery</span><p>Export evidence, restore a checkpoint or index, and verify the result.</p></div>
+    </div>
+    <p class="summary-note">Validation used tagged benign events, dedicated test accounts, and a disposable Kali clone.</p>
+  </aside>
+</section>
+<section class="panel section">
+  <h2 class="section-title">Identity and endpoint monitoring</h2>
+  <div class="detail-grid">
+    <article class="detail-card"><h3>Active Directory foundation</h3><p>Promoted a Windows Server domain controller with AD DS and DNS, checked domain health, and joined a Windows endpoint. Prepared organizational units, security groups, and staged role accounts.</p></article>
+    <article class="detail-card"><h3>Least-privilege sign-in</h3><p>Verified an interactive domain logon with a non-administrator account. Checked the Windows logon event, Kerberos tickets, and SYSVOL access, then logged off the test user and disabled the temporary account.</p></article>
+    <article class="detail-card"><h3>Wazuh and Sysmon</h3><p>Enrolled Windows and Linux guests in centralized monitoring. Generated tagged test activity and verified fresh domain-controller and Sysmon events in the Wazuh index, including Sysmon delivery after endpoint rollback.</p></article>
   </div>
-  <script>
-    (function initOverlayCloseLinks() {
-      if (window.top === window.self) return;
-      document.querySelectorAll('[data-overlay-close="true"]').forEach((link) => {
-        link.addEventListener('click', (event) => {
-          if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-          event.preventDefault();
-          window.parent.postMessage({ type: 'stassinos-close-project-overlay' }, window.location.origin);
-        });
-      });
-    })();
-  </script>
+</section>
+<section class="panel section">
+  <h2 class="section-title">Recovery tested against evidence</h2>
+  <div class="detail-grid">
+    <article class="detail-card"><h3>Windows checkpoint recovery</h3><p>Exported test evidence, restored the domain-joined endpoint, and verified its machine identity and domain trust. Confirmed the temporary marker was absent and fresh Sysmon telemetry still reached Wazuh.</p></article>
+    <article class="detail-card"><h3>Isolated Kali reset</h3><p>Created a network-disconnected linked clone for the reset test. Exported a benign marker, restored the clone's checkpoint, and verified isolation and marker removal after recovery.</p></article>
+    <article class="detail-card"><h3>SIEM index restoration</h3><p>Restored 5,181 historical records into a temporary index and verified the full record count and saved archive hashes. Removed the temporary index after validation.</p></article>
+  </div>
+  <p class="section-copy">Domain-controller system-state backups were also created on a separate recovery disk, with backup catalogs and recovery items checked for readability.</p>
+</section>
+<section class="panel section">
+  <h2 class="section-title">Repeatable lab operations</h2>
+  <p class="section-copy">PowerShell and Python scripts supported health checks, tagged event generation, evidence export, and acceptance reports. The project ties Windows identity administration to SIEM monitoring and recovery verification in a controlled virtual environment.</p>
+  <div class="stack-grid"><span class="stack-item">VMware</span><span class="stack-item">Wazuh</span><span class="stack-item">Windows Server</span><span class="stack-item">AD DS / DNS</span><span class="stack-item">Sysmon</span><span class="stack-item">PowerShell</span><span class="stack-item">Python</span><span class="stack-item">Kali Linux</span><span class="stack-item">Snapshot recovery</span></div>
+</section></main>
+    <footer><span>Christopher Stassinos</span><span>Virtual SOC &amp; Active Directory Lab</span></footer>
+  </div>
 </body>
 </html>
