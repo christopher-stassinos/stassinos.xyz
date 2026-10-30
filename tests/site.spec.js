@@ -87,10 +87,10 @@ test.describe('stassinos.xyz smoke checks', () => {
     await expect(page.locator('.cert-targets, .timeline-item.is-target')).toHaveCount(0);
   });
 
-  test('the detailed moon follows Home and respects still mode', async ({ page }) => {
+  test('the ASCII moon follows Home and respects still mode', async ({ page }) => {
     await page.goto('/?motion=still#/home');
     const moon = page.locator('#museum-lunar-detail');
-    await expect(moon).toHaveAttribute('data-detail', 'spherical-relief');
+    await expect(moon).toHaveAttribute('data-detail', 'ascii-crescent');
     await expect(moon).toHaveCSS('opacity', '1');
     await page.locator('.museum-nav a[data-route="bot"]').click();
     await expect(moon).toHaveCSS('opacity', '0');

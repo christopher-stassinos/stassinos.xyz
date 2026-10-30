@@ -1,4 +1,4 @@
-/* A relief-lit lunar sphere with fine ASCII grain. Rendered once, shared by both ocean renderers. */
+/* A cratered crescent drawn entirely in the ocean's ASCII glyphs. Shared by both renderers. */
 (() => {
   'use strict';
   const background=document.getElementById('museum-background');
@@ -60,10 +60,8 @@
       +Math.exp(-((x-.30)**2*14+(y+.34)**2*12))*.18;
     albedo[i]=.82-maria+(rough-.5)*.14+(fine-.5)*.055;
   }
-  const sunLength=Math.hypot(-.91,-.24,-.27),lx=-.91/sunLength,ly=-.24/sunLength,lz=-.27/sunLength;
-  const rayXY=Math.hypot(lx,ly),image=ctx.createImageData(size,size);
-  const bloom=document.createElement('canvas');bloom.width=bloom.height=size;
-  const bloomCtx=bloom.getContext('2d'),bloomImage=bloomCtx.createImageData(size,size);
+  const sunLength=Math.hypot(-.91,-.24,-.10),lx=-.91/sunLength,ly=-.24/sunLength,lz=-.10/sunLength;
+  const rayXY=Math.hypot(lx,ly);
   for(let row=1;row<size-1;row++)for(let col=1;col<size-1;col++){
     const i=row*size+col;if(!inside[i])continue;
     const x=col*step-extent,y=row*step-extent,z=Math.sqrt(Math.max(0,1-x*x-y*y));
@@ -86,27 +84,47 @@
     const direct=albedo[i]*(diffuse*.78+Math.sqrt(diffuse)*.22);
     const earthshine=.014*(.45+z*.55),tone=clamp(direct+earthshine);
     tones[i]=tone;
-    const light=Math.pow(tone,.72),edge=clamp((1-Math.hypot(x,y))/step+.25),o=i*4;
-    image.data[o]=Math.round(5+light*183);
-    image.data[o+1]=Math.round(7+light*184);
-    image.data[o+2]=Math.round(10+light*174);
-    image.data[o+3]=Math.round(edge*255);
-    bloomImage.data[o]=230;bloomImage.data[o+1]=232;bloomImage.data[o+2]=215;
-    bloomImage.data[o+3]=Math.round(direct*direct*20);
   }
-  bloomCtx.putImageData(bloomImage,0,0);ctx.filter='blur(4px)';ctx.drawImage(bloom,0,0);ctx.filter='none';
-  const surface=document.createElement('canvas');surface.width=surface.height=size;surface.getContext('2d').putImageData(image,0,0);
-  ctx.drawImage(surface,0,0);
-  // Fine ASCII grain sits over continuous shading rather than replacing the surface relief.
-  const glyphs='.,:;-+=xvoQMW#@',cw=3.9,ch=6.1;
-  ctx.font='bold 6px "Courier New",monospace';ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.save();ctx.beginPath();ctx.arc((size-1)/2,(size-1)/2,1/step,0,Math.PI*2);ctx.clip();
-  for(let y=ch/2;y<size;y+=ch)for(let x=cw/2;x<size;x+=cw){
-    const i=Math.floor(y)*size+Math.floor(x),tone=tones[i];if(!inside[i]||tone<.026)continue;
-    const char=glyphs[Math.min(glyphs.length-1,Math.floor(Math.pow(tone,.68)*(glyphs.length-1)))];
-    ctx.fillStyle=`rgba(235,235,219,${(.16+tone*.16).toFixed(3)})`;ctx.fillText(char,x,y);
+  const glyphBook=window.STASSINOS_STUDIO.glyphBook();
+  function draw(dimension,left,top){
+    const dpr=Math.min(devicePixelRatio||1,2);
+    canvas.width=canvas.height=Math.round(dimension*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    const mobile=innerWidth<760,fallback=background.dataset.renderer==='canvas2d-ocean-ascii';
+    // Derive cells from the current viewport; the sea's grid can still describe the previous size.
+    const columns=Math.min(mobile?128:380,Math.max(48,Math.round(innerWidth/(mobile?5.6:6.3))));
+    const rows=Math.min(196,Math.max(36,Math.round(innerHeight/(mobile?9.3:9.8))));
+    const cw=fallback?(mobile?7.2:8.5):innerWidth/columns;
+    const ch=fallback?(mobile?11.1:12.5):innerHeight/rows;
+    ctx.font=`bold ${Math.min(ch*.94,cw*1.6)}px "Courier New",monospace`;
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    // Snap to the sea's character grid. Empty cells reveal the sky, with no solid disc or glow.
+    const offsetX=Math.ceil(left/cw)*cw-left+cw/2;
+    const offsetY=Math.ceil(top/ch)*ch-top+ch/2;
+    let cells=0;
+    for(let y=offsetY;y<dimension;y+=ch)for(let x=offsetX;x<dimension;x+=cw){
+      const sx=x/dimension*(size-1),sy=y/dimension*(size-1);
+      const i=Math.round(sy)*size+Math.round(sx);
+      if(!inside[i])continue;
+      // Average the relief within each cell so tiny craters become coherent clusters of type.
+      let tone=0;
+      for(const [dx,dy] of [[0,0],[-.22,0],[.22,0],[0,-.22],[0,.22]]){
+        const col=Math.round(clamp(sx+dx*cw/dimension*size,0,size-1));
+        const row=Math.round(clamp(sy+dy*ch/dimension*size,0,size-1));
+        tone+=tones[row*size+col]/5;
+      }
+      if(tone<.035)continue;
+      const level=clamp((Math.pow(tone,.72)-.025)*1.45);
+      const band=Math.round(level*5)/5;
+      let char=glyphBook.records[glyphBook.lookup[Math.round(level*255)]].char;
+      const nx=sx*step-extent,ny=sy*step-extent;
+      if(nx*nx+ny*ny>.90&&tone>.09)char=Math.abs(nx)>.78?'|':nx*ny>0?'\\':'/';
+      ctx.fillStyle=`rgba(${Math.round(153+band*83)},${Math.round(190+band*48)},${Math.round(188+band*42)},${(.60+band*.34).toFixed(2)})`;
+      ctx.fillText(char,x,y);cells++;
+    }
+    canvas.dataset.cells=String(cells);
   }
-  ctx.restore();canvas.dataset.detail='spherical-relief';canvas.dataset.craters=String(craters.length);
+  canvas.dataset.detail='ascii-crescent';canvas.dataset.craters=String(craters.length);
   background.after(canvas);
   const preference=matchMedia('(prefers-reduced-motion: reduce)');
   const still=new URLSearchParams(location.search).get('motion')==='still';
@@ -115,10 +133,10 @@
   function place(){
     const aspect=innerWidth/innerHeight,u=clamp((aspect-.65)/.40),wide=u*u*(3-2*u);
     const radius=.054+(.090-.054)*wide,cx=.020+(.16-.020)*wide,cy=.205+(.30-.205)*wide,dimension=radius*innerHeight*2.4;
+    const left=innerWidth*.71+cx*innerHeight-dimension/2,top=(.5-cy)*innerHeight-dimension/2;
     canvas.style.width=canvas.style.height=`${dimension}px`;
-    canvas.style.filter=`brightness(${(1.65-.60*wide).toFixed(2)}) contrast(1.05)`;
-    canvas.style.left=`${innerWidth*.71+cx*innerHeight-dimension/2}px`;
-    canvas.style.top=`${(.5-cy)*innerHeight-dimension/2}px`;
+    canvas.style.left=`${left}px`;canvas.style.top=`${top}px`;
+    draw(dimension,left,top);
   }
   addEventListener('museum:exhibit',show);addEventListener('resize',place);
   preference.addEventListener('change',transition);

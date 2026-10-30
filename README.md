@@ -4,7 +4,7 @@ Christopher Stassinos — cybersecurity and enterprise IT.
 
 Live site: https://www.stassinos.xyz/ (the bare domain redirects here).
 
-A static portfolio with seven connected ocean scenes, a relief-lit lunar sphere, responsive navigation, and a persistent YouTube music player. The artwork supports WebGL2, a Canvas fallback, and reduced motion. Playback starts only after pressing Play.
+A static portfolio with seven connected ocean scenes, an ASCII crescent moon, responsive navigation, and a persistent YouTube music player. The artwork supports WebGL2, a Canvas fallback, and reduced motion. Playback starts only after pressing Play.
 
 ## Sections
 
