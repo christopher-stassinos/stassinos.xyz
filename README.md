@@ -25,7 +25,10 @@ Legacy project HTML pages and the root CV URL remain available.
 - assets/site-content.js contains the profile, project briefs, credentials, and music selection.
 - assets/portfolio.js and assets/portfolio.css provide the interface.
 - assets/ocean-worlds.js, assets/ocean-canvas.js, and assets/lunar-detail.js provide the art.
-- GitHub Pages deploys the main branch. CNAME uses www.stassinos.xyz; GitHub Pages redirects the bare domain to it.
+- Cloudflare Pages project `stassinos-portfolio` serves the public site over HTTPS. GoDaddy remains the domain registrar; Cloudflare hosts DNS.
+- GitHub stores the source. After committing and pushing a release, run `python deploy_site.py` to publish it. A GitHub push alone does not deploy to Cloudflare.
+- The deployment helper uploads only committed public files. Use `python deploy_site.py --prepare-only` to inspect the upload. Wrangler uses its existing local login; no credentials belong in this repository.
+- `_headers` sets HTTPS transport and content-type protections. Keep Cloudflare Full (Strict), Universal SSL, and Always Use HTTPS enabled.
 - Runtime asset URLs include content hashes to refresh changed files after releases.
 - build_cv.py regenerates the root PDF; copy the finished PDF into assets/ as well.
 
