@@ -232,6 +232,12 @@ html.artwork-view .museum-app { display: none; }
 .project-brief .summary-grid .metric { padding: 18px 0; border: 0; border-bottom: 1px solid var(--line); background: transparent; }
 .project-brief .summary-grid .metric:first-child { padding-top: 0; }
 .project-brief .summary-note { font-size: 12px; margin-top: 20px; color: var(--ink3); }
+.project-brief .flux-architecture .flow { display: block; }
+@media (max-width: 760px) {
+  .project-brief .flux-architecture .flow-chain { flex-direction: column; align-items: stretch; }
+  .project-brief .flux-architecture .node { flex-basis: auto; }
+  .project-brief .flux-architecture .arrow { align-self: center; transform: rotate(90deg); }
+}
 
 .music-player { position: relative; flex: 0 0 auto; width: 100%; min-width: 0; margin-top: auto; padding: 18px 0 0; border-top: 1px solid var(--line); font: 12px/1.4 var(--sans); }
 .music-player:not(.is-expanded) { display: grid; grid-template-columns: minmax(0,1fr); gap: 10px; }
