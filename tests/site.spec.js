@@ -1,211 +1,100 @@
 const { test, expect } = require('@playwright/test');
-const fs = require('fs');
-const path = require('path');
-
-async function clearPlayerState(page) {
-  await page.addInitScript(() => {
-    try { localStorage.removeItem('stassinos-site-player-state-v1'); } catch (e) {}
-  });
-}
+const fs = require('node:fs');
+const path = require('node:path');
 
 test.describe('stassinos.xyz smoke checks', () => {
-  test('mobile layout is single-column with no horizontal overflow', async ({ browser }) => {
-    const context = await browser.newContext({
-      viewport: { width: 390, height: 844 },
-      isMobile: true,
-      hasTouch: true,
-      userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1'
-    });
-    const page = await context.newPage();
-    await clearPlayerState(page);
-    await page.goto('/index.html', { waitUntil: 'networkidle' });
-    await page.waitForTimeout(2500);
-
-    const state = await page.evaluate(() => {
-      const hero = document.querySelector('.hero');
-      const player = document.getElementById('artifact-player');
-      const bodyWidth = Math.max(document.body.scrollWidth, document.documentElement.scrollWidth);
-      const viewportWidth = window.innerWidth;
-      const playerRect = player?.getBoundingClientRect();
-      return {
-        heroColumns: hero ? getComputedStyle(hero).gridTemplateColumns : '',
-        overflowX: bodyWidth > viewportWidth + 1,
-        viewportWidth,
-        scrollWidth: bodyWidth,
-        playerFits: !!playerRect && playerRect.left >= 0 && playerRect.right <= viewportWidth
-      };
-    });
-
-    expect(state.overflowX).toBe(false);
-    expect(state.playerFits).toBe(true);
-    expect(state.heroColumns).toBe('370px');
-
-    await context.close();
-  });
-
-  test('music player responds to play, next, and previous controls', async ({ page }) => {
-    await clearPlayerState(page);
-    await page.goto('/index.html', { waitUntil: 'networkidle' });
-    await page.waitForTimeout(2500);
-
-    const sub = page.locator('#player-sub');
-
-    const readPlayerState = async () => page.evaluate(() => {
-      const trackText = document.querySelector('#player-track')?.textContent?.trim() || '';
-      const subText = document.querySelector('#player-sub')?.textContent?.trim() || '';
-      const match = subText.match(/(\d+)\s*\/\s*(\d+)/);
-      return {
-        trackText,
-        subText,
-        current: match ? Number(match[1]) : null,
-        total: match ? Number(match[2]) : null
-      };
-    });
-
-    const initial = await readPlayerState();
-    expect(initial.total).not.toBeNull();
-    expect(initial.total).toBeGreaterThanOrEqual(1);
-    expect(initial.current).not.toBeNull();
-
-    await page.locator('#player-toggle').click();
-    await expect(sub).toContainText(/Now Playing/i);
-
-    await page.locator('#player-next').click();
-    await page.waitForTimeout(1200);
-    const afterNext = await readPlayerState();
-    expect(afterNext.total).toBe(initial.total);
-    expect(afterNext.trackText.length).toBeGreaterThan(0);
-    if ((initial.total || 0) > 1) {
-      expect(afterNext.trackText).not.toBe(initial.trackText);
-      expect(afterNext.current).not.toBe(initial.current);
-    }
-
-    await page.locator('#player-prev').click();
-    await page.waitForTimeout(1200);
-    const afterPrev = await readPlayerState();
-    expect(afterPrev.total).toBe(initial.total);
-    expect(afterPrev.trackText.length).toBeGreaterThan(0);
-    if ((initial.total || 0) > 1) {
-      expect(afterPrev.trackText).toBe(initial.trackText);
-      expect(afterPrev.current).toBe(initial.current);
-    }
-  });
-
-  test('site uses the native cursor across site pages', async ({ page }) => {
-    const routes = [
-      '/index.html',
-      '/alpaca-gpu-trading-bot.html',
-      '/network-traffic-analysis.html',
-      '/siem-home-lab.html'
+  test('all portfolio sections open through persistent navigation', async ({ page }) => {
+    await page.goto('/');
+    const sections = [
+      ['home', 'Christopher'], ['bot', 'Experience'], ['memory', 'Certifications'],
+      ['history', 'Education'], ['trajectory', 'Labs + projects'],
+      ['metrics', 'Core skills'], ['console', 'Contact'],
     ];
+    for (const [route, heading] of sections) {
+      await page.locator(`.museum-nav a[data-route="${route}"]`).click();
+      await expect(page.locator('#portfolio-page h1')).toContainText(heading);
+      await expect(page.locator(`.museum-nav a[data-route="${route}"]`)).toHaveAttribute('aria-current', 'page');
+      await expect(page.locator('.music-player')).toBeVisible();
+    }
+    await expect(page.locator('.preview-label')).toHaveCount(0);
+  });
 
-    for (const route of routes) {
-      await page.goto(route, { waitUntil: 'networkidle' });
-      await expect(page.locator('#cursor-node')).toHaveCount(0);
-      await expect(page.locator('body')).not.toHaveClass(/cursor-active/);
-      await expect(page.locator('body')).toHaveCSS('cursor', 'auto');
+  test('mobile navigation, identity and player fit without horizontal overflow', async ({ page }) => {
+    for (const width of [390, 320]) {
+      await page.setViewportSize({ width, height: 844 });
+      await page.goto('/');
+      await expect(page.locator('.museum-name')).toHaveText('Christopher Stassinos');
+      await expect(page.locator('.museum-nav a')).toHaveCount(7);
+      const fit = await page.evaluate(() => {
+        const player = document.querySelector('.music-player').getBoundingClientRect();
+        const nav = [...document.querySelectorAll('.museum-nav a')].map(link => link.getBoundingClientRect());
+        return document.documentElement.scrollWidth <= innerWidth + 1
+          && player.left >= 0 && player.right <= innerWidth + 1
+          && nav.every(rect => rect.left >= 0 && rect.right <= innerWidth + 1 && rect.height >= 44);
+      });
+      expect(fit).toBe(true);
+      await page.locator('.museum-nav a[data-route="memory"]').click();
+      await expect(page.locator('.cert-card')).toHaveCount(4);
     }
   });
 
-  test('MSP experience highlights concrete security and infrastructure tools', async ({ page }) => {
-    await page.goto('/index.html', { waitUntil: 'networkidle' });
-
-    const mspRole = page.locator('.timeline-item').filter({ hasText: 'MSP Support Engineer' });
-    await expect(mspRole).toContainText('724IT · San Diego');
-    await expect(page.locator('body')).not.toContainText('Southern California');
-
-    for (const capability of [
-      'Huntress',
-      'Microsoft Defender XDR',
-      'Microsoft 365',
-      'Entra ID',
-      'Intune',
-      'Active Directory',
-      'Conditional Access',
-      'ConnectWise PSA',
-      'RMM',
-      'DNS',
-      'DHCP',
-      'VLANs',
-      'VPNs',
-      'firewalls'
-    ]) {
-      await expect(mspRole).toContainText(capability);
-    }
-
-    const mspBullets = await mspRole.locator('.timeline-points li').allInnerTexts();
-    const cvSource = fs.readFileSync(path.join(__dirname, '..', 'build_cv.py'), 'utf8');
-
-    expect(mspBullets).toHaveLength(3);
-    expect(cvSource).not.toContain('Southern California');
-    for (const bullet of mspBullets) {
-      expect(cvSource).toContain(JSON.stringify(bullet));
-    }
+  test('single music selection waits for Play and persists through navigation', async ({ page }) => {
+    await page.goto('/');
+    const music = page.locator('.music-player');
+    await expect(music.locator('[data-track-title]')).toContainText('Local Technology Life');
+    await expect(music.locator('[data-track-state]')).toHaveText('Paused');
+    await expect(music.locator('iframe')).toHaveCount(0);
+    await expect(music.locator('.music-player__heading a')).toHaveAttribute('href', 'https://www.youtube.com/watch?v=SXmx8AI1Hfo');
+    await expect(music.locator('[data-music-prev], [data-music-next]')).toHaveCount(0);
+    await music.getByRole('button', { name: 'Expand', exact: true }).click();
+    await expect(music.locator('#music-video')).toBeVisible();
+    await page.locator('.museum-nav a[data-route="bot"]').click();
+    await expect(music.locator('#music-video')).toBeVisible();
+    await expect(music.locator('[data-track-state]')).toHaveText('Paused');
   });
 
-  test('certifications list only current credentials', async ({ page }) => {
-    await page.goto('/index.html', { waitUntil: 'networkidle' });
+  test('project briefs open inside the portfolio and retain their content', async ({ page }) => {
+    await page.goto('/#/trajectory');
+    await page.locator('a[href="#/trajectory/alpaca-gpu-trading-bot"]').click();
+    await expect(page.locator('.project-brief')).toContainText('Alpaca');
+    await expect(page.locator('.museum-nav a[data-route="trajectory"]')).toHaveAttribute('aria-current', 'page');
+    await page.getByRole('link', { name: 'All projects' }).click();
+    await expect(page.locator('#portfolio-page h1')).toContainText('Labs + projects');
+    await expect(page.locator('.project-records > article')).toHaveCount(3);
+  });
 
-    const expectedCertifications = [
-      'CompTIA Security+',
-      'AWS Cloud Practitioner',
-      'IBM Cybersecurity Analyst',
-      'Palo Alto Networks Associate'
-    ];
-    const removedCertifications = [
-      'CompTIA Network+',
-      'AWS Solutions Architect Associate'
-    ];
-    const body = page.locator('body');
-    const cvSource = fs.readFileSync(path.join(__dirname, '..', 'build_cv.py'), 'utf8');
-    const credentialMetric = page.locator('.metric', { hasText: 'Credentials' });
-    const certificationStat = page.locator('.resume-stat', { hasText: 'Certifications' });
+  test('MSP experience and the CV describe the same work', async ({ page }) => {
+    await page.goto('/#/bot');
+    const role = page.locator('.timeline-item').filter({ hasText: 'MSP Support Engineer' });
+    await expect(role).toContainText('724IT · San Diego');
+    for (const tool of ['Huntress', 'Microsoft Defender XDR', 'Entra ID', 'Intune', 'ConnectWise PSA', 'VLANs']) {
+      await expect(role).toContainText(tool);
+    }
+    const bullets = await role.locator('.timeline-points li').allInnerTexts();
+    const cv = fs.readFileSync(path.join(__dirname, '..', 'build_cv.py'), 'utf8');
+    expect(bullets).toHaveLength(3);
+    for (const bullet of bullets) expect(cv).toContain(JSON.stringify(bullet));
+  });
 
+  test('credentials contain four earned certifications and no planned targets', async ({ page }) => {
+    await page.goto('/#/memory');
     await expect(page.locator('.cert-card')).toHaveCount(4);
-    await expect(credentialMetric.locator('strong')).toHaveText('4');
-    await expect(certificationStat.locator('strong')).toHaveText('4');
-    await expect(credentialMetric).not.toContainText('Active');
-    await expect(certificationStat).not.toContainText('Active');
-
-    for (const certification of expectedCertifications) {
-      await expect(body).toContainText(certification);
-      expect(cvSource).toContain(certification);
+    await expect(page.locator('.compact-records .timeline-item')).toHaveCount(4);
+    for (const name of ['CompTIA Security+', 'AWS Cloud Practitioner', 'IBM Cybersecurity Analyst', 'Palo Alto Networks Associate']) {
+      await expect(page.locator('.cert-grid')).toContainText(name);
     }
-    for (const certification of removedCertifications) {
-      await expect(body).not.toContainText(certification);
-      expect(cvSource).not.toContain(certification);
-    }
-  });
-
-  test('certification cards stay packed beneath the heading', async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 900 });
-    await page.goto('/index.html', { waitUntil: 'networkidle' });
-
-    const spacing = await page.locator('#certifications').evaluate((panel) => {
-      const heading = panel.querySelector('.section-head')?.getBoundingClientRect();
-      const grid = panel.querySelector('.cert-grid')?.getBoundingClientRect();
-      return {
-        alignContent: getComputedStyle(panel).alignContent,
-        gap: heading && grid ? grid.top - heading.bottom : Number.POSITIVE_INFINITY,
-        gridHeight: grid?.height || Number.POSITIVE_INFINITY
-      };
-    });
-
-    expect(spacing.alignContent).toBe('start');
-    expect(spacing.gap).toBeLessThan(36);
-    expect(spacing.gridHeight).toBeLessThan(320);
-  });
-
-  test('certification roadmap does not publish unearned targets', async ({ page }) => {
-    await page.goto('/index.html', { waitUntil: 'networkidle' });
-
-    await expect(page.locator('.cert-targets')).toHaveCount(0);
-    await expect(page.locator('.timeline-item.is-target')).toHaveCount(0);
     await expect(page.locator('body')).not.toContainText('Pearson VUE / OnVUE');
+    await expect(page.locator('.cert-targets, .timeline-item.is-target')).toHaveCount(0);
+  });
 
-    await page.locator('[data-tab="certs"]').click();
-    await expect(page.locator('#tab-certs')).toHaveClass(/active/);
-    await expect(page.locator('#tab-certs .timeline-item')).toHaveCount(4);
-    await expect(page.locator('.metric', { hasText: 'Credentials' }).locator('strong')).toHaveText('4');
+  test('the detailed moon follows Home and respects still mode', async ({ page }) => {
+    await page.goto('/?motion=still#/home');
+    const moon = page.locator('#museum-lunar-detail');
+    await expect(moon).toHaveAttribute('data-detail', 'spherical-relief');
+    await expect(moon).toHaveCSS('opacity', '1');
+    await page.locator('.museum-nav a[data-route="bot"]').click();
+    await expect(moon).toHaveCSS('opacity', '0');
+    await page.locator('.museum-nav a[data-route="home"]').click();
+    await expect(moon).toHaveCSS('opacity', '1');
   });
 });

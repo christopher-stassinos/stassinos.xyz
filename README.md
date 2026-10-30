@@ -1,40 +1,32 @@
 # stassinos.xyz
 
-Personal portfolio of **Christopher Stassinos** — cybersecurity & enterprise IT.
+Christopher Stassinos — cybersecurity and enterprise IT.
 
-**Live site:** [https://stassinos.xyz](https://stassinos.xyz)
+Live site: https://stassinos.xyz/
 
-A single-page, dependency-free portfolio with a monochrome "gallery" visual system: framed artwork, wall-label plaques, scan-line texture, and a persistent ambient audio player. Project briefs open seamlessly in an in-page overlay without a full navigation.
+A static portfolio with seven connected ocean scenes, a relief-lit lunar sphere, responsive navigation, and a persistent YouTube music player. The artwork supports WebGL2, a Canvas fallback, and reduced motion. Playback starts only after pressing Play.
 
-## Pages
+## Sections
 
-| Page | Description |
+| Route | Section |
 | --- | --- |
-| `index.html` | Portfolio home — profile, certifications, skills, resume timeline, contact |
-| `alpaca-gpu-trading-bot.html` | Public Market Lab — systematic trading research stack (Mac mini + 5-GPU rig, Alpaca API, SQLite, Flask) |
-| `siem-home-lab.html` | SIEM Home Lab — Splunk, pfSense, VMware, Windows Server AD detection engineering |
-| `network-traffic-analysis.html` | Network Traffic Analysis — Wireshark, tcpdump, Kali Linux packet-analysis workflows |
+| #/home | Overview |
+| #/bot | Experience |
+| #/memory | Credentials |
+| #/history | Education |
+| #/trajectory | Projects and project briefs |
+| #/metrics | Skills |
+| #/console | Contact and CV |
 
-## Stack
+Legacy project HTML pages and the root CV URL remain available.
 
-- Plain HTML/CSS/JS — no build step, no framework
-- Hosted on GitHub Pages with a custom domain (`CNAME` → stassinos.xyz)
-- `build_cv.py` regenerates `christopher-stassinos-cv.pdf`
-- Playwright smoke tests in `tests/`
+## Editing and deployment
 
-## Local development
+- assets/site-content.js contains the profile, project briefs, credentials, and music selection.
+- assets/portfolio.js and assets/portfolio.css provide the interface.
+- assets/ocean-worlds.js, assets/ocean-canvas.js, and assets/lunar-detail.js provide the art.
+- GitHub Pages deploys the main branch. CNAME retains stassinos.xyz.
+- Runtime asset URLs include content hashes to refresh changed files after releases.
+- build_cv.py regenerates the root PDF; copy the finished PDF into assets/ as well.
 
-```bash
-python -m http.server 4173
-# open http://127.0.0.1:4173
-```
-
-## Tests
-
-```bash
-npm install
-npx playwright install chromium
-npm test
-```
-
-Smoke checks cover mobile layout (single column, no horizontal overflow), the audio player controls, and the project-brief overlay.
+Serve locally with Python's http.server bound to 127.0.0.1. There is no build step. Browser smoke checks are in tests/; npm test runs them with Playwright.
